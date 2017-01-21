@@ -1,13 +1,37 @@
-# CakePHP
+# DARIS - Dara Information System
+- This information system is currently still being developed using cakephp 2.X
+- The following modules exist:
+	- Student records module with the following functionality:
+		- Adds New records
+		- Deletes existing records
+		- Edits Existing records
+		- Searches for Student records
+	- Academics Module with the following sub-modules
+		- Subjects sub-module with the following functionality:
+			- Adds New subjects to the system
+			- Edits existing subject details in the system
+			- Deletes existing subjects details from the system
+			- Searches for specific subjects
+		- Examinations sub-module with the following functionality:
+			- Creates examination and test schedules for students
+			- Edits or deletes examination schedules for students
+		- Grading sub-module with the following functionality:
+			- Provides a grading criterea for the examinations done
+			- Assigns a grading criterea to the different class levels
+		- Results sub-module with the following functionality:
+			- Provides a framework to enter and edit examination results for students
+			- Provides a facility to view student examination results at a subject and examination level
+		- Reports sub-module with the following functionality:
+			- Faclitates the creation of student examination result reports
+			- Facilitates the editing and deleting of student examination result reports
+			- Facilitates the commenting onto student examination result reports
+			- Facilitates the viewing and downloading of student examination result reports
+	- Users module with the following functionality:
+		- Enables the creating of new system users and defining their user levels and roles
+		- Enable the editing and deleting of existing system users
+	
 
-[![Bake Status](https://secure.travis-ci.org/cakephp/cakephp.png?branch=master)](http://travis-ci.org/cakephp/cakephp)
-[![Latest Stable Version](https://poser.pugx.org/cakephp/cakephp/v/stable.svg)](https://packagist.org/packages/cakephp/cakephp)
-[![License](https://poser.pugx.org/cakephp/cakephp/license.svg)](https://packagist.org/packages/cakephp/cakephp)
 
-[![CakePHP](http://cakephp.org/img/cake-logo.png)](http://www.cakephp.org)
-
-CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC.
-Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.
 
 
 ## Some Handy Links
