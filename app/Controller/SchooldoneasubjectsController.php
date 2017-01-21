@@ -90,6 +90,7 @@ class SchooldoneasubjectsController extends AppController {
 	    
 	    $bothoptionschosen = null;
 	    $subjectpapers = null;
+	    $subsidiary_option_chosen = null;
 	    if (!empty($this->request->data)) {
 	    
 		
@@ -131,6 +132,7 @@ class SchooldoneasubjectsController extends AppController {
 				if($this->request->data['Schooldoneasubject']['issubsidiary'] == "1"){
 			
 				    unset($this->request->data['Schooldoneasubject']['papersdone']);
+				    $subsidiary_option_chosen = 1;
 
 				}else {
 			
@@ -158,8 +160,12 @@ class SchooldoneasubjectsController extends AppController {
 			
 					if($value2 != null){
 				
-					    $this->Schooldoneasubject->addColumninTable($newsubjectname,$subjectpapers);
+					    $this->Schooldoneasubject->addColumninTable($newsubjectname,$subjectpapers,null);
 				    
+					}else{
+					
+					    $this->Schooldoneasubject->addColumninTable($newsubjectname,$subjectpapers,$subsidiary_option_chosen);
+					
 					}
 				
 					$this->Session->setFlash(__('The Subject details have been saved.'));
@@ -222,7 +228,7 @@ class SchooldoneasubjectsController extends AppController {
 	    
 	}else {
 	
-	    $subjectpapers = null;
+	    $subjectpapers = array();
 	
 	}
 	
@@ -239,6 +245,7 @@ class SchooldoneasubjectsController extends AppController {
 	    $subjectpaperstoremove = array();
 	    $subjectpaperstoadd = array();
 	    $subjectpaperstochange = array();
+	    $subject_was_sub_before = null;
 	    if( ($this->request->data['Schooldoneasubject']['issubsidiary']) ||
 		($this->request->data['Schooldoneasubject']['papersdone'])
 	    ){
@@ -258,11 +265,12 @@ class SchooldoneasubjectsController extends AppController {
 	    
 		    if($this->request->data['Schooldoneasubject']['issubsidiary'] == "1"){
 			
-			if(($this->request->data['Schooldoneasubject']['issubsidiary'] == "1")
-			      && 
-			  ($subjectpaperissubsidiary == 0)
+			// converting from principal subject to subsidary subject
+			//(the subject was not a subsidiary subject before)
+			if(($subjectpaperissubsidiary == 0)
 			){
 			    
+				// Check if results are in atleast one subjectpaper of the Alevelmarksheetresult and Alevelreport table
 				if(($this->Schooldoneasubject
 					->checkIfResultsAreInatleastaColumn($subjectpapers,
 									$shortsubjectnametobemodified)) == true){
@@ -270,8 +278,62 @@ class SchooldoneasubjectsController extends AppController {
 					$this->Session->setFlash(__('Cannot convert subject into a subsidiary because
 					some papers already have results'));
 					return $this->redirect(array('action' => 'edit', $id));
+				}else {
+				    
+				    // step 1: First delete the subjects that exist already
+				    // step 2: Do a save of the information on the form
+				    // step 3: Add the subjects that the user has selected to the marksheet and report table
+				    
+				    
+				    // Step 1
+				    $papers_currently_done = $staff['Schooldoneasubject']['papersdone'];
+				    $papers_currently_done = explode("$",$papers_currently_done);
+				    unset($papers_currently_done[0]);
+				    $this->Schooldoneasubject->deleteColumninTable($shortsubjectnametobemodified,$papers_currently_done,0);
+				    
+				    
+				    $newsubjectname = $this->request->data['Schooldoneasubject']['shortsubjectname'];
+				    
+				    if(is_array($this->request->data['Schooldoneasubject']['papersdone'])){
+			    
+					foreach($this->request->data['Schooldoneasubject']['papersdone'] as $key => $value){
+			    
+					    $value2 = $value2."$".$value; 
+			    
+					}
+			    
+				    }
+			
+				    if($value2 != null){
+			
+					$this->request->data['Schooldoneasubject']['papersdone'] = $value2;
+					$subjectpaperstobechanged = explode("$",$value2);
+					unset($subjectpaperstobechanged[0]);
+				    }
+				    
+				    // Step 2
+				    if ($this->Schooldoneasubject->save($this->request->data)){
+				    
+					//Step 3
+					$this->Schooldoneasubject->addColumninTable($newsubjectname,$subjectpaperstobechanged,1);
+		    
+					$this->Session->setFlash(__('Subject Details have been updated successfully'));
+					return $this->redirect(array('action' => 'index'));
+		    
+				    }else{
+				    
+					    $this->Session->setFlash(__('Subject Details could not be updated successfully'));
+					    return $this->redirect(array('action' => 'index'));
+				    
+				    }
+				    
+				    
 				}
 			    
+			}else{
+			// converting 
+			    
+			
 			}
 			
 			unset($this->request->data['Schooldoneasubject']['papersdone']);
@@ -295,6 +357,9 @@ class SchooldoneasubjectsController extends AppController {
 			    unset($subjectpaperstobechanged[0]);
 			}
 		    }
+		    
+		    // if the paper was not a subsidary before and a set of subject papers has been chosen
+		    // perform the if operation
 		    if( ($subjectpaperissubsidiary == 0) &&
 			($this->request->data['Schooldoneasubject']['issubsidiary'] != "1")
 		      ) {
@@ -310,20 +375,30 @@ class SchooldoneasubjectsController extends AppController {
 			  $subjectpaperstochange = array_intersect($subjectpaperstobechanged,$subjectpapers);
 		    }
 	    
+		    // Converting a subject which was subsidary before to one with papers now
 		    if(
 			($subjectpaperissubsidiary == 1) &&
 			(($this->request->data['Schooldoneasubject']['issubsidiary'] != "1"))
 		    ){
 	    
-			  //these are the subject papers to be removed from the existing
-			  //$subjectpaperstoremove = array_diff($subjectpapers,$subjectpaperstobechanged);
+			  if($this->Schooldoneasubject->checkIfResultsAreInColumn("",$shortsubjectnametobemodified) == true){
+			  
+			      $this->Session->setFlash(__('Cannot convert subsidiary paper to principal paper because
+					results already exist for the subsidiary paper'));
+					return $this->redirect(array('action' => 'edit', $id));
+			  
+			  }else{
+			      //these are the subject papers to be removed from the existing
+			      //$subjectpaperstoremove = array_diff($subjectpapers,$subjectpaperstobechanged);
 		    
-			  //these are the subject papers to be added to the existing
-			  $subjectpaperstoadd = array_diff($subjectpaperstobechanged,$subjectpapers);
+			      //these are the subject papers to be added to the existing
+			      $subjectpaperstoadd = array_diff($subjectpaperstobechanged,$subjectpapers);
 		  
-			  //these are the subject papers that existed before and the user has again
-			  //selected them
-			  //$subjectpaperstochange = array_intersect($subjectpaperstobechanged,$subjectpapers);
+			      //these are the subject papers that existed before and the user has again
+			      //selected them
+			      //$subjectpaperstochange = array_intersect($subjectpaperstobechanged,$subjectpapers);
+			      $subject_was_sub_before = 1;
+			  }
 	    
 		    }
 	    
@@ -336,13 +411,27 @@ class SchooldoneasubjectsController extends AppController {
 		
 			    if ($this->request->data['Schooldoneasubject']['issubsidiary'] != "1") {
 		    
-				$this->Schooldoneasubject
-				  ->alterColumninTable($shortsubjectnametobemodified,
+				if($subjectpaperissubsidiary == 0){
+				    
+				    $this->Schooldoneasubject
+					->alterColumninTable($shortsubjectnametobemodified,
 						    $modifiedshortsubjectname,
 						    $subjectpaperstoremove,
 						    $subjectpaperstoadd,
-						    $subjectpaperstochange
+						    $subjectpaperstochange,$subject_was_sub_before
 						  );
+						  
+				}else{
+				
+				    $this->Schooldoneasubject
+					->alterColumninTable($shortsubjectnametobemodified,
+						    $modifiedshortsubjectname,
+						    $subjectpaperstoremove,
+						    $subjectpaperstoadd,
+						    $subjectpaperstochange,$subject_was_sub_before
+						  );
+				
+				}
 		    
 			    } else {
 		    
@@ -414,6 +503,11 @@ class SchooldoneasubjectsController extends AppController {
 		$papersdone = $this->Schooldoneasubject->field('papersdone',
 			    array('id =' => $id)
 			);
+		$is_subsidiary = $this->Schooldoneasubject->field('issubsidiary',
+			    array('id =' => $id)
+			);
+		$is_subsidiary = intval($is_subsidiary);
+		
 		
 		$subjectpaperstobechanged = explode("$",$papersdone);
 		
@@ -429,7 +523,7 @@ class SchooldoneasubjectsController extends AppController {
 		
 		    if($shortsubjectnamefound[0]['Schooldoneasubject']['shortsubjectname'] != null){
 			if ($this->Schooldoneasubject->delete()) {
-				$this->Schooldoneasubject->deleteColumninTable($shortsubjectnametobedeleted,$subjectpaperstobechanged);
+				$this->Schooldoneasubject->deleteColumninTable($shortsubjectnametobedeleted,$subjectpaperstobechanged,$is_subsidiary);
 				$this->Session->setFlash(__('Subject details have been deleted.'));
 			} else {
 				$this->Session->setFlash(__('Subject details could not be deleted. Please, try again.'));
