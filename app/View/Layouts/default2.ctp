@@ -14,7 +14,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = __d('cake_dev', 'DARIS: DARA Students Records System');
+$cakeDescription = __d('cake_dev', 'DARIS: DARA Information System');
 $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 ?>
 <!DOCTYPE html>
@@ -127,7 +127,8 @@ $(document).ready(function (e) {
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php
-		echo $this->Html->meta('icon');
+		//echo $this->Html->meta('icon');
+		echo $this->Html->meta('favicon.ico','img/favicon.ico',array('type' => 'icon'));
 		echo $this->Html->css('cake.generic');
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -198,10 +199,6 @@ $(document).ready(function (e) {
 		  </li>
 		  <li><a href="/daris/olevelmarksheetresults/upLoadData">Upload Data</a>
 		  </li>
-		  <li><a href="#">Edit</a>
-		  </li>
-		  <li><a href="#">Comment</a>
-		  </li>
 	      </ul>
 	  </li>
 	  <li><a href="#">Reports</a>
@@ -225,10 +222,10 @@ $(document).ready(function (e) {
 	  <li><a href="/daris/schooldonesubjects/">O-level Subjects</a></li>
 	  <li><a href="/daris/schooldoneasubjects/">A-level Subjects</a></li>
 	  <li><a href="/daris/schooldoneexams/">Examinations</a></li>
-	  <li><a href="/daris/schooldoneexams/">Grading</a>
+	  <li><a href="/daris/gradeprofiles/">Grading</a>
 	  <ul>
 	  <li><a href="/daris/gradeprofiles/">Profiles</a></li>
-	  <li><a href="#">Assign profiles</a></li>
+	  <li><a href="/daris/gradeprofiles/assign">Assign profiles</a></li>
 	  </ul>	  
 	  </li>
 	  </ul>

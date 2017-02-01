@@ -17,13 +17,26 @@ class StudentsController extends AppController {
 	$this->Paginator->settings = array(
 	  'Student' => array (
 	    'paramType' => 'querystring',
-	    'limit' => 100,
+	    'limit' => 10,
 	    'order' => array(
 	      'Student.id' => 'desc'
-	    )
-	  )
+	    ),
+	    'conditions' => array('Student.leavingreason =' => 'None')
+	  ),
+	  //'conditions' => array('Student.sex =' => 'M')
 	);
 	$this->set('students', $this->Paginator->paginate());
+	$this->set('studentsnotpartofschool', 0);
+	$this->set('extrasearchison', 0);
+	
+	$this->loadModel('Schoolstream');
+	$streamsintheschool = $this->Schoolstream->find('list', array(
+		'fields' => array('Schoolstream.shortstreamname','Schoolstream.stream'),
+		//’conditions’ => array(’Article.status !=’ => ’pending’),
+		'recursive' => 0
+	));
+	
+	$this->set('streamsintheschool',$streamsintheschool);
 	/*$students = $this->Student->find(
 				      'all', 
 				      array('order' => 'Student.id DESC', 'group' => 'Student.id')
@@ -36,23 +49,93 @@ class StudentsController extends AppController {
       $this->layout = 'default2';
       if ($this->request->is('put') || $this->request->is('post')) {
 	// poor man's Post Redirect Get behavior
+	$studentnotpartofschool = $this->request->data('studentnotpartofschool');
 	return $this->redirect(array(
 	  '?' => array(
-	    'q' => $this->request->data('Student.searchQuery')
+	    'q' => $this->request->data('Student.searchQuery'),
+	    'snpos' => $this->request->data('Student.studentnotpartofschool'),
+	    'exson' => $this->request->data('Student.showextracriterea'),// extrasearchon
+	    'clcsn' => $this->request->data('Student.currentclass'),//class chosen
+	    'jndn' => ($this->request->data('Student.joiningdate')),//joining year
+	    'lndn' => ($this->request->data('Student.leavingdate')),//leaving year
+	    'strm' => ($this->request->data('Student.currentstream')),//stream
+	    'sex' => ($this->request->data('Student.sex')),//sex
+	    'availstate' => ($this->request->data('Student.availabilitystatus')),//availabilitystatus
+	    'relgn' => ($this->request->data('Student.religion')),//religion
 	  )
 	));
       }
+      
       $this->Student->recursive = 0;
       $searchQuery = $this->request->query('q');
+      $studentnotpartofschool = $this->request->query('snpos');
+      $extrasearchison = $this->request->query('exson');
+      $currentclass = $this->request->query('clcsn');
+      $joiningdate = $this->request->query('jndn');
+      $leavingdate = $this->request->query('lndn');
+      $currentstream = $this->request->query('strm');
+      $sex = $this->request->query('sex');
+      $availabilitystatus = $this->request->query('availstate');
+      $religion = $this->request->query('relgn');
+      
+      if($studentnotpartofschool === "1"){
+      
+	  $studentnotpartofschool = "1";
+      
+      }else{
+      
+	  $studentnotpartofschool = "0";
+      
+      }
       $this->Paginator->settings = array(
 	'Student' => array(
-	'findType' => 'search',
-	'searchQuery' => $searchQuery
+	  'findType' => 'search',
+	  'limit' => 10,
+	  'searchQuery' => $searchQuery,
+	  'studentnotpartofschool' => $studentnotpartofschool,
+	  'currentclass' => $currentclass,
+	  'joiningdate' => $joiningdate,
+	  'leavingdate' => $leavingdate,
+	  'currentstream' => $currentstream,
+	  'sex' => $sex,
+	  'availabilitystatus' => $availabilitystatus,
+	  'religion' => $religion,
 	)
       );
+      
+      if($studentnotpartofschool === "1"){
+      
+	 $this->set('studentsnotpartofschool', 1);
+      
+      }else{
+      
+	 $this->set('studentsnotpartofschool', 0);
+      
+      }
+      
+      if($extrasearchison == "1"){
+      
+	  $this->set('extrasearchison', 1);
+      
+      }else{
+      
+	  $this->set('extrasearchison', 0);
+      
+      }
+      
+      $this->loadModel('Schoolstream');
+      $streamsintheschool = $this->Schoolstream->find('list', array(
+		'fields' => array('Schoolstream.shortstreamname','Schoolstream.stream'),
+		//’conditions’ => array(’Article.status !=’ => ’pending’),
+		'recursive' => 0
+      ));
+	
+      $this->set('streamsintheschool',$streamsintheschool);
+      
       $this->set('students', $this->Paginator->paginate());
       $this->set('searchQuery', $searchQuery);
       $this->render('index');
+      
     }
     
     
@@ -206,6 +289,13 @@ class StudentsController extends AppController {
 	}
 	//}
 	
+	$this->loadModel('Schooldoneasubject');
+	$alevel_subjects = $this->Schooldoneasubject->find('list', array(
+		'fields' => array('Schooldoneasubject.id','Schooldoneasubject.shortsubjectname'),
+		//’conditions’ => array(’Article.status !=’ => ’pending’),
+		'recursive' => 0
+	));
+	$this->set('alevel_subjects', $alevel_subjects);
     }
 
     public function edit($id = null) {

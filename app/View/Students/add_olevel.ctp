@@ -23,8 +23,20 @@
     </td>
     <td>
     <?php
-    echo $this->Form->checkbox('multiple')."Enter multiple records continously"."<br/>";
+    echo $this->Form->checkbox('multiple')."Enter multiple records for the same class and stream continously"."<br/>";
     ?>
+    <!--
+	<?php   echo $this->Html->link(
+		    '<< Previous ',
+		     array('action' => '')
+		     );?>
+		     |
+      <?php   echo $this->Html->link(
+		    ' Next >>',
+		     array('action' => '')
+		     );
+	?>
+    -->
     </td>
     </tr></table>
     <?php
@@ -50,6 +62,8 @@
 		   "geog" => "GEOG",
 		   "cre" => "CRE",
     );
+    
+
     $nationality = array(
 		   "Ug" => "Uganda",
 		   "S.Sud" => "South Sudan",
@@ -63,7 +77,7 @@
 		   "Ethio" => "Ethiopia",
 		   "Erit" => "Eritrea",
     );
-
+    
     $regilions = array(
 		   "Pentecostal" => "Pentecostal",
 		   "Protestant" => "Protestant",
@@ -92,12 +106,13 @@
     );
 
     $leavingreasons = array(
-		   "None" => "None",
+		   "None" => "None - still a student with the school",
 		   "Finished a candidate class" => "Finished a candidate class",
 		   "Not promoted to the next class and left" => "Not promoted to the next class and left",
 		   "Fees Defaulter" => "Fees Defaulter",
 		   "Expelled" => "Expelled",
 		   "Just chose not to come back" => "Just chose not to come back",
+		   "Reason not known" => "Unknown reason"
     );
 
 //     ?>
@@ -106,7 +121,7 @@
 <td>
 <?php
 
-   echo $this->Form->input('registrationnumber', array('label' => 'Registration Number','disabled' => 'disabled'));
+   echo $this->Form->input('registrationnumber', array('label' => 'Registration Number','readonly' => 'readonly'));
 ?>
 </td>
 <td>
@@ -462,7 +477,7 @@ function getnextregistrationnumber(){
       //update:"#StudentRegistrationnumber"
       success: function(data){
 	  document.getElementById('StudentRegistrationnumber').value = data;
-	  //$("#StudentRegistrationnumber").removeAttr("disabled");
+	  //$("#StudentRegistrationnumber").removeAttr("readonly");
       },
       error: function(){
 	alert("Failed to get a registration number");
@@ -482,7 +497,7 @@ $(function() {
       //update:"#StudentRegistrationnumber"
       success: function(data){
 	  document.getElementById('StudentRegistrationnumber').value = data;
-	  //$("#StudentRegistrationnumber").removeAttr("disabled");
+	  //$("#StudentRegistrationnumber").removeAttr("readonly");
       }
     });
     //getnextregistrationnumber();
@@ -490,15 +505,42 @@ $(function() {
 });
 
 $(function() {
+  $('#StudentSurname').change(function() {
+    //var a = $("#StudentCurrentclass").val ;
+    if(document.getElementById('StudentRegistrationnumber').value == ""){
+	var one = document.getElementById('StudentCurrentclass').value;
+	$.ajax({
+	  type:"POST",
+	  datatype:'json',
+	  cache: false,
+	  data: {"currentclass":one/*$("#StudentCurrentclass").val()*/},
+	  url:"get_the_registrationnumber",
+	  //update:"#StudentRegistrationnumber"
+	  success: function(data){
+	      document.getElementById('StudentRegistrationnumber').value = data;
+	      //$("#StudentRegistrationnumber").removeAttr("readonly");
+	  }
+	});
+	//getnextregistrationnumber();
+    }else{
+    
+	
+    
+    }
+  });
+});
+
+$(function() {
   $('body').on('submit','#StudentAddOlevelForm',function(e) {
   if($("#StudentMultiple").prop('checked')){
-    $("#StudentRegistrationnumber").removeAttr("disabled");
+    $("#StudentRegistrationnumber").removeAttr("readonly");
     var formData = $(this).serialize();
     //$("#newmessage").html("Success");
     var a = $("#StudentRegistrationnumber").val();
     var studentsurname = $("#StudentSurname").val();
     var studentothernames = $("#StudentOthernames").val();
     var selectedclass = $("#StudentCurrentclass").val();
+    var selectedstream = $("#StudentCurrentstream").val();
     e.preventDefault();
     $.ajax({
       type:"POST",
@@ -510,7 +552,7 @@ $(function() {
       //update:"#StudentRegistrationnumber"
       success: function(data){
 	//document.getElementById('newmessage').value = data;
-	$("#StudentRegistrationnumber").attr("disabled", "disabled");
+	$("#StudentRegistrationnumber").attr("readonly", "readonly");
 	$("#flashMessage").addClass("message"); 
 	$("#flashMessage").html("Added "+studentsurname+" "+studentothernames+ " ,"+"registration number:"+a);
 	//$("#StudentAddOlevelForm")[0].reset();
@@ -519,19 +561,21 @@ $(function() {
 	$("#StudentPicture").removeAttr("value");
 	$("#StudentMultiple").attr("checked",true);
 	$("#StudentCurrentclass option[value="+selectedclass+"]").attr("selected",true);
+	$("#StudentCurrentstream option[value="+selectedstream+"]").attr("selected",true);
+	document.getElementById("StudentSurname").focus();
 	getnextregistrationnumber();
 	//e.preventDefault();
 	  //document.getElementById("newmessage").innerHTML = "New text!";
       },
       error: function(data){
-        $("#StudentRegistrationnumber").attr("disabled", "disabled");
+        $("#StudentRegistrationnumber").attr("readonly", "readonly");
         $("#flashMessage").addClass("message"); 
 	$("#flashMessage").html("Failed to save details for Student with registration number:"+a);      
       }
     });
   }else{
   
-      $("#StudentRegistrationnumber").removeAttr("disabled");  
+      $("#StudentRegistrationnumber").removeAttr("readonly");  
       //$( "#StudentAddOlevelForm" ).submit();
   }
   });

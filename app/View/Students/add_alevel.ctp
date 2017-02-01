@@ -88,12 +88,13 @@
     );
 
     $leavingreasons = array(
-		   "None" => "None",
+		   "None" => "None - still a student with the school",
 		   "Finished a candidate class" => "Finished a candidate class",
 		   "Not promoted to the next class and left" => "Not promoted to the next class and left",
 		   "Fees Defaulter" => "Fees Defaulter",
 		   "Expelled" => "Expelled",
 		   "Just chose not to come back" => "Just chose not to come back",
+		   "Reason not known" => "Unknown reason"
     );
     
     $subjectofolevel = array(
@@ -128,6 +129,8 @@
 		   "Lit" => "Lit",
 		   "Agri" => "Agri",
     );
+    
+    $subjectofalevel = $alevel_subjects;
 //     ?>
 <table>
 <tr class = "olevelresults">
@@ -232,22 +235,22 @@
 <tr class = "olevelresults">
 <td>
 <?php
-echo $this->Form->input('Alevelsubjectcombination.subject1', array('label' => 'Subject One','options' => $subjectofalevel,'selected' => 'Chemistry'));
+echo $this->Form->input('Alevelsubjectcombination.subject1', array('label' => 'Subject One','options' => $subjectofalevel,'selected' => 'none'));
 ?>
 </td>
 <td>
 <?php
-echo $this->Form->input('Alevelsubjectcombination.subject2', array('label' => 'Subject Two','options' => $subjectofalevel,'selected' => 'Chemistry'));
+echo $this->Form->input('Alevelsubjectcombination.subject2', array('label' => 'Subject Two','options' => $subjectofalevel,'selected' => 'none'));
 ?>
 </td>
 <td>
 <?php
-echo $this->Form->input('Alevelsubjectcombination.subject3', array('label' => 'Subject Three','options' => $subjectofalevel,'selected' => 'Chemistry'));
+echo $this->Form->input('Alevelsubjectcombination.subject3', array('label' => 'Subject Three','options' => $subjectofalevel,'selected' => 'none'));
 ?>
 </td>
 <td>
 <?php
-echo $this->Form->input('Alevelsubjectcombination.subject4', array('label' => 'Subject Four','options' => $subjectofalevel,'selected' => 'Chemistry'));
+echo $this->Form->input('Alevelsubjectcombination.subject4', array('label' => 'Subject Four (Subsidiary)','options' => $subjectofalevel,'selected' => 'none'));
 ?>
 </td>
 <td></td>

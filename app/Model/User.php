@@ -92,7 +92,17 @@ class User extends AppModel {
 		'rule' => array('equaltofield','password_update'),
 		'message' => 'Both passwords must match.'
 	    )
-        )	
+        ),
+        'previous_password' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Please confirm your previous password'
+            ),
+	    'rule1' => array(
+		  'rule' => array('checkifsameasprevious'),
+		  'message' => 'Please provide the correct previous password',
+	    ),
+        ),
 	
 	/*'password_update' => array(
 	     'min_length' => array(
@@ -112,6 +122,25 @@ class User extends AppModel {
         )*/
 		
    );
+	
+	function checkifsameasprevious(){
+	
+	    $hashedtablepassword = $this->field('password',
+		array("id =" => AuthComponent::user('id'))
+	    );
+	    
+	    $passwordHasher = new BlowfishPasswordHasher();
+	    if($passwordHasher->hash($this->data[$this->alias]['previous_password']) === $hashedtablepassword){
+	    
+		return true;
+	    
+	    }else {
+	    
+		return false;
+	    
+	    }
+	
+	}
 	
 		/**
 	 * Before isUniqueUsername

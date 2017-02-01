@@ -797,6 +797,12 @@ fieldset.sectiondefinition1 {
 	padding: 16px 10px;
 }
 
+fieldset legend.sectiondefinition1 {
+	color: #003d4c;
+	font-size: 120%;
+	font-weight: normal;
+}
+
 h1.sectiondefinition1 {
 	color: #003d4c;
 	font-size: 160%;
@@ -1079,4 +1085,7 @@ ul#tabmenu li.active ul ul
 ul#tabmenu li.active li
 {
     position: relative;
+}
+.hide {
+ display:none;
 }

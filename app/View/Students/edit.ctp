@@ -99,12 +99,13 @@
     );
 
     $leavingreasons = array(
-		   "None" => "None",
+		   "None" => "None - still a student with the school",
 		   "Finished a candidate class" => "Finished a candidate class",
 		   "Not promoted to the next class and left" => "Not promoted to the next class and left",
 		   "Fees Defaulter" => "Fees Defaulter",
 		   "Expelled" => "Expelled",
 		   "Just chose not to come back" => "Just chose not to come back",
+		   "Reason not known" => "Unknown reason"
     );
     
     $subjectofolevel = array(
@@ -129,7 +130,7 @@
 <td>
 <?php
 
-   echo $this->Form->input('registrationnumber', array('label' => 'Registration Number'));
+   echo $this->Form->input('registrationnumber', array('label' => 'Registration Number', 'readonly' => 'readonly'));
 ?>
 </td>
 <td>

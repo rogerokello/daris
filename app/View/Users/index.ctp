@@ -24,7 +24,13 @@
 			<?php	
 			    if( $numberofusers >= 2 ){
 			    
-				echo " | ".$this->Html->link(" Delete", array('action'=>'delete', $user['User']['id']));
+				//echo " | ".$this->Html->link(" Delete", array('action'=>'delete', $user['User']['id']));
+				
+				echo $this->Form->postLink(
+					'| Delete',
+					array('action' => 'delete', $user['User']['id']),
+					array('confirm' => 'This action will delete this user parmanently, Are you sure you want to continue?')
+					    );
 			    
 			    } else {
 			    

@@ -51,8 +51,8 @@ $(document).ready(function (e) {
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php
-		echo $this->Html->meta('icon');
-
+		//echo $this->Html->meta('icon');
+		echo $this->Html->meta('favicon.ico','img/favicon.ico',array('type' => 'icon'));
 		echo $this->Html->css('cake.generic');
 
 		echo $this->fetch('meta');

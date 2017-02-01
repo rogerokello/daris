@@ -208,7 +208,7 @@ class OlevelmarksheetresultsController extends AppController {
 				  $studentsbyclass = $this->Student->find('all',
 				      array(
 					  'fields' => array('Student.registrationnumber','Student.id','Student.surname','Student.othernames','Student.currentstream'),
-					  'conditions' => array('Student.currentclass =' => 1,'Student.availabilitystatus =' => "Present"),
+					  'conditions' => array('Student.currentclass =' => 1,'Student.leavingreason =' => "None"),
 					  'order' => array( 'Student.currentstream' => 'asc','Student.surname' => 'asc'),
 					  'recursive' => 0
 				      )
@@ -219,7 +219,7 @@ class OlevelmarksheetresultsController extends AppController {
 				  $studentsbyclass = $this->Student->find('all',
 				      array(
 					  'fields' => array('Student.registrationnumber','Student.id','Student.surname','Student.othernames','Student.currentstream'),
-					  'conditions' => array('Student.currentclass =' => 1,'Student.availabilitystatus =' => "Present",'Student.currentstream =' => $stream),
+					  'conditions' => array('Student.currentclass =' => 1,'Student.leavingreason =' => "None",'Student.currentstream =' => $stream),
 					  'order' => array( 'Student.currentstream' => 'asc','Student.surname' => 'asc'),
 					  'recursive' => 0
 				      )
@@ -244,14 +244,14 @@ class OlevelmarksheetresultsController extends AppController {
 			      if($stream_exists == 0){
 				  $studentsbyclass = $this->Student->find('all', array(
 				      'fields' => array('Student.registrationnumber','Student.id','Student.surname','Student.othernames','Student.currentstream'),
-				      'conditions' => array('Student.currentclass =' => 2,'Student.availabilitystatus =' => "Present"),
+				      'conditions' => array('Student.currentclass =' => 2,'Student.leavingreason =' => "None"),
 				      'order' => array( 'Student.currentstream' => 'asc','Student.surname' => 'asc'),
 				      'recursive' => 0
 				  ));
 			      }else{
 				  $studentsbyclass = $this->Student->find('all', array(
 				      'fields' => array('Student.registrationnumber','Student.id','Student.surname','Student.othernames','Student.currentstream'),
-				      'conditions' => array('Student.currentclass =' => 2,'Student.availabilitystatus =' => "Present",'Student.currentstream =' => $stream),
+				      'conditions' => array('Student.currentclass =' => 2,'Student.leavingreason =' => "None",'Student.currentstream =' => $stream),
 				      'order' => array( 'Student.currentstream' => 'asc','Student.surname' => 'asc'),
 				      'recursive' => 0
 				  ));
@@ -275,14 +275,14 @@ class OlevelmarksheetresultsController extends AppController {
 			      if($stream_exists == 0){
 				  $studentsbyclass = $this->Student->find('all', array(
 				      'fields' => array('Student.registrationnumber','Student.id','Student.surname','Student.othernames','Student.currentstream'),
-				      'conditions' => array('Student.currentclass =' => 3,'Student.availabilitystatus =' => "Present"),
+				      'conditions' => array('Student.currentclass =' => 3,'Student.leavingreason =' => "None"),
 				      'order' => array( 'Student.currentstream' => 'asc','Student.surname' => 'asc'),
 				      'recursive' => 0
 				  ));
 			      }else{
 				  $studentsbyclass = $this->Student->find('all', array(
 				      'fields' => array('Student.registrationnumber','Student.id','Student.surname','Student.othernames','Student.currentstream'),
-				      'conditions' => array('Student.currentclass =' => 3,'Student.availabilitystatus =' => "Present",'Student.currentstream =' => $stream),
+				      'conditions' => array('Student.currentclass =' => 3,'Student.leavingreason =' => "None",'Student.currentstream =' => $stream),
 				      'order' => array( 'Student.currentstream' => 'asc','Student.surname' => 'asc'),
 				      'recursive' => 0
 				  ));
@@ -304,14 +304,14 @@ class OlevelmarksheetresultsController extends AppController {
 			      if($stream_exists == 0){
 				  $studentsbyclass = $this->Student->find('all', array(
 				      'fields' => array('Student.registrationnumber','Student.id','Student.surname','Student.othernames','Student.currentstream'),
-				      'conditions' => array('Student.currentclass =' => 4,'Student.availabilitystatus =' => "Present"),
+				      'conditions' => array('Student.currentclass =' => 4,'Student.leavingreason =' => "None"),
 				      'order' => array( 'Student.currentstream' => 'asc','Student.surname' => 'asc'),
 				      'recursive' => 0
 				  ));
 			      }else{
 				  $studentsbyclass = $this->Student->find('all', array(
 				      'fields' => array('Student.registrationnumber','Student.id','Student.surname','Student.othernames','Student.currentstream'),
-				      'conditions' => array('Student.currentclass =' => 4,'Student.availabilitystatus =' => "Present",'Student.currentstream =' => $stream),
+				      'conditions' => array('Student.currentclass =' => 4,'Student.leavingreason =' => "None",'Student.currentstream =' => $stream),
 				      'order' => array( 'Student.currentstream' => 'asc','Student.surname' => 'asc'),
 				      'recursive' => 0
 				  ));

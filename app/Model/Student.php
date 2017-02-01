@@ -66,6 +66,21 @@ class Student extends AppModel {
 	      'message' => 'This registration number is already taken, please enter another one',
 	   )   
       ),
+      'surname' => array(
+	  
+	  'surnameRule-1' => array(
+	      'rule' => array('minLength', 1),
+	      'message' => 'A Surname is required',	  
+	  )
+	  
+      ),      
+      'othernames' => array(
+	  
+	  'othernamesRule-1' => array(
+	      'rule' => array('minLength', 1),
+	      'message' => 'Othername(s) is(are) required',	  
+	  )
+      ),
       'picturepath' => array(
 
 
@@ -128,14 +143,88 @@ protected function _findSearch($state, $query, $results = array())
 {
   if ($state === 'before') {
     $searchQuery = Hash::get($query, 'searchQuery');
+    $studentnotpartofschool = Hash::get($query, 'studentnotpartofschool');
+    $elementsofquery = array();
+    $elementsofquery['currentclass'] = Hash::get($query, 'currentclass');
+    $elementsofquery['joiningdate'] = Hash::get($query, 'joiningdate');
+    $elementsofquery['leavingdate'] = Hash::get($query, 'leavingdate');
+    $elementsofquery['currentstream'] = Hash::get($query, 'currentstream');
+    $elementsofquery['sex'] = Hash::get($query, 'sex');
+    $elementsofquery['availabilitystatus'] = Hash::get($query, 'availabilitystatus');
+    $elementsofquery['religion'] = Hash::get($query, 'religion');
+    
     $searchConditions = array(
       'or' => array(
         "{$this->alias}.registrationnumber LIKE" => '%' . $searchQuery . '%',
         "{$this->alias}.surname LIKE" => '%' . $searchQuery . '%',
         "{$this->alias}.othernames LIKE" => '%' . $searchQuery . '%',
         "{$this->alias}.fullnames LIKE" => '%' . $searchQuery . '%'
+      ), 
+      'and' => array(
+        
       )
     );
+    
+    if($studentnotpartofschool === "1"){
+    
+	$searchConditions = array(
+	  'or' => array(
+	    "{$this->alias}.registrationnumber LIKE" => '%' . $searchQuery . '%',
+	    "{$this->alias}.surname LIKE" => '%' . $searchQuery . '%',
+	    "{$this->alias}.othernames LIKE" => '%' . $searchQuery . '%',
+	    "{$this->alias}.fullnames LIKE" => '%' . $searchQuery . '%'
+	  ), 
+	  'and' => array(
+	    "{$this->alias}.leavingreason NOT LIKE" => 'None',
+	  )
+	);
+    
+    }else{
+    
+	$searchConditions = array(
+	  'or' => array(
+	    "{$this->alias}.registrationnumber LIKE" => '%' . $searchQuery . '%',
+	    "{$this->alias}.surname LIKE" => '%' . $searchQuery . '%',
+	    "{$this->alias}.othernames LIKE" => '%' . $searchQuery . '%',
+	    "{$this->alias}.fullnames LIKE" => '%' . $searchQuery . '%',
+	    //"{$this->alias}.joiningdate like" => "".$elementsofquery['joiningdate']/*['year']*/.""
+	  ), 
+	  'and' => array(
+	    "{$this->alias}.leavingreason LIKE" => 'None',
+	  )
+	); 	  
+    
+    }
+    
+    
+    
+    if($elementsofquery['currentclass'] != ''){
+	    $searchConditions['and']["{$this->alias}.currentclass ="] = $elementsofquery['currentclass'];
+    }
+    
+    if($elementsofquery['joiningdate']['year'] != ''){
+	    $searchConditions['and']["{$this->alias}.joiningdate like"] = '%'.(string)$elementsofquery['joiningdate']['year'].'%';
+    }
+
+    if($elementsofquery['leavingdate']['year'] != ''){
+	    $searchConditions['and']["{$this->alias}.leavingdate like"] = '%'.(string)$elementsofquery['leavingdate']['year'].'%';
+    }
+    
+    if($elementsofquery['currentstream'] != ''){
+	    $searchConditions['and']["{$this->alias}.currentstream like"] = '%'.(string)$elementsofquery['currentstream'].'%';
+    }
+    
+    if($elementsofquery['sex'] != ''){
+	    $searchConditions['and']["{$this->alias}.sex like"] = '%'.(string)$elementsofquery['sex'].'%';
+    }
+    
+    if($elementsofquery['availabilitystatus'] != ''){
+	    $searchConditions['and']["{$this->alias}.availabilitystatus like"] = '%'.(string)$elementsofquery['availabilitystatus'].'%';
+    }
+
+    if($elementsofquery['religion'] != ''){
+	    $searchConditions['and']["{$this->alias}.religion like"] = '%'.(string)$elementsofquery['religion'].'%';
+    }
     
     $query['conditions'] = array_merge($searchConditions,(array)$query['conditions']);
     return $query;

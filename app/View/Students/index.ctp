@@ -1,18 +1,179 @@
+<!--<table>
+    <tr>
+	<td><?php //echo $this->Html->link('Home', array('controller' => 'Users','action' => 'loginhome'));?></td>
+	<td><?php //echo $this->Html->link('Add New', array('action' => 'add_olevel')); ?></td>
+    </tr>
+</table>
+-->
+<?php
+  echo $this->Form->create('Student', array('action' => 'search'));
+  if (!isset($searchQuery)) {
+    $searchQuery = '';
+  }
+  
+  
+  echo $this->Form->input('searchQuery', array('label' => 'Search for Student (Use a Registration number, Surname or Other Names)','value' => h($searchQuery)));
+  if($extrasearchison == 0){
+  
+      echo $this->Form->input('showextracriterea', array('label' => 'Show extra search criterea','type' => 'checkbox'));
+      echo "<span id=\"extrasearchcriterea\" class=\"hide\">";
+  
+  }else{
+  
+      echo $this->Form->input('showextracriterea', array('label' => 'Show extra search criterea','type' => 'checkbox', 'checked'));
+      echo "<span id=\"extrasearchcriterea\" class=\"\">";
+  
+  }
+  ?>
+  <fieldset class="sectiondefinition1" id ="StudentSearchfieldset_"><legend class="sectiondefinition1">Extra Search criterea</legend><?php
+  if(($studentsnotpartofschool == 1)){
+  
+      echo $this->Form->input('studentnotpartofschool', array('label' => 'Search for students who are nolonger part of school(Old Boys and Old Girls)','type' => 'checkbox', 'checked' => 'checked'));
+  
+  }else {
+  
+      echo $this->Form->input('studentnotpartofschool', array('label' => 'Search for students who are nolonger part of school(Old Boys and Old Girls)','type' => 'checkbox'));
+  
+  }
+  
+  $currentstream = $streamsintheschool;
+  //$currentstream[""] = "";
+  $currentstream = array_merge(array("" => ""),$currentstream);
+  $sexes = array(
+		   "" => "",
+		   "F" => "F",
+		   "M" => "M",
+    );
+    
+    $regilions = array(
+		   "" => "",
+		   "Pentecostal" => "Pentecostal",
+		   "Protestant" => "Protestant",
+		   "Catholic" => "Catholic",
+		   "Moslem" => "Moslem",
+    );
+    
+    $availabilitystatus = array(
+		   "" => "",
+		   "Present" => "Present",
+		   "Absent" => "Absent",
+    );
+    
+    $currentclass = array(
+		   ""  => "",
+		   "1" => "Senior One",
+		   "2" => "Senior Two",
+		   "3" => "Senior Three",
+		   "4" => "Senior Four",
+		   "5" => "Senior Five",
+		   "6" => "Senior Six",
+    );?>
+  <table>
+      <tr class = "olevelresults">
+      <td>
+      <?php
+	  echo $this->Form->input('currentclass', array(
+					'label' => 'Choose class',
+					'options' => $currentclass,
+					'selected' => ''));     
+      ?>
+      </td>
+      <td>
+      <?php
+	  echo $this->Form->input('currentstream', array(
+					'label' => 'Choose stream',
+					'options' => $currentstream,
+					'selected' => ""));     
+      ?>
+      </td>
+      <td>
+      <?php
+	  echo $this->Form->input('sex', array(
+					'label' => 'Gender(sex)',
+					'options' => $sexes,
+					'selected' => ''));
+      ?>
+      </td>
+      <td>
+      <?php
+	  echo $this->Form->input('availabilitystatus', array(
+					'label' => 'Present/Absent',
+					'options' => $availabilitystatus,
+					'selected' => ''));
+      
+      ?>
+      </td>
+      <td>
+      <?php
+	echo $this->Form->input('joiningdate', array(
+	    'label' => 'Year of Joining',
+	    'dateFormat' => 'Y',
+	    'maxYear' => date('Y'),
+	    'minYear' => date('Y') - 100,
+	    'empty' => ' ',
+	));      
+      ?>
+      </td>
+      <td>
+      <?php
+	echo $this->Form->input('leavingdate', array(
+	    'label' => 'Year of leaving',
+	    'dateFormat' => 'Y',
+	    'maxYear' => date('Y'),
+	    'minYear' => date('Y') - 100,
+	    'empty' => ' ',
+	));      
+      ?>
+      </td>
+      </tr>
+      <tr class = "olevelresults">
+      <td>
+      <?php
+	  echo $this->Form->input('religion', array(
+					'label' => 'Religion',
+					'options' => $regilions,
+					'selected' => ''));
+      ?>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      </tr>
+  </table>
+  <?php
+
+	
+	
+  ?>
+  
+  </fieldset><?php
+  echo "</span>";
+  echo $this->Form->end(__('Search'));
+?>
+<br/>
+<?php   echo $this->Html->link(
+		    'Add O-level',
+		     array('action' => 'add_olevel')
+		     );?>
+	    <?php   echo $this->Html->link(
+		    'Add A-level',
+		     array('action' => 'add_alevel')
+		     );
+?>
+<br/>
 <table>
     <tr>
 	<td><?php //echo $this->Html->link('Home', array('controller' => 'Users','action' => 'loginhome'));?></td>
 	<td><?php //echo $this->Html->link('Add New', array('action' => 'add_olevel')); ?></td>
     </tr>
 </table>
-
-<?php
-  echo $this->Form->create('Student', array('action' => 'search'));
-  if (!isset($searchQuery)) {
-    $searchQuery = '';
-  }
-  echo $this->Form->input('searchQuery', array('label' => 'Search for Student','value' => h($searchQuery)));
-  echo $this->Form->end(__('Search'));
-?>
 <table>
     <tr>
 	<th>Picture</th>
@@ -102,4 +263,25 @@
     //echo $this->Paginator->next( '>>', array( 'class' => '', 'tag' => 'li' ), null, array( 'class' => 'disabled', 'tag' => 'li' ) );
     ?>
     </ul>
-    </div> !>
+    </div> -->
+    <script>
+   
+	
+	    //$("#StudentShowextracriterea_").click(function(e) {
+	    $("#StudentShowextracriterea").change(function(e) {
+		if(document.getElementById('StudentShowextracriterea').checked == true){
+		
+		    
+		    document.getElementById("extrasearchcriterea").classList.remove('hide');
+		
+		}else{
+		
+		    
+		    document.getElementById("extrasearchcriterea").classList.add("hide");
+		
+		}
+	    });
+ 
+    
+    </script>
+    
