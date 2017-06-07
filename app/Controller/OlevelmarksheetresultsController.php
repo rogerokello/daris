@@ -54,10 +54,17 @@ class OlevelmarksheetresultsController extends AppController {
 		$foundname = $this->Student->find('all', 
 		    array(
 			'fields' => array('Student.id'),
-			'conditions' => array('Student.id =' => $registrationnumber)
+			'conditions' => array('Student.id =' => $registrationnumber),
+			'recursive' => -1
 		    )
 		);	      	      
-		$students = $this->Student->findAllByRegistrationnumber($registrationnumber);
+		$students = $this->Student->findAllByRegistrationnumber($registrationnumber,
+		    array(),
+		    array(),
+		    null,
+		    null,
+		    -1		
+		);
 	      
 		if($students != null){
 	      

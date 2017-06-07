@@ -185,7 +185,8 @@ class Olevelmarksheetresult extends AppModel {
 		'conditions' => array('Student.currenttimestamp >' => $marksheettimestamp, 
 				      'Student.leavingreason =' => 'None',
 				      'Student.currentclass =' => $class,
-		)
+		),
+		'recursive' => -1
 	    ));
 	    
 	    // extract students of that particular class
@@ -193,7 +194,8 @@ class Olevelmarksheetresult extends AppModel {
 		'fields' => array('Student.id'),
 		'conditions' => array('Student.leavingreason =' => 'None',
 				      'Student.currentclass =' => $class,
-		)
+		),
+		'recursive' => -1
 	    ));
 	    
 	    
@@ -214,7 +216,8 @@ class Olevelmarksheetresult extends AppModel {
 		'conditions' => array('exam_name =' => $examname, 
 				      'year =' => $examyear,
 				      'class =' => $class,
-		)
+		),
+		'recursive' => -1
 	    ));
 	    
 	    $marksheet_student_ids = null;

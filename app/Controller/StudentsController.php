@@ -22,6 +22,10 @@ class StudentsController extends AppController {
 	      'Student.id' => 'desc'
 	    ),
 	    'conditions' => array('Student.leavingreason =' => 'None'),
+	    'fields' => array('Student.id','Student.registrationnumber','Student.surname','Student.othernames',
+			      'Student.availabilitystatus','Student.studenthaspic','Student.sex',
+			      'Student.currentclass','Student.currentclass','Student.currentstream',
+	    ),
 	    'recursive' => -1
 	  ),
 	  //'conditions' => array('Student.sex =' => 'M')
@@ -67,7 +71,7 @@ class StudentsController extends AppController {
 	));
       }
       
-      $this->Student->recursive = 0;
+      $this->Student->recursive = -1;
       $searchQuery = $this->request->query('q');
       $studentnotpartofschool = $this->request->query('snpos');
       $extrasearchison = $this->request->query('exson');
@@ -92,6 +96,10 @@ class StudentsController extends AppController {
 	'Student' => array(
 	  'findType' => 'search',
 	  'limit' => 10,
+	  'fields' => array('Student.id','Student.registrationnumber','Student.surname','Student.othernames',
+			      'Student.availabilitystatus','Student.studenthaspic','Student.sex',
+			      'Student.currentclass','Student.currentclass','Student.currentstream',
+	   ),
 	  'searchQuery' => $searchQuery,
 	  'studentnotpartofschool' => $studentnotpartofschool,
 	  'currentclass' => $currentclass,
@@ -101,7 +109,7 @@ class StudentsController extends AppController {
 	  'sex' => $sex,
 	  'availabilitystatus' => $availabilitystatus,
 	  'religion' => $religion,
-	  'recursive' => 0
+	  'recursive' => -1
 	)
       );
       
@@ -195,6 +203,10 @@ class StudentsController extends AppController {
 	  'sex' => $sex,
 	  'availabilitystatus' => $availabilitystatus,
 	  'religion' => $religion,
+	  'fields' => array('Student.id','Student.registrationnumber','Student.surname','Student.othernames',
+			      'Student.availabilitystatus','Student.studenthaspic','Student.sex',
+			      'Student.currentclass','Student.currentclass','Student.currentstream',
+	  ),
 	)
       );
       
@@ -205,7 +217,11 @@ class StudentsController extends AppController {
 	    'order' => array(
 	      'Student.id' => 'desc'
 	    ),
-	    'conditions' => array('Student.leavingreason =' => 'None')
+	    'conditions' => array('Student.leavingreason =' => 'None'),
+	    'fields' => array('Student.id','Student.registrationnumber','Student.surname','Student.othernames',
+			      'Student.availabilitystatus','Student.studenthaspic','Student.sex',
+			      'Student.currentclass','Student.currentclass','Student.currentstream',
+	    ),
 	  ),
 	  //'conditions' => array('Student.sex =' => 'M')
 	);
