@@ -120,10 +120,14 @@
 		   "Commerce" => "COMM",
 		   "Entreprenuership Education" => "ENTRE",
 		   "Computer Studies" => "COMP",
-		   "Fine Art" => "F/AT",
+		   "Fine Art" => "ART",
 		   "Literature In English" => "LIT",
 		   "Principles And Practices of Agriculture" => "AGRIC",
+		   "Luganda" => "LUG",
+		   "Lango" => "LNGO",
+		   "French" => "FRCH",
     );
+    $subjectofalevel = $alevel_subjects;
 //     ?>
 <table>
 <tr class = "olevelresults">
@@ -222,7 +226,36 @@
 </td>
 </tr>
 </table>
-</fieldset> 
+</fieldset>
+<fieldset class="sectiondefinition1"><legend class="sectiondefinition">Subject Combination</legend>
+<table>
+<tr class = "olevelresults">
+<td>
+<?php
+echo $this->Form->input('Alevelsubjectcombination.subject1', array('label' => 'Subject One','options' => $subjectofalevel, 'empty' => ' '/*,'selected' => 'none'*/));
+?>
+</td>
+<td>
+<?php
+echo $this->Form->input('Alevelsubjectcombination.subject2', array('label' => 'Subject Two','options' => $subjectofalevel, 'empty' => ' '/*,'selected' => 'none'*/));
+?>
+</td>
+<td>
+<?php
+echo $this->Form->input('Alevelsubjectcombination.subject3', array('label' => 'Subject Three','options' => $subjectofalevel,'empty' => ' '/*,'selected' => 'none'*/));
+?>
+</td>
+<td>
+<?php
+echo $this->Form->input('Alevelsubjectcombination.subject4', array('label' => 'Subject Four (Subsidiary)','options' => $subjectofalevel,'empty' => ' '/*,'selected' => 'none'*/));
+?>
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+</fieldset>
 <fieldset class="sectiondefinition1"><legend class="sectiondefinition">Home address information</legend>
 <table>
 <tr class = "olevelresults">

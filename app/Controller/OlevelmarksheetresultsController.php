@@ -14,6 +14,21 @@ class OlevelmarksheetresultsController extends AppController {
       $this->layout = 'default2';
       if ($this->request->is('post')) {
 	
+	    if(isset($this->request->data['Olevelmarksheetresult']['marksheet_id']) 
+	      ){
+	    
+		$this->Olevelmarksheetresult->id = $this->request->data['Olevelmarksheetresult']['marksheet_id'];
+		if ($this->Olevelmarksheetresult->save($this->request->data)){
+		    $this->Session->setFlash(__('Successfully updated the students marks'));
+		    //return $this->redirect(array('action' => 'index'));
+		}else{
+		
+		    $this->Session->setFlash(__('Was Unable to update the marks'));
+		
+		}
+	    
+	    }else{
+	
 	    if($this->request->data['criterea'] === "singlestudent"){
 	  
 		$this->loadModel('Schooldonesubject');
@@ -32,7 +47,9 @@ class OlevelmarksheetresultsController extends AppController {
 		);
 		$registrationnumber = $this->request->data['registrationnumber'];	    
 		$subject = $foundsubjectname[0]['Schooldonesubject']['fullsubjectname'];	    
-		$examtoenter = $foundexamname[0]['Schooldoneexam']['fullexamname'];	    
+		$examtoenter = $foundexamname[0]['Schooldoneexam']['fullexamname'];
+		//the short exam name
+		$shortexamtoenter = $this->request->data['examtoenter'];
 		$this->loadModel('Student');	    
 		$foundname = $this->Student->find('all', 
 		    array(
@@ -61,14 +78,41 @@ class OlevelmarksheetresultsController extends AppController {
 		    $this->loadModel('Marksheetcriterea');
 	      
 		    $Marksheetcriterea = $this->Olevelmarksheetresult
-					    ->checkIfMarksheetIsCreated($examtoenter,date("Y"),$students[0]['Student']['currentclass']);
+					    ->checkIfMarksheetIsCreated($shortexamtoenter,date("Y"),$students[0]['Student']['currentclass']);
 	      
 		    // if the marksheet has not been created perform these actions
 		    if($Marksheetcriterea == false){
 	      
 			$this->Olevelmarksheetresult
-			     ->createMarksheet($examtoenter,$students[0]['Student']['currentclass'],date("Y"));
+			     ->createMarksheet($shortexamtoenter,$students[0]['Student']['currentclass'],date("Y"));
 	
+			// Extract ,the id of the marksheet containing the students marks
+			$olevelresult_table_id = $this->Olevelmarksheetresult->field('id',
+			    array('student_id' => $students[0]['Student']['id'],
+				  'exam_name' => $this->request->data['examtoenter'],
+				  'year' => date("Y"), 'class' => $students[0]['Student']['currentclass']
+			    )
+			);
+			
+			// Extract the current marks for the subject
+			$olevelresult_table_mark = $this->Olevelmarksheetresult->field($this->request->data['subject'],
+			    array('student_id' => $students[0]['Student']['id'],
+				  'exam_name' => $this->request->data['examtoenter'],
+				  'year' => date("Y"), 'class' => $students[0]['Student']['currentclass']
+			    )
+			);
+			
+			
+			$results = $this->Olevelmarksheetresult->findById($olevelresult_table_id);
+			if (!$results){
+			    throw new NotFoundException(__('Invalid Result'));
+			}
+			if (!$this->request->data){
+			    $this->request->data = $results;
+			}
+			$this->set('subjecttoedit',$this->request->data['subject']);
+			$this->set('current_mark',$olevelresult_table_mark);
+			$this->set('marksheet_id',$olevelresult_table_id);
 			$this->set('examtoenter', $examtoenter);
 			$this->set('subjecttoenter', $subject);
 			$this->set('student', $students);			
@@ -78,7 +122,34 @@ class OlevelmarksheetresultsController extends AppController {
 		    }else{
 		  
 			$this->Olevelmarksheetresult
-			      ->updateMarksheet($examtoenter,$students[0]['Student']['currentclass'],date("Y"));
+			      ->updateMarksheet($shortexamtoenter,$students[0]['Student']['currentclass'],date("Y"));
+			
+			// Extract ,the id of the marksheet containing the students marks
+			$olevelresult_table_id = $this->Olevelmarksheetresult->field('id',
+			    array('student_id' => $students[0]['Student']['id'],
+				  'exam_name' => $this->request->data['examtoenter'],
+				  'year' => date("Y"), 'class' => $students[0]['Student']['currentclass']
+			    )
+			);
+			
+			// Extract the current marks for the subject
+			$olevelresult_table_mark = $this->Olevelmarksheetresult->field($this->request->data['subject'],
+			    array('student_id' => $students[0]['Student']['id'],
+				  'exam_name' => $this->request->data['examtoenter'],
+				  'year' => date("Y"), 'class' => $students[0]['Student']['currentclass']
+			    )
+			);
+			
+			$results = $this->Olevelmarksheetresult->findById($olevelresult_table_id);
+			if (!$results){
+			    throw new NotFoundException(__('Invalid Result'));
+			}
+			if (!$this->request->data){
+			    $this->request->data = $results;
+			}
+			$this->set('subjecttoedit',$this->request->data['subject']);
+			$this->set('current_mark',$olevelresult_table_mark);
+			$this->set('marksheet_id',$olevelresult_table_id);
 			$this->set('examtoenter', $examtoenter);
 			$this->set('subjecttoenter', $subject);
 			$this->set('student', $students);
@@ -469,6 +540,8 @@ class OlevelmarksheetresultsController extends AppController {
 	  }
 
 	  }
+	  
+	  }
     	
  
       }
@@ -498,6 +571,8 @@ class OlevelmarksheetresultsController extends AppController {
       $entrycriterea = "allstudents";
       $this->set('entrycriterea', $entrycriterea); 
     }
+    
+   // public function 
     
     public function upLoadData(){
 	$this->layout = 'default2';
@@ -676,7 +751,7 @@ class OlevelmarksheetresultsController extends AppController {
 	    }
 	}
 	
-	$this->render('up_load_data','uploadlayout');
+	$this->render('up_load_data'/*,'uploadlayout'*/);
     }
     public function subjects(){
 	  if($this->request->is('post')){

@@ -34,7 +34,8 @@ class GradeprofilesController extends AppController {
 	    'order' => array(
 	      'Gradeprofile.id' => 'desc'
 	    ),
-	    'fields' => array('DISTINCT Gradeprofile.profilename','Gradeprofile.*')
+	    'fields' => array('DISTINCT Gradeprofile.profilename','Gradeprofile.*'),
+	    'recursive' => -1
 	  )
 	);
 	$this->set('students', $this->Paginator->paginate());
@@ -61,7 +62,8 @@ class GradeprofilesController extends AppController {
       $this->Paginator->settings = array(
 	'Gradeprofile' => array(
 	'findType' => 'search',
-	'searchQuery' => $searchQuery
+	'searchQuery' => $searchQuery,
+	'recursive' => -1
 	)
       );
       $this->set('students', $this->Paginator->paginate());

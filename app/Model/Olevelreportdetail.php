@@ -33,20 +33,28 @@ class Olevelreportdetail extends AppModel {
 	);
 	
 	
-    public function updateReport($reportdetail_id = null){
+    public function updateReport($reportdetail_id = null, $updateflag = null){
     
 	$Olevelreports = ClassRegistry::init('Olevelreport');
-	if($reportdetail_id != null){
+	if(($reportdetail_id != null) && ($updateflag == 1)){
 	
-	      $Olevelreports->report_add_examsconsidered($reportdetail_id,null);
-	      $Olevelreports->report_gradesubjects($reportdetail_id,null);
+	      $Olevelreports->report_add_examsconsidered($reportdetail_id,null);// Expensive operation
+	      $Olevelreports->report_gradesubjects($reportdetail_id,null);// Expensive operation
 	      $Olevelreports->report_getaggregates($reportdetail_id);
 	      $Olevelreports->report_get_total_mark($reportdetail_id,null);
 	      $Olevelreports->report_getdivision($reportdetail_id);
+	      $Olevelreports->report_get_position($reportdetail_id, null); // Expensive operation
+	
+	}
+	
+	if(($reportdetail_id != null) && ($updateflag == 2)){
+	
+	
 	
 	}
     
     }
+    
     
 /*
     public $validate = array(

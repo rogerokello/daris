@@ -5,6 +5,18 @@
 		   "THREE" => "Term Three"
     );
     
+    $positions = array(0 => 0);
+    
+    $number_of_positions_to_choosefrom = 0;
+    
+    while($number_of_positions_to_choosefrom < $no_of_subjects_already_entered){
+    
+	array_push($positions,($number_of_positions_to_choosefrom+1));
+	$number_of_positions_to_choosefrom++;
+    }
+    
+    $positions = array_slice($positions,1,sizeof($positions),true);
+    
     echo $this->Form->create('Schooldoneexam');
 ?>
     <?php
@@ -37,7 +49,18 @@
 <tr class = "olevelresults">
   <td>
     <?php
-	echo $this->Form->input('startdate', array('label' => 'Start date (For the entry of Examinations into the system)','empty' => ' ',));
+	echo $this->Form->input('reportorder', array(
+						    'label' => 'The order of the exam on the report form',
+						    'options' => $positions,
+	
+	));
+    ?>
+  </td>
+</tr>
+<tr class = "olevelresults">
+  <td>
+    <?php
+	echo $this->Form->input('startdate', array('label' => 'Start date (First date students do the exam)','empty' => ' ',));
     ?>
   </td>
 </tr>
@@ -45,7 +68,7 @@
   <td>
     <?php
 	echo $this->Form->input('enddate', 
-			  array('label' => 'End date (For the entry of Examinations into the system)','empty' => ' ',));
+			  array('label' => 'End date (last date students do the exam)','empty' => ' ',));
     ?>
   </td>
 </tr>

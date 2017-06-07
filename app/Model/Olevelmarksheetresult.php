@@ -54,6 +54,7 @@ class Olevelmarksheetresult extends AppModel {
     public function createMarksheet($examname,$class,$examyear){
 	$mutexrail = ClassRegistry::init('Mutexrail');
 	$student = ClassRegistry::init('Student');
+	//$schooldoneexam = ClassRegistry::init('Schooldoneexam');
 	$marksheetcriterea = ClassRegistry::init('Marksheetcriterea');
 	// Check if marksheet for a particular class is being created and wait for 3s to see if it is created
 	// if it has now been created break out of the while loop and feed the data passed to the student database
@@ -161,7 +162,7 @@ class Olevelmarksheetresult extends AppModel {
 	if($mutexrail->findAllByUpdatingsheetAndClassAndExamnameAndYear(1,$class,$examname,date("Y")) != null){
 	    while($mutexrail->findAllByUpdatingsheetAndClassAndExamnameAndYear(1,$class,$examname,date("Y")) != null){
 		sleep(1);
-		if(($mutexrail->findAllByUpdatingsheetAndClassAndExamnameAndYear(0,$class,$examname,date("Y")) != null) && ($this->Marksheetcriterea->findAllByExamnameAndYearAndClass($examname,date("Y"),$class) != null)){
+		if(($mutexrail->findAllByUpdatingsheetAndClassAndExamnameAndYear(0,$class,$examname,date("Y")) != null) && ($marksheetcriterea->findAllByExamnameAndYearAndClass($examname,date("Y"),$class) != null)){
 		    break;
 		}else{
 		    continue;
@@ -178,15 +179,58 @@ class Olevelmarksheetresult extends AppModel {
 	    $marksheettimestamps = $marksheetcriterea->findAllByClassAndExamnameAndYear($class,$examname,date("Y"));
 	    $marksheettimestamp = $marksheettimestamps[0]['Marksheetcriterea']['currenttimestamp'];
 	    
-	    //search for those records entered after the time the marksheet was created
+	    //search for the records for that class entered after the time the marksheet was created
 	    $classtocreate = $student->find('all', array(
 		'fields' => array('Student.id','Student.currentstream'),
-		'conditions' => array('Student.currenttimestamp >' => $marksheettimestamp)
+		'conditions' => array('Student.currenttimestamp >' => $marksheettimestamp, 
+				      'Student.leavingreason =' => 'None',
+				      'Student.currentclass =' => $class,
+		)
 	    ));
+	    
+	    // extract students of that particular class
+	    $ids_of_class_students = $student->find('all', array(
+		'fields' => array('Student.id'),
+		'conditions' => array('Student.leavingreason =' => 'None',
+				      'Student.currentclass =' => $class,
+		)
+	    ));
+	    
+	    
+	    //ids of students currently available in the class
+	    $class_ids = null;
+	    $class_ids = array();
+	    
+	    foreach($ids_of_class_students as $id){
+	    
+		 array_push($class_ids, $id['Student']['id']);
+	    
+	    }
+	    
+	    // these are the id's of the students who did the exam
+	    // of that class in that particular year
+	    $ids_of_students_exam_year_class = $this->find('all', array(
+		'fields' => array('student_id'),
+		'conditions' => array('exam_name =' => $examname, 
+				      'year =' => $examyear,
+				      'class =' => $class,
+		)
+	    ));
+	    
+	    $marksheet_student_ids = null;
+	    $marksheet_student_ids = array();
+	    
+	    foreach($ids_of_students_exam_year_class as $id){
+	    
+		 array_push($marksheet_student_ids, $id['Olevelmarksheetresult']['student_id']);
+	    
+	    }
+	    
+	    $students_not_in_marksheet = array_diff($class_ids,$marksheet_student_ids);
 	    
 	    // if some records exist that have been created after the time the marksheet was
 	    // created,add those records to the marksheet with O-level results
-	    if($classtocreate != null){
+	    if(is_array($students_not_in_marksheet) && ($students_not_in_marksheet != null)){
 		
 		//******Start updating the class list for the selected class***********//
 		
@@ -207,16 +251,20 @@ class Olevelmarksheetresult extends AppModel {
 		
 		// update the marksheets using the studentid's, class, examname and year
 		      
-		foreach($classtocreate as $studentid){
-	    
+		foreach(/*$classtocreate*/$students_not_in_marksheet as $studentid){
+		    $currentstream = null;
+		    $currentstream = $student->field('currentstream',		    
+			array('id' => $studentid)		    
+		    );
+		    
 		    Olevelmarksheetresult::create();
 		
 		    $data = array(
 			'Olevelmarksheetresult' => array(
-			    'student_id' => $studentid['Student']['id'],
+			    'student_id' => $studentid/*['Student']['id']*/,
 			    'class' => $class,
 			    'exam_name' => $examname,
-			    'stream' => $studentid['Student']['currentstream'],
+			    'stream' => $currentstream,
 			    'year' => date("Y")
 			)
 		    );
@@ -232,7 +280,7 @@ class Olevelmarksheetresult extends AppModel {
 			'examname' => $examname,
 			'class' => $class,
 			'year' => date("Y"),
-			'currenttimestamp' => time()
+			'currenttimestamp' => date('Y-m-d H:i:s',time())
 		    )
 		);
 			

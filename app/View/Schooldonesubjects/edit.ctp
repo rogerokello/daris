@@ -40,7 +40,7 @@
     <?php
 	echo $this->Form->input('subjectgroup', array('label' => 'Subject Group',
 						      'options' => $subjectgroups,
-						      'selected' => 'none'
+						      //'selected' => 'none'
 						      ));
     ?>
   </td>

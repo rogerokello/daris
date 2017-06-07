@@ -87,6 +87,20 @@ class SchooldoneexamsController extends AppController {
  */
     public function add() {
 	    $this->layout = 'default2';
+	    
+	    $no_of_subjects_already_entered = $this->Schooldoneexam->find('count',array(
+	    
+		'conditions' => array('Schooldoneexam.id !=' => null)
+	    
+	    ));
+	    
+	    if(($no_of_subjects_already_entered >= 24) ){
+		$this->Session->setFlash(__('You can only create up to a maximum of 24 Examinations'));
+		return $this->redirect(array('action' => 'index'));
+	    
+	    }else {
+	    
+	    
 	    if (!empty($this->request->data)) {
 		if ($this->request->is('post')) {
 			//$newsubjectname = $this->request->data['Schooldoneexam']['shortsubjectname'];
@@ -101,6 +115,10 @@ class SchooldoneexamsController extends AppController {
 			}
 		}
 	    }
+	    
+	    }
+	    $this->set('no_of_subjects_already_entered', $no_of_subjects_already_entered);
+	    
     }
 
 /**
@@ -125,6 +143,12 @@ class SchooldoneexamsController extends AppController {
 
 	//$shortsubjectnametobemodified = $staff['Schooldoneexam']['shortsubjectname'];
 	
+	$no_of_subjects_already_entered = $this->Schooldoneexam->find('count',array(
+	    
+		'conditions' => array('Schooldoneexam.id !=' => null)
+	    
+	));
+	
 	if ($this->request->is(array('post', 'put'))){
 	    $this->Schooldoneexam->id = $id;
 	    
@@ -146,6 +170,7 @@ class SchooldoneexamsController extends AppController {
 	
 
 	$this->set('staffrecords',$staff);
+	$this->set('no_of_subjects_already_entered', $no_of_subjects_already_entered);
 	
     }
 
@@ -167,19 +192,38 @@ class SchooldoneexamsController extends AppController {
 		$this->request->allowMethod('post', 'delete');
 		//$shortsubjectnamefound = $this->Schooldoneexam->findAllByShortsubjectname($shortsubjectnametobedeleted);
 		
-		//if($shortsubjectnamefound[0]['Schooldoneexam']['shortsubjectname'] != null){
+		$examname = $this->Schooldoneexam->field('alias',
+		
+		      array('id' => $id)
+		
+		);
+		
+		$this->loadModel('Olevelmarksheetresult');
+		$results = $this->Olevelmarksheetresult->field('id',
+	
+			array('exam_name' => $examname)
+	
+		);
+		
+		if($results == false){
+		
 		    if ($this->Schooldoneexam->delete()) {
 			    //$this->Schooldoneexam->deleteColumninTable($shortsubjectnametobedeleted);
 			    $this->Session->setFlash(__('Examination details have been deleted.'));
 		    } else {
 			    $this->Session->setFlash(__('Examination details could not be deleted. Please, try again.'));
 		    }
-		//}else{
-		    //$this->Session->setFlash(__('Subject details could not be deleted because they do not exist. Please, try again.'));
-		//}
-		return $this->redirect(array('action' => 'index'));
+		
+		    return $this->redirect(array('action' => 'index'));
+		}else{
+		
+		    $this->Session->setFlash(__('Could not delete the Examination details because some results are already entered for it'));
+		    return $this->redirect(array('action' => 'index'));
+		
+		}
     }
 
+    /*
     private function createcolumn($columnname){
 	$this->layout = 'default2';
 	// load the model with the data
@@ -187,5 +231,5 @@ class SchooldoneexamsController extends AppController {
 
 	// perform a query using the model you loaded
 	$livequery = $new->query("DESCRIBE olevelmarksheetresults;");
-    }
+    }*/
 }

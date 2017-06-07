@@ -1089,3 +1089,49 @@ ul#tabmenu li.active li
 .hide {
  display:none;
 }
+
+/* This block stipulate the mechanism to formulate the drop down   */
+.dropbtn {
+    /*background-color: #4CAF50;*/
+    /*color: black;*/
+    padding: 16px;
+    /*font-size: 16px;*/
+    border: none;
+    cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    /*background-color: #3e8e41;*/
+}
+
+.dropdown {
+    float: left;
+    position: relative;
+    display: inline-block;
+    
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 50px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    right: 1;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    /*color: black;*/
+    padding: 5px 5px 5px 5px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {
+  /*background-color: #f1f1f1;*/
+  
+}
+
+.show {display:block;}

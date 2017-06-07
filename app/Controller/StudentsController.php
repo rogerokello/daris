@@ -21,7 +21,8 @@ class StudentsController extends AppController {
 	    'order' => array(
 	      'Student.id' => 'desc'
 	    ),
-	    'conditions' => array('Student.leavingreason =' => 'None')
+	    'conditions' => array('Student.leavingreason =' => 'None'),
+	    'recursive' => -1
 	  ),
 	  //'conditions' => array('Student.sex =' => 'M')
 	);
@@ -100,6 +101,7 @@ class StudentsController extends AppController {
 	  'sex' => $sex,
 	  'availabilitystatus' => $availabilitystatus,
 	  'religion' => $religion,
+	  'recursive' => 0
 	)
       );
       
@@ -135,6 +137,111 @@ class StudentsController extends AppController {
       $this->set('students', $this->Paginator->paginate());
       $this->set('searchQuery', $searchQuery);
       $this->render('index');
+      
+    }
+    
+    public function searchedit() {
+      $this->layout = 'default2';
+      if ($this->request->is('put') || $this->request->is('post')) {
+	// poor man's Post Redirect Get behavior
+	$studentnotpartofschool = $this->request->data('studentnotpartofschool');
+	return $this->redirect(array(
+	  '?' => array(
+	    'q' => $this->request->data('Student.searchQuery'),
+	    'snpos' => $this->request->data('Student.studentnotpartofschool'),
+	    'exson' => $this->request->data('Student.showextracriterea'),// extrasearchon
+	    'clcsn' => $this->request->data('Student.currentclass'),//class chosen
+	    'jndn' => ($this->request->data('Student.joiningdate')),//joining year
+	    'lndn' => ($this->request->data('Student.leavingdate')),//leaving year
+	    'strm' => ($this->request->data('Student.currentstream')),//stream
+	    'sex' => ($this->request->data('Student.sex')),//sex
+	    'availstate' => ($this->request->data('Student.availabilitystatus')),//availabilitystatus
+	    'relgn' => ($this->request->data('Student.religion')),//religion
+	  )
+	));
+      }
+      
+      $this->Student->recursive = 0;
+      $searchQuery = $this->request->query('q');
+      $studentnotpartofschool = $this->request->query('snpos');
+      $extrasearchison = $this->request->query('exson');
+      $currentclass = $this->request->query('clcsn');
+      $joiningdate = $this->request->query('jndn');
+      $leavingdate = $this->request->query('lndn');
+      $currentstream = $this->request->query('strm');
+      $sex = $this->request->query('sex');
+      $availabilitystatus = $this->request->query('availstate');
+      $religion = $this->request->query('relgn');
+      
+      if($studentnotpartofschool === "1"){
+      
+	  $studentnotpartofschool = "1";
+      
+      }else{
+      
+	  $studentnotpartofschool = "0";
+      
+      }
+      $this->Paginator->settings = array(
+	'Student' => array(
+	  'findType' => 'search',
+	  'limit' => 10,
+	  'searchQuery' => $searchQuery,
+	  'studentnotpartofschool' => $studentnotpartofschool,
+	  'currentclass' => $currentclass,
+	  'joiningdate' => $joiningdate,
+	  'leavingdate' => $leavingdate,
+	  'currentstream' => $currentstream,
+	  'sex' => $sex,
+	  'availabilitystatus' => $availabilitystatus,
+	  'religion' => $religion,
+	)
+      );
+      
+      $this->Paginator->settings = array(
+	  'Student' => array (
+	    'paramType' => 'querystring',
+	    'limit' => 10,
+	    'order' => array(
+	      'Student.id' => 'desc'
+	    ),
+	    'conditions' => array('Student.leavingreason =' => 'None')
+	  ),
+	  //'conditions' => array('Student.sex =' => 'M')
+	);
+      
+      if($studentnotpartofschool === "1"){
+      
+	 $this->set('studentsnotpartofschool', 1);
+      
+      }else{
+      
+	 $this->set('studentsnotpartofschool', 0);
+      
+      }
+      
+      if($extrasearchison == "1"){
+      
+	  $this->set('extrasearchison', 1);
+      
+      }else{
+      
+	  $this->set('extrasearchison', 0);
+      
+      }
+      
+      $this->loadModel('Schoolstream');
+      $streamsintheschool = $this->Schoolstream->find('list', array(
+		'fields' => array('Schoolstream.shortstreamname','Schoolstream.stream'),
+		//’conditions’ => array(’Article.status !=’ => ’pending’),
+		'recursive' => 0
+      ));
+	
+      $this->set('streamsintheschool',$streamsintheschool);
+      
+      $this->set('students', $this->Paginator->paginate());
+      $this->set('searchQuery', $searchQuery);
+      return $this->edit(204,$this->Paginator->paginate());
       
     }
     
@@ -298,7 +405,7 @@ class StudentsController extends AppController {
 	$this->set('alevel_subjects', $alevel_subjects);
     }
 
-    public function edit($id = null) {
+    public function edit($id = null, $index_ids = null) {
 	$this->layout = 'default2';
 	if (!$id){
 	    throw new NotFoundException(__('Invalid Student'));
@@ -307,7 +414,95 @@ class StudentsController extends AppController {
 	if (!$students){
 	    throw new NotFoundException(__('Invalid Student'));
 	}
-	if ($this->request->is(array('post', 'put'))){
+	if ($this->request->is(array('post', 'put')) && ($index_ids == null)){
+	    $this->Student->id = $id;
+
+	    if($this->request->data['Student']['picture'] != ""){
+		$encoded_data = $this->request->data['Student']['picture'];
+		$binary_data = base64_decode($encoded_data);
+
+		//first delete the file from the specified location if it exists
+		//$path = "img/studentpics/".$this->request->data['Student']['picturenumber'].".jpg";
+		//if(file_exists($path) == true){
+		    //unlink($path);
+		//}
+		// save to server (beware of permissions)	
+		//$result = file_put_contents( 'img/studentpics/'.$this->request->data['Student']['picturenumber'].'.jpg', $binary_data );
+		$this->request->data['Student']['picture'] = "";
+		$this->request->data['Student']['studenthaspic'] = "YES";
+		$this->request->data['Student']['studentpicture'] = $binary_data;
+		
+	    }
+
+	    $this->request->data['Student']['fullnames'] = $this->request->data['Student']['surname']." ".$this->request->data['Student']['othernames'];
+	    
+	    if ($this->Student->saveAssociated($this->request->data)){
+		$this->Session->setFlash(__('Records for %s %s, Registration number: %s have been been updated.',
+					    $this->request->data['Student']['surname'], 
+					    $this->request->data['Student']['othernames'], 
+					    $this->request->data['Student']['registrationnumber']));
+		return $this->redirect(array('action' => 'index'));
+	    }
+	    $this->Session->setFlash(__('Unable to update Student Records.'));
+	}
+
+	if (!$this->request->data){
+	    $this->request->data = $students;
+	}
+
+	/*
+	if(file_exists("img/studentpics/".$students['Student']['picturenumber'].".jpg") == true){
+	    $webcampic = $students['Student']['picturenumber'];
+	    $this->set('webcampic', $students['Student']['picturenumber']);
+	    $this->set('studentpicid', $students['Student']['id']);
+	}else{
+	    $webcampic = false;
+	    $this->set('webcampic', $webcampic);
+	    $this->set('studentpicid', $students['Student']['id']);
+	}
+	*/
+	if ($students['Student']['studenthaspic'] == "YES") {
+	
+	    $webcampic = $students['Student']['studenthaspic'];
+	    $this->set('webcampic', $webcampic);
+	    $this->set('studentpicid', $students['Student']['id']);
+	
+	}else {
+	
+	    $webcampic = false;
+	    $this->set('webcampic', $webcampic);
+	    $this->set('studentpicid', $students['Student']['id']);
+	
+	}
+	
+	$this->loadModel('Schoolstream');
+	
+	$streamsintheschool = $this->Schoolstream->find('list', array(
+		'fields' => array('Schoolstream.shortstreamname','Schoolstream.stream'),
+		//’conditions’ => array(’Article.status !=’ => ’pending’),
+		'recursive' => 0
+	));
+	
+	$this->set('streamsintheschool',$streamsintheschool);
+	$this->loadModel('Schooldoneasubject');
+	$alevel_subjects = $this->Schooldoneasubject->find('list', array(
+		'fields' => array('Schooldoneasubject.id','Schooldoneasubject.shortsubjectname'),
+		//’conditions’ => array(’Article.status !=’ => ’pending’),
+		'recursive' => 0
+	));
+	$this->set('alevel_subjects', $alevel_subjects);
+    }
+    
+    public function searcheditsave($id = null, $index_ids = null) {
+	$this->layout = 'default2';
+	if (!$id){
+	    throw new NotFoundException(__('Invalid Student'));
+	}
+	$students = $this->Student->findById($id);
+	if (!$students){
+	    throw new NotFoundException(__('Invalid Student'));
+	}
+	if ($this->request->is(array('post', 'put')) && ($index_ids == null)){
 	    $this->Student->id = $id;
 
 	    if($this->request->data['Student']['picture'] != ""){
@@ -377,6 +572,7 @@ class StudentsController extends AppController {
 	$this->set('streamsintheschool',$streamsintheschool);
     }
 
+
     public function delete($id){
 	$this->layout = 'default2';
 	if ($this->request->is('get')){
@@ -387,16 +583,68 @@ class StudentsController extends AppController {
 	if(file_exists($path) == true){
 	    unlink($path);
 	}
-	if ($this->Student->delete($id)){
-		$this->Session->setFlash(__('Records for %s %s, Registration number: %s have been been deleted.',
+	
+	$this->loadModel('Olevelmarksheetresult');
+	$this->loadModel('Schooldonesubject');
+	
+	$olevelsubjects = $this->Schooldonesubject->find('all', array(
+	    'fields' => array('Schooldonesubject.shortsubjectname')	    		      
+	));
+	
+	$altleastonesubjectentered = null;
+	
+	foreach($olevelsubjects as $olevelsubject){
+	
+	    $olevelsubject['Schooldonesubject']['shortsubjectname'];
+	    $results = $this->Olevelmarksheetresult->find('all',array(
+		'fields' => array($olevelsubject['Schooldonesubject']['shortsubjectname']),
+		'conditions' => array('student_id' => $id, $olevelsubject['Schooldonesubject']['shortsubjectname']." !=" => null)
+	
+	    ));
+	    
+	    if($results != false){
+	    
+		break;
+	    
+	    }
+	
+	}
+	
+	/*
+	$results = $this->Olevelmarksheetresult->field('id',
+	
+	    array('student_id' => $id)
+	
+	);
+	*/
+	
+	if($results == null){
+	
+		//$this->Session->setFlash(__('Managed to delete the records'));
+		
+		if ($this->Student->delete($id)) {
+		    $this->Session->setFlash(__('Records for %s %s, Registration number: %s have been deleted.',
 					    $students['Student']['surname'], 
 					    $students['Student']['othernames'], 
 					    $students['Student']['registrationnumber']));
-	    return $this->redirect(array('action' => 'index'));
+		    return $this->redirect(array('action' => 'index'));
+		} else {
+		
+		    $this->Session->setFlash(__('Had a slight problem trying to delete Student Records.'));
+		    return $this->redirect(array('action' => 'index'));
+	      
+		}
 	}else{
-	    $this->Session->setFlash(__('Had a slight problem trying to delete Student Records.'));
-	    return $this->redirect(array('action' => 'index'));
+	
+	     $this->Session->setFlash(__('Records for %s %s, Registration number: %s cannot be deleted because the student already has marks entered in a marksheet.',
+					    $students['Student']['surname'], 
+					    $students['Student']['othernames'], 
+					    $students['Student']['registrationnumber']));
+		    return $this->redirect(array('action' => 'index'));
+	
 	}
+	
+
     }
     
     public function displayImage ( $id ) {

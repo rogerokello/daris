@@ -20,11 +20,13 @@
 	<td></td>
 	<td></td>
 	<td></td>
+	<td></td>
     </tr>
     <tr>
 	<th><?php echo $this->Paginator->sort('fullexamname','Full Examination name');?></th>
 	<th>Short Name</th>
 	<th>Term done</th>
+	<th>Report Order</th>
 	<th>End date</th>
 	<th>Start date</th>
 	<th>Action</th>
@@ -37,6 +39,7 @@
 	<td><?php echo $student['Schooldoneexam']['fullexamname'];?></td>
 	<td><?php echo $student['Schooldoneexam']['alias'];?></td>
 	<td><?php echo $student['Schooldoneexam']['termdone'];?></td>
+	<td><?php echo $student['Schooldoneexam']['reportorder'];?></td>
 	<td><?php echo $student['Schooldoneexam']['startdate'];?></td>
 	<td><?php echo $student['Schooldoneexam']['enddate'];?></td>
 	<td><?php

@@ -28,7 +28,7 @@
 		}
 		
 		echo "<br/>"."<br/>";
-		$this->Form->create();
+		
 	    ?>
 	</td>
 	<td>
@@ -42,7 +42,14 @@
     <tr class = "olevelresults">
 	<td>
 	    <?php
-		echo $this->Form->input('biology', array('label' => false, 'tabindex' => '1', 'autofocus' => 'autofocus'));
+		echo $this->Form->create('Olevelmarksheetresult');
+		if($current_mark != null){
+		    echo $this->Form->input($subjecttoedit, array('value' => $current_mark,'label' => "Mark(%)", 'tabindex' => '1', 'autofocus' => 'autofocus'));
+		}else{
+		    echo $this->Form->input($subjecttoedit, array('label' => "Mark(%)", 'tabindex' => '1', 'autofocus' => 'autofocus'));
+		}
+		echo $this->Form->hidden('marksheet_id', array('default' => $marksheet_id));
+		echo $this->Form->end('Update');
 	    ?>
 	</td>
 	<td>
@@ -55,5 +62,5 @@
 </table>
 <?php
     //echo $this->Form->create('Student');
-    echo $this->Form->end('Update');
+    
 ?>

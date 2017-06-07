@@ -19,6 +19,23 @@
     echo $this->Form->input('Student.picturepath', array('between' => '<br />', 'type' => 'file', 'label' => 'Attach your picture','accept' =>'image/*'));
     ?>
     </td>
+    <td>
+    <?php
+    echo $this->Form->checkbox('multiple')."Enter multiple records for the same class and stream continously"."<br/>";
+    ?>
+    <!--
+	<?php   echo $this->Html->link(
+		    '<< Previous ',
+		     array('action' => '')
+		     );?>
+		     |
+      <?php   echo $this->Html->link(
+		    ' Next >>',
+		     array('action' => '')
+		     );
+	?>
+    -->
+    </td>   
     </tr></table>
     <?php
     ?>
@@ -109,9 +126,12 @@
 		   "Commerce" => "COMM",
 		   "Entreprenuership Education" => "ENTRE",
 		   "Computer Studies" => "COMP",
-		   "Fine Art" => "F/AT",
+		   "Fine Art" => "ART",
 		   "Literature In English" => "LIT",
 		   "Principles And Practices of Agriculture" => "AGRIC",
+		   "Luganda" => "LUG",
+		   "Lango" => "LNGO",
+		   "French" => "FRCH",
     );
     
     $subjectofalevel = array(
@@ -137,7 +157,7 @@
 <td>
 <?php
 
-   echo $this->Form->input('registrationnumber', array('label' => 'Registration Number'));
+   echo $this->Form->input('registrationnumber', array('label' => 'Registration Number','readonly' => 'readonly'));
 ?>
 </td>
 <td>
@@ -235,22 +255,22 @@
 <tr class = "olevelresults">
 <td>
 <?php
-echo $this->Form->input('Alevelsubjectcombination.subject1', array('label' => 'Subject One','options' => $subjectofalevel,'selected' => 'none'));
+echo $this->Form->input('Alevelsubjectcombination.subject1', array('label' => 'Subject One','options' => $subjectofalevel,'empty' => ' ','selected' => 'none',));
 ?>
 </td>
 <td>
 <?php
-echo $this->Form->input('Alevelsubjectcombination.subject2', array('label' => 'Subject Two','options' => $subjectofalevel,'selected' => 'none'));
+echo $this->Form->input('Alevelsubjectcombination.subject2', array('label' => 'Subject Two','options' => $subjectofalevel,'empty' => ' ','selected' => 'none'));
 ?>
 </td>
 <td>
 <?php
-echo $this->Form->input('Alevelsubjectcombination.subject3', array('label' => 'Subject Three','options' => $subjectofalevel,'selected' => 'none'));
+echo $this->Form->input('Alevelsubjectcombination.subject3', array('label' => 'Subject Three','options' => $subjectofalevel,'empty' => ' ','selected' => 'none'));
 ?>
 </td>
 <td>
 <?php
-echo $this->Form->input('Alevelsubjectcombination.subject4', array('label' => 'Subject Four (Subsidiary)','options' => $subjectofalevel,'selected' => 'none'));
+echo $this->Form->input('Alevelsubjectcombination.subject4', array('label' => 'Subject Four (Subsidiary)','options' => $subjectofalevel,'empty' => ' ','selected' => 'none'));
 ?>
 </td>
 <td></td>
@@ -553,6 +573,123 @@ echo $this->Form->input('hobbies', array('rows' => '3', 'label' => 'Hobbies'));
 					'options' => $leavingreasons,
 					/*'empty' => 'None'*/)); ?></td></tr></table>
 </fieldset>
+
+<script>
+function getnextregistrationnumber(){
+    $.ajax({
+      type:"POST",
+      datatype:'json',
+      cache: false,
+      data: {"currentclass":$("#StudentCurrentclass").val()},
+      url:"get_the_registrationnumber",
+      //update:"#StudentRegistrationnumber"
+      success: function(data){
+	  document.getElementById('StudentRegistrationnumber').value = data;
+	  //$("#StudentRegistrationnumber").removeAttr("readonly");
+      },
+      error: function(){
+	alert("Failed to get a registration number");
+      }
+    });
+}
+$(function() {
+  $('#StudentCurrentclass').change(function() {
+    //var a = $("#StudentCurrentclass").val ;
+    var one = document.getElementById('StudentCurrentclass').value;
+    $.ajax({
+      type:"POST",
+      datatype:'json',
+      cache: false,
+      data: {"currentclass":one/*$("#StudentCurrentclass").val()*/},
+      url:"get_the_registrationnumber",
+      //update:"#StudentRegistrationnumber"
+      success: function(data){
+	  document.getElementById('StudentRegistrationnumber').value = data;
+	  //$("#StudentRegistrationnumber").removeAttr("readonly");
+      }
+    });
+    //getnextregistrationnumber();
+  });
+});
+
+$(function() {
+  $('#StudentSurname').change(function() {
+    //var a = $("#StudentCurrentclass").val ;
+    if(document.getElementById('StudentRegistrationnumber').value == ""){
+	var one = document.getElementById('StudentCurrentclass').value;
+	$.ajax({
+	  type:"POST",
+	  datatype:'json',
+	  cache: false,
+	  data: {"currentclass":one/*$("#StudentCurrentclass").val()*/},
+	  url:"get_the_registrationnumber",
+	  //update:"#StudentRegistrationnumber"
+	  success: function(data){
+	      document.getElementById('StudentRegistrationnumber').value = data;
+	      //$("#StudentRegistrationnumber").removeAttr("readonly");
+	  }
+	});
+	//getnextregistrationnumber();
+    }else{
+    
+	
+    
+    }
+  });
+});
+
+$(function() {
+  $('body').on('submit','#StudentAddAlevelForm',function(e) {
+  if($("#StudentMultiple").prop('checked')){
+    $("#StudentRegistrationnumber").removeAttr("readonly");
+    var formData = $(this).serialize();
+    //$("#newmessage").html("Success");
+    var a = $("#StudentRegistrationnumber").val();
+    var studentsurname = $("#StudentSurname").val();
+    var studentothernames = $("#StudentOthernames").val();
+    var selectedclass = $("#StudentCurrentclass").val();
+    var selectedstream = $("#StudentCurrentstream").val();
+    e.preventDefault();
+    $.ajax({
+      type:"POST",
+      datatype:'json',
+      cache: false,
+      async: true,
+      data: formData,
+      url:"add_olevel",
+      //update:"#StudentRegistrationnumber"
+      success: function(data){
+	//document.getElementById('newmessage').value = data;
+	$("#StudentRegistrationnumber").attr("readonly", "readonly");
+	$("#flashMessage").addClass("message"); 
+	$("#flashMessage").html("Added "+studentsurname+" "+studentothernames+ " ,"+"registration number:"+a);
+	//$("#StudentAddAlevelForm")[0].reset();
+	document.getElementById('StudentAddAlevelForm').reset();
+	$("#shayhowe").attr("src","\/daris\/img\/studentpics\/person.png");
+	$("#StudentPicture").removeAttr("value");
+	$("#StudentMultiple").attr("checked",true);
+	$("#StudentCurrentclass option[value="+selectedclass+"]").attr("selected",true);
+	$("#StudentCurrentstream option[value="+selectedstream+"]").attr("selected",true);
+	document.getElementById("StudentSurname").focus();
+	getnextregistrationnumber();
+	//e.preventDefault();
+	  //document.getElementById("newmessage").innerHTML = "New text!";
+      },
+      error: function(data){
+        $("#StudentRegistrationnumber").attr("readonly", "readonly");
+        $("#flashMessage").addClass("message"); 
+	$("#flashMessage").html("Failed to save details for Student with registration number:"+a);      
+      }
+    });
+  }else{
+  
+      $("#StudentRegistrationnumber").removeAttr("readonly");  
+      //$( "#StudentAddOlevelForm" ).submit();
+  }
+  });
+});
+</script>
+
 <?php
 
     echo $this->Form->hidden('picture');

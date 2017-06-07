@@ -46,61 +46,62 @@
 	<th>Lowest Value</th>
 	<th>Highest Value</th>
 	<th>Grade</th>
+	<th>Remarks</th>
 	<!-- <th>Action</th> -->
 </tr>
 <tr class = "olevelresults2">
 	<td><?php echo $this->Form->input('Grading.0.lowestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.0.highestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.0.award', array('label' => false,'options' => $markswards)); ?></td>
-	<!-- <td></td> -->
+	<td><?php echo $this->Form->input('Grading.0.remarks', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
 	<td><?php echo $this->Form->input('Grading.1.lowestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.1.highestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.1.award', array('label' => false,'options' => $markswards)); ?></td>
-	<!-- <td></td> -->
+	<td><?php echo $this->Form->input('Grading.1.remarks', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
 	<td><?php echo $this->Form->input('Grading.2.lowestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.2.highestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.2.award', array('label' => false,'options' => $markswards)); ?></td>
-	<!-- <td></td> -->
+	<td><?php echo $this->Form->input('Grading.2.remarks', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
 	<td><?php echo $this->Form->input('Grading.3.lowestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.3.highestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.3.award', array('label' => false,'options' => $markswards)); ?></td>
-	<!-- <td></td> -->
+	<td><?php echo $this->Form->input('Grading.3.remarks', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
 	<td><?php echo $this->Form->input('Grading.4.lowestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.4.highestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.4.award', array('label' => false,'options' => $markswards)); ?></td>
-	<!-- <td></td> -->
+	<td><?php echo $this->Form->input('Grading.4.remarks', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
 	<td><?php echo $this->Form->input('Grading.5.lowestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.5.highestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.5.award', array('label' => false,'options' => $markswards)); ?></td>
-	<!-- <td></td> -->
+	<td><?php echo $this->Form->input('Grading.5.remarks', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
 	<td><?php echo $this->Form->input('Grading.6.lowestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.6.highestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.6.award', array('label' => false,'options' => $markswards)); ?></td>
-	<!-- <td></td> -->
+	<td><?php echo $this->Form->input('Grading.6.remarks', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
 	<td><?php echo $this->Form->input('Grading.7.lowestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.7.highestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.7.award', array('label' => false,'options' => $markswards)); ?></td>
-	<!-- <td></td> -->
+	<td><?php echo $this->Form->input('Grading.7.remarks', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
 	<td><?php echo $this->Form->input('Grading.8.lowestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.8.highestvalue', array('label' => false)); ?></td>
 	<td><?php echo $this->Form->input('Grading.8.award', array('label' => false,'options' => $markswards)); ?></td>
-	<!-- <td></td> -->
+	<td><?php echo $this->Form->input('Grading.8.remarks', array('label' => false)); ?></td>
 </tr>
 <!-- <tr class = "olevelresults">
 <td>

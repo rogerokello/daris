@@ -155,7 +155,20 @@ $(document).ready(function (e) {
 	  
     </style>
     
-
+     <style type="text/css">
+	  #drop-nav2 ul {list-style: none; padding: 0px; margin: 0px;}
+	  #drop-nav2 ul li {display: block; position: relative; float:left; border: 0px solid #000}
+	  #drop-nav2 li ul {display: none;}
+	  #drop-nav2 ul li a {display: block; background: white; padding: 0px 5px 5px 5px; text-decoration: none; white-space: nowrap; /*color: #fff;*/}
+	  #drop-nav2 ul li a:hover {background: white;}
+	  #drop-nav2 li:hover > ul {display:block; position: absolute; text-decoration:none;}
+	  #drop-nav2 li:hover li {background: #D3D3D3;float: none; text-decoration:none;z-index:1;}
+	  #drop-nav2 li:hover a {background: #D3D3D3; text-decoration:none;}
+	  #drop-nav2 li:hover li a:hover {background: #D3D3D3; text-decoration:none;}
+	  #drop-nav2 li ul li {border-top: 0px;}
+	  #drop-nav2 ul ul ul {left:100%; top: 0;}
+	  
+    </style>
     
     
     <div id="drop-nav">
@@ -202,39 +215,56 @@ $(document).ready(function (e) {
 	      </ul>
 	  </li>
 	  <li><a href="#">Reports</a>
-	  <ul>
-	  <li><a href="/daris/Olevelreportdetails/">Class Reports</a></li>
+	      <ul>
+		  <li><a href="/daris/Olevelreportdetails/">O-level Academic Results</a></li>
+	  <!--
 	  <li>
 	      <a href="#">Student Reports</a>
 	      <ul>
-		  <li><a href="#"> New</a></li><!-- Add a new student report to the collection of reports -->
-		  <li><a href="#"> Edit</a></li><!-- Edit a student report from a collection of reports -->
-		  <li><a href="#"> Delete</a></li><!-- Delete a student report from a collection of reports -->
+		  <li><a href="#"> New</a></li> Add a new student report to the collection of reports 
+		  <li><a href="#"> Edit</a></li> Edit a student report from a collection of reports 
+		  <li><a href="#"> Delete</a></li> Delete a student report from a collection of reports
 	      </ul>
 	  </li>
-	  <li><a href="#">Comment</a></li>
-	  <li><a href="#">Upload</a></li>
-	  </ul>
+	  -->
+	  <!-- <li><a href="#">Comment</a></li> -->
+		  <li><a href="/daris/Olevelreportdetails/upLoadData">Upload Comment file</a></li>
+	      </ul>
 	  </li>
 	  <li><a href="#">Settings</a>
-	  <ul>
-	  <li><a href="/daris/schoolstreams/">Streams</a></li>
-	  <li><a href="/daris/schooldonesubjects/">O-level Subjects</a></li>
+	      <ul>
+		  <li><a href="/daris/schoolstreams/">Streams</a></li>
+		  <li><a href="/daris/schooldonesubjects/">O-level Subjects</a>
+	      <ul>
+		  <li><a href="/daris/Olevelcompulsorysubjects/">Compulsory Subjects</a></li>
+	      </ul>
+	  </li>
 	  <li><a href="/daris/schooldoneasubjects/">A-level Subjects</a></li>
 	  <li><a href="/daris/schooldoneexams/">Examinations</a></li>
 	  <li><a href="/daris/gradeprofiles/">Grading</a>
-	  <ul>
-	  <li><a href="/daris/gradeprofiles/">Profiles</a></li>
-	  <li><a href="/daris/gradeprofiles/assign">Assign profiles</a></li>
-	  </ul>	  
+	      <ul>
+		  <li><a href="/daris/gradeprofiles/">Profiles</a></li>
+		  <li><a href="/daris/gradeprofiles/assign">Assign profiles</a></li>
+	      </ul>	  
 	  </li>
 	  </ul>
+	  </li>
+	  <li><a href="#">Administrators</a>
+	      <ul>
+		  <!-- <li><a href="/daris/headteachers">Head Teachers</a></li> -->
+		  <!-- <li><a href="/daris/deputies">Deputies</a></li>
+		  <li><a href="/daris/doses">DOS(s)</a></li>
+		  <li><a href="/daris/departementalheads">HODs</a></li> -->
+		  <li><a href="/daris/classteachers">Class Teachers</a></li>
+		  <!-- <li><a href="/daris/housemasters">House Masters</a></li> -->
+		  <!-- <li><a href="/daris/housemistresses">House Mistresses</a></li> -->
+	      </ul>
 	  </li>
 	  <li><a href="#">Users</a>
-	  <ul>
-	  <li><a href="/daris/users/index">View all</a></li>
-	  <li><a href="/daris/users/add">Add New</a></li>
-	  </ul>
+	      <ul>
+		  <li><a href="/daris/users/index">View all</a></li>
+		  <li><a href="/daris/users/add">Add New</a></li>
+	      </ul>
 	  </li>
 	  <li><a href="/daris/users/logout">logout</a></li>
 	</ul>
@@ -331,5 +361,38 @@ $(document).ready(function (e) {
 			} );
 		}*/
 	</script>
+	<script language="JavaScript">
+	    /* When the user clicks on the button, 
+	    toggle between hiding and showing the dropdown content */
+	    function myFunction(i) {
+		if(i == 0){
+		
+		  document.getElementById("myDropdown").classList.toggle("show");
+		
+		}
+		
+		if(i == 1){
+		
+		  document.getElementById("myDropdown1").classList.toggle("show");
+		
+		}
+	    }
+
+	    // Close the dropdown if the user clicks outside of it
+	    window.onclick = function(event) {
+		if (!event.target.matches('.dropbtn')) {
+
+		    var dropdowns = document.getElementsByClassName("dropdown-content");
+		    var i;
+		    for (i = 0; i < dropdowns.length; i++) {
+			var openDropdown = dropdowns[i];
+			if (openDropdown.classList.contains('show')) {
+			    openDropdown.classList.remove('show');
+			}
+		    }
+		}
+	    }
+	  </script>
+
 </body>
 </html>

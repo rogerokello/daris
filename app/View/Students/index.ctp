@@ -188,7 +188,16 @@
     </tr>
 
     <!-- Here is where we loop through the students array printing out each of the students details -->
-
+    <?php
+	//loop through the whole array of the result set that has been obtained to extract the 
+	//student ids of the records selected
+	$array_of_ids = array();
+	foreach($students as $student){
+	
+	    array_push($array_of_ids, intval($student['Student']['id']));
+	
+	}
+    ?>
     <?php foreach ($students as $student): ?>
     <tr class='studentpic'>
 	<?php     
@@ -218,8 +227,13 @@
 				     );*/
 		  echo $this->Html->link(
 				    'Edit ',
-				     array('action' => 'edit', $student['Student']['id'])
+				     array('action' => 'edit', $student['Student']['id']/*,$array_of_ids*/)
 				     );
+		/*echo $this->Form->postLink(
+					'Edit ',
+					array('action' => 'edit', $student['Student']['id'])//,
+					//array('confirm' => 'This action will delete this record parmanently, Are you sure you want to continue?')
+					    );*/
 		  echo $this->Form->postLink(
 					'Delete ',
 					array('action' => 'delete', $student['Student']['id']),

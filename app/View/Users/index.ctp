@@ -15,6 +15,7 @@
 		</tr>
 		<?php foreach($users as $user): ?>				
 			
+			<?php if(AuthComponent::user('role') == "admin") { ?> 
 			<td><?php echo $this->Html->link( $user['User']['username']  ,   array('action'=>'edit', $user['User']['id']),array('escape' => false) );?></td>
 			<td><?php echo $this->Time->niceShort($user['User']['created']); ?></td>
 			<td><?php echo $this->Time->niceShort($user['User']['modified']); ?></td>
@@ -37,6 +38,25 @@
 				echo "";
 			    
 			    }
+			?>
+			<?php }else { 
+			
+			    if(AuthComponent::user('username') == $user['User']['username']){
+				?>
+				<td><?php echo $this->Html->link( $user['User']['username']  ,   array('action'=>'edit', $user['User']['id']),array('escape' => false) );?></td>
+				<td><?php echo $this->Time->niceShort($user['User']['created']); ?></td>
+				<td><?php echo $this->Time->niceShort($user['User']['modified']); ?></td>
+				<td><?php echo $user['User']['role']; ?></td>
+				<td>
+				<?php echo $this->Html->link("Edit ",   array('action'=>'edit', $user['User']['id']) ); ?>
+				<?php
+			    }else{
+			    
+				continue;
+			    
+			    }
+			
+			}
 			?>
 			</td>
 		</tr>

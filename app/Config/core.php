@@ -393,3 +393,10 @@ Configure::write('Security.salt', 'pl345e-P45s_7h3*S@l7!');
 * A random numeric string (digits only) used to encrypt/decrypt strings.
 */
 Configure::write('Security.cipherSeed','7485712659625147843639846751');
+/*
+Configure::write('Session', array(
+        'defaults' => 'php',
+        'timeout' => 10, // The session will timeout after 10 minutes of inactivity
+        'cookieTimeout' => 1440
+));
+*/

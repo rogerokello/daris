@@ -4,7 +4,7 @@ App::uses('AppModel', 'Model');
 App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 
 class User extends AppModel {
-    
+   
    public $validate = array(
         'username' => array(
             'nonEmpty' => array(
@@ -51,7 +51,7 @@ class User extends AppModel {
 		
 	'email' => array(
 	    'required' => array(
-		'rule' => array('email', true),    
+		'rule' => array('email'),    
 		'message' => 'Please provide a valid email address.'    
 	     ),
 	     'unique' => array(
@@ -60,7 +60,7 @@ class User extends AppModel {
 	     ),
 	     'between' => array( 
 		'rule' => array('between', 6, 60), 
-		'message' => 'Usernames must be between 6 to 60 characters'
+		'message' => 'Emails must be between 6 to 60 characters'
 	      )
 	),
 	
@@ -94,11 +94,11 @@ class User extends AppModel {
 	    )
         ),
         'previous_password' => array(
-            'required' => array(
+            /*'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'Please confirm your previous password'
-            ),
-	    'rule1' => array(
+            ),*/
+	    'checkifsameasprevious' => array(
 		  'rule' => array('checkifsameasprevious'),
 		  'message' => 'Please provide the correct previous password',
 	    ),
@@ -123,21 +123,35 @@ class User extends AppModel {
 		
    );
 	
-	function checkifsameasprevious(){
-	
-	    $hashedtablepassword = $this->field('password',
-		array("id =" => AuthComponent::user('id'))
-	    );
+	function checkifsameasprevious($check){
 	    
-	    $passwordHasher = new BlowfishPasswordHasher();
-	    if($passwordHasher->hash($this->data[$this->alias]['previous_password']) === $hashedtablepassword){
+	    
+	    $one = $check['previous_password'];
+	    $passwordHasher1 = new BlowfishPasswordHasher();
+	    //$one1 = $passwordHasher1->hash($one);
+	    if(AuthComponent::user('role') == "admin"){
 	    
 		return true;
 	    
-	    }else {
+	    }else{
 	    
-		return false;
+		$hashedtablepassword1 = $this->field('password',
+		    array("username =" => $one)
+		);
+		
+		/*$hashedtablepassword = $this->field('password',
+		    array("username =" => $passwordHasher1->check($one,$hashedtablepassword1));*/
+	    	    
+		$passwordHasher = new BlowfishPasswordHasher();
+		if($passwordHasher1->check($one,$hashedtablepassword1)){
 	    
+		    return true;
+	    
+		}else {
+	    
+		    return false;
+	    
+		}
 	    }
 	
 	}

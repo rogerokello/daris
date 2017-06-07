@@ -194,6 +194,7 @@ class SchooldonesubjectsController extends AppController {
 		return $this->redirect(array('action' => 'index'));
     }
 
+    /*
     public function createcolumn($columnname){
 	$this->layout = 'default2';
 	// load the model with the data
@@ -201,5 +202,5 @@ class SchooldonesubjectsController extends AppController {
 
 	// perform a query using the model you loaded
 	$livequery = $new->query("DESCRIBE olevelmarksheetresults;");
-    }
+    }*/
 }

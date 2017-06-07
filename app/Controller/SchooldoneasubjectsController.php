@@ -88,6 +88,18 @@ class SchooldoneasubjectsController extends AppController {
     public function add() {
 	    $this->layout = 'default2';
 	    
+	    $no_of_subjects_already_entered = $this->Schooldoneasubject->find('count',array(
+	    
+		'conditions' => array('Schooldoneasubject.id !=' => null)
+	    
+	    ));
+	    
+	    if(($no_of_subjects_already_entered >= 42) ){
+		$this->Session->setFlash(__('You can only create up to a maximum of 42 Advanced level subjects'));
+		return $this->redirect(array('action' => 'index'));
+	    
+	    }else {
+	    
 	    $bothoptionschosen = null;
 	    $subjectpapers = null;
 	    $subsidiary_option_chosen = null;
@@ -195,6 +207,8 @@ class SchooldoneasubjectsController extends AppController {
 		    $this->set('selectedoptions','none');
 		
 	    }//$this->set('selectedoptions','none');
+	    
+	    }
     }
 
 /**

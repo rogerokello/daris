@@ -859,6 +859,234 @@ class Gradeprofile extends AppModel {
     
     }
 
+    
+    public function gradeprofile_returnsubjectremark($class = null, $subject_mark = null){
+    
+	$Profileassignment = ClassRegistry::init('Profileassignment');
+	$Grading = ClassRegistry::init('Grading');
+	$grade_to_be_returned = null;
+    
+	switch ($class) {
+
+	    case 1:
+	    
+		$gradeprofile_id = $Profileassignment->field('gradeprofile_id',
+		    array('class =' => 1)
+		);
+		
+		$grading = $Grading->find('all', array(
+			      'fields' => array('Grading.lowestvalue','Grading.highestvalue','Grading.remarks'),
+			      'conditions' => array('Grading.gradeprofile_id =' => $gradeprofile_id),
+			      'order' => array('Grading.lowestvalue' => 'asc'),
+			      'recursive' => 0
+		));
+		
+		$matchfound = 0;
+		$award = -1;
+		if(($subject_mark != null) && is_numeric($subject_mark) ){
+		    foreach ($grading as $key1){
+			foreach($key1 as $key2){
+			      //echo $key2['lowestvalue']."<br/>";
+			      if(($subject_mark >= $key2['lowestvalue']) 
+					&&
+			      ($subject_mark < $key2['highestvalue'])
+			      ){
+			      
+				    $matchfound = 1;
+				    $award = $key2['remarks'];
+				    $grade_to_be_returned = $award;
+				    break;
+				    break;
+				}
+			    }
+		    }
+		}
+		
+		break;
+	    case 2:
+	    
+		$gradeprofile_id = $Profileassignment->field('gradeprofile_id',
+		    array('class =' => 2)
+		);
+		
+		$grading = $Grading->find('all', array(
+			      'fields' => array('Grading.lowestvalue','Grading.highestvalue','Grading.remarks'),
+			      'conditions' => array('Grading.gradeprofile_id =' => $gradeprofile_id),
+			      'order' => array('Grading.lowestvalue' => 'asc'),
+			      'recursive' => 0
+		));
+		
+		$matchfound = 0;
+		$award = -1;
+		if(($subject_mark != null) && is_numeric($subject_mark) ){
+		    foreach ($grading as $key1){
+			foreach($key1 as $key2){
+			      //echo $key2['lowestvalue']."<br/>";
+			      if(($subject_mark >= $key2['lowestvalue']) 
+					&&
+			      ($subject_mark < $key2['highestvalue'])
+			      ){
+			      
+				    $matchfound = 1;
+				    $award = $key2['remarks'];
+				    $grade_to_be_returned = $award;
+				    break;
+				    break;
+				}
+			    }
+		    }
+		}
+		
+		break;
+	    case 3:
+	    
+		$gradeprofile_id = $Profileassignment->field('gradeprofile_id',
+		    array('class =' => 3)
+		);
+		
+		$grading = $Grading->find('all', array(
+			      'fields' => array('Grading.lowestvalue','Grading.highestvalue','Grading.remarks'),
+			      'conditions' => array('Grading.gradeprofile_id =' => $gradeprofile_id),
+			      'order' => array('Grading.lowestvalue' => 'asc'),
+			      'recursive' => 0
+		));
+		
+		$matchfound = 0;
+		$award = -1;
+		if(($subject_mark != null) && is_numeric($subject_mark) ){
+		    foreach ($grading as $key1){
+			foreach($key1 as $key2){
+			      //echo $key2['lowestvalue']."<br/>";
+			      if(($subject_mark >= $key2['lowestvalue']) 
+					&&
+			      ($subject_mark < $key2['highestvalue'])
+			      ){
+			      
+				    $matchfound = 1;
+				    $award = $key2['remarks'];
+				    $grade_to_be_returned = $award;
+				    break;
+				    break;
+				}
+			    }
+		    }
+		}
+		
+		break;
+	    case 4:
+	    
+		$gradeprofile_id = $Profileassignment->field('gradeprofile_id',
+		    array('class =' => 4)
+		);
+		
+		$grading = $Grading->find('all', array(
+			      'fields' => array('Grading.lowestvalue','Grading.highestvalue','Grading.remarks'),
+			      'conditions' => array('Grading.gradeprofile_id =' => $gradeprofile_id),
+			      'order' => array('Grading.lowestvalue' => 'asc'),
+			      'recursive' => 0
+		));
+		
+		$matchfound = 0;
+		$award = -1;
+		if(($subject_mark != null) && is_numeric($subject_mark) ){
+		    foreach ($grading as $key1){
+			foreach($key1 as $key2){
+			      //echo $key2['lowestvalue']."<br/>";
+			      if(($subject_mark >= $key2['lowestvalue']) 
+					&&
+			      ($subject_mark < $key2['highestvalue'])
+			      ){
+			      
+				    $matchfound = 1;
+				    $award = $key2['remarks'];
+				    $grade_to_be_returned = $award;
+				    break;
+				    break;
+				}
+			    }
+		    }
+		}
+		
+		break;
+	    case 5:
+	    
+		$gradeprofile_id = $Profileassignment->field('gradeprofile_id',
+		    array('class =' => 5)
+		);
+		
+		$grading = $Grading->find('all', array(
+			      'fields' => array('Grading.lowestvalue','Grading.highestvalue','Grading.remarks'),
+			      'conditions' => array('Grading.gradeprofile_id =' => $gradeprofile_id),
+			      'order' => array('Grading.lowestvalue' => 'asc'),
+			      'recursive' => 0
+		));
+		
+		$matchfound = 0;
+		$award = -1;
+		if(($subject_mark != null) && is_numeric($subject_mark) ){
+		    foreach ($grading as $key1){
+			foreach($key1 as $key2){
+			      //echo $key2['lowestvalue']."<br/>";
+			      if(($subject_mark >= $key2['lowestvalue']) 
+					&&
+			      ($subject_mark < $key2['highestvalue'])
+			      ){
+			      
+				    $matchfound = 1;
+				    $award = $key2['remarks'];
+				    $grade_to_be_returned = $award;
+				    break;
+				    break;
+				}
+			    }
+		    }
+		}
+		
+		break;
+	    case 6:
+	    
+		$gradeprofile_id = $Profileassignment->field('gradeprofile_id',
+		    array('class =' => 6)
+		);
+		
+		$grading = $Grading->find('all', array(
+			      'fields' => array('Grading.lowestvalue','Grading.highestvalue','Grading.remarks'),
+			      'conditions' => array('Grading.gradeprofile_id =' => $gradeprofile_id),
+			      'order' => array('Grading.lowestvalue' => 'asc'),
+			      'recursive' => 0
+		));
+		
+		$matchfound = 0;
+		$award = -1;
+		if(($subject_mark != null) && is_numeric($subject_mark) ){
+		    foreach ($grading as $key1){
+			foreach($key1 as $key2){
+			      //echo $key2['lowestvalue']."<br/>";
+			      if(($subject_mark >= $key2['lowestvalue']) 
+					&&
+			      ($subject_mark < $key2['highestvalue'])
+			      ){
+			      
+				    $matchfound = 1;
+				    $award = $key2['remarks'];
+				    $grade_to_be_returned = $award;
+				    break;
+				    break;
+				}
+			    }
+		    }
+		}
+		
+		break;
+		default:
+		break;
+	
+	}
+	
+	return $grade_to_be_returned;
+    
+    }
+
  
 
 

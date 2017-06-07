@@ -24,7 +24,11 @@ class Schooldoneexam extends AppModel {
 	  'alias-1' => array(
 	      'rule' => 'isUnique',
 	      'message' => 'The short examination name already exists, please choose another subject name',
-	   )
+	   ),
+	  'alias-2' => array(
+	      'rule' => '/^[a-zA-Z0-9.\-\s]{3,12}$/i',
+	      'message' => 'The short examination name must be between 3 to 12 characters long',
+	   ),	   
       )
       
 

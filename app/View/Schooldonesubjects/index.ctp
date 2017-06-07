@@ -13,9 +13,17 @@
 	<td><?php   echo $this->Html->link(
 		    'Add Subject',
 		     array('action' => 'add')
-		     );?>
+		     );
+		     echo " | ";
+		     echo $this->Html->link(
+		    'Compulsory Subjects',
+		     array('controller' => 'Olevelcompulsorysubjects','action' => 'index')
+		     );
+		     
+		     ?>
 	</td>
-	<td></td>
+	<td>
+	</td>
 	<td></td>
 	<td></td>
 	<td></td>

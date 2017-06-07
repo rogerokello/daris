@@ -127,16 +127,18 @@ $(document).ready(function (e) {
 	  </li>
 	  <li><a href="#">Reports</a>
 	  <ul>
-	  <li><a href="/daris/Olevelreportdetails/">Class Reports</a></li>
+	  <li><a href="/daris/Olevelreportdetails/">O-level Academic Results</a></li>
+	  <!--
 	  <li>
 	      <a href="#">Student Reports</a>
 	      <ul>
-		  <li><a href="#"> New</a></li><!-- Add a new student report to the collection of reports -->
-		  <li><a href="#"> Edit</a></li><!-- Edit a student report from a collection of reports -->
-		  <li><a href="#"> Delete</a></li><!-- Delete a student report from a collection of reports -->
+		  <li><a href="#"> New</a></li><!-- Add a new student report to the collection of reports 
+		  <li><a href="#"> Edit</a></li><!-- Edit a student report from a collection of reports 
+		  <li><a href="#"> Delete</a></li><!-- Delete a student report from a collection of reports 
 	      </ul>
 	  </li>
-	  <li><a href="#">Comment</a></li>
+	  
+	  <li><a href="#">Comment</a></li> -->
 	  <li><a href="#">Upload</a></li>
 	  </ul>
 	  </li>
