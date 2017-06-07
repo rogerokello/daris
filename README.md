@@ -5,7 +5,9 @@
 		- Adds New records
 		- Deletes existing records
 		- Edits Existing records
-		- Searches for Student records
+		- Searches for Student records(Using the students registration number,Surname and other Names)
+			- Other search criterea exist where you can search for a student in a class and or stream and or
+			  gender and or if the student is present
 	- Academics Module with the following sub-modules
 		- Subjects sub-module with the following functionality:
 			- Adds New subjects to the system
