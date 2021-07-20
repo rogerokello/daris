@@ -1,0 +1,46 @@
+<table>
+    <tr>
+	<td><?php //echo $this->Html->link('Home', array('controller' => 'Users','action' => 'loginhome'));?></td>
+	<td><?php //echo $this->Html->link('Add New', array('action' => 'add_olevel')); ?></td>
+    </tr>
+</table>
+<table>
+    <tr>
+	<th>Student Number</th>
+	<!-- <th>Registration Number</th> -->
+	<th>Surname</th>
+	<th>Other Names</th>
+	<th>Sex</th>
+	<th>Current Class</th>
+	<th>Current Stream</th>
+	<th>Present?</th>
+	<th>Action</th>
+    </tr>
+
+    <!-- Here is where we loop through the students array printing out each of the students details -->
+
+    <?php foreach ($students as $student): ?>
+    <tr>
+	<td><?php echo $student['Student']['picturenumber']; ?></td>
+	<!-- <td><?php //echo $student['Student']['registrationnumber']; ?></td> -->
+	<td><?php echo $student['Student']['surname'];?></td>
+	<td><?php echo $student['Student']['othernames'];?></td>
+	<td><?php echo $student['Student']['sex']; ?></td>
+	<td><?php echo "Senior ".$student['Student']['currentclass']; ?></td>
+	<td><?php echo $student['Student']['currentstream']; ?></td>
+	<td><?php echo $student['Student']['availabilitystatus']; ?></td>
+	<td><?php echo $this->Html->link(
+				    'Edit ',
+				     array('action' => 'edit', $student['Student']['id'])
+				     );
+		  echo $this->Form->postLink(
+					'Delete ',
+					array('action' => 'delete', $student['Student']['id']),
+					array('confirm' => 'This action will delete this record parmanently, Are you sure you want to continue?')
+					    );
+	    ?>
+	</td>
+    </tr>
+    <?php endforeach; ?>
+    <?php unset($student); ?>
+</table>
