@@ -817,12 +817,18 @@ class AlevelmarksheetresultsController extends AppController {
               $data_validation_broken = False;
               while ($objPHPExcel->getActiveSheet()->getCell('B'.$i)->getValue() != null) {
                 $mark = $objPHPExcel->getActiveSheet()->getCell('E'.$i)->getValue();
+
+                // Unique case when the last cell had no marks and you have reached the end of your list.
+                if ($mark == null && $objPHPExcel->getActiveSheet()->getCell('B'.($i+1))->getValue() == null) {
+                  break;
+                }
+
                 if (is_numeric($mark) && ($mark <=0 or $mark >=100)) {
                   $data_validation_broken = True;
                   break;
                 }
 
-                if (!(is_numeric($mark)) && strtolower($mark) != "x") {
+                if (!(empty($mark)) && !(is_numeric($mark)) && strtolower($mark) != "x") {
                   $data_validation_broken = True;
                   break;
                 }
@@ -1140,4 +1146,3 @@ class AlevelmarksheetresultsController extends AppController {
    }
 
 }
-?>
