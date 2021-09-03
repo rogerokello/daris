@@ -364,6 +364,7 @@ class AlevelmarksheetresultsController extends AppController {
                                     'Alevelsubjectcombination.subject2 =' => (string)$subject_id,
                                     'Alevelsubjectcombination.subject3 =' => (string)$subject_id,
                                     'Alevelsubjectcombination.subject4 =' => (string)$subject_id,
+                                    'Alevelsubjectcombination.subject5 =' => (string)$subject_id,
                                   )
                                 )
                               ),
@@ -385,6 +386,7 @@ class AlevelmarksheetresultsController extends AppController {
                                     'Alevelsubjectcombination.subject2 =' => (string)$subject_id,
                                     'Alevelsubjectcombination.subject3 =' => (string)$subject_id,
                                     'Alevelsubjectcombination.subject4 =' => (string)$subject_id,
+                                    'Alevelsubjectcombination.subject5 =' => (string)$subject_id,
                                   )
                                 )
                               ),
@@ -420,6 +422,7 @@ class AlevelmarksheetresultsController extends AppController {
                                   'Alevelsubjectcombination.subject2 =' => (string)$subject_id,
                                   'Alevelsubjectcombination.subject3 =' => (string)$subject_id,
                                   'Alevelsubjectcombination.subject4 =' => (string)$subject_id,
+                                  'Alevelsubjectcombination.subject5 =' => (string)$subject_id,
                                 )
                               )
                             ),
@@ -439,6 +442,7 @@ class AlevelmarksheetresultsController extends AppController {
                                   'Alevelsubjectcombination.subject2 =' => (string)$subject_id,
                                   'Alevelsubjectcombination.subject3 =' => (string)$subject_id,
                                   'Alevelsubjectcombination.subject4 =' => (string)$subject_id,
+                                  'Alevelsubjectcombination.subject5 =' => (string)$subject_id,
                                 )
                               )
                             ),

@@ -26,7 +26,8 @@
     ?><table><tr><td><?php
 
     //echo $this->Html->link('Upload your picture file', array('controller' => '','action' => ''));
-    echo $this->Form->input('Student.picturepath', array('between' => '<br />', 'type' => 'file', 'label' => 'Attach a new picture','accept' =>'image/*'));
+    echo $this->Form->input('Student.picturepath', array('between' => '<br />', 'type' => 'file', 'label' => 'Attach a new picture(A jpeg of not more than 200 Kilobytes)','accept' =>'image/*'));
+    echo $this->Form->input('clear_image', array('type' => 'checkbox', 'label' => 'Remove student picture'));
     ?>
     </td>
     </tr></table>
@@ -248,6 +249,11 @@ echo $this->Form->input('Alevelsubjectcombination.subject3', array('label' => 'S
 <td>
 <?php
 echo $this->Form->input('Alevelsubjectcombination.subject4', array('label' => 'Subject Four (Subsidiary)','options' => $subjectofalevel,'empty' => ' '/*,'selected' => 'none'*/));
+?>
+</td>
+<td>
+<?php
+echo $this->Form->input('Alevelsubjectcombination.subject5', array('label' => 'Subject Five (Subsidiary)','options' => $subjectofalevel,'empty' => ' '));
 ?>
 </td>
 <td></td>

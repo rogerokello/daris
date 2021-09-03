@@ -413,12 +413,20 @@ class StudentsController extends AppController {
 	//}
 	
 	$this->loadModel('Schooldoneasubject');
+  $this->loadModel('Schoolstream');
+  $streamsintheschool = $this->Schoolstream->find('list',
+			array(
+			    'fields' => array('Schoolstream.shortstreamname','Schoolstream.stream'),
+			    'recursive' => 0
+			)
+		    );
 	$alevel_subjects = $this->Schooldoneasubject->find('list', array(
 		'fields' => array('Schooldoneasubject.id','Schooldoneasubject.shortsubjectname'),
 		//’conditions’ => array(’Article.status !=’ => ’pending’),
 		'recursive' => 0
 	));
 	$this->set('alevel_subjects', $alevel_subjects);
+  $this->set('streamsintheschool', $streamsintheschool);
     }
 
     public function edit($id = null, $index_ids = null) {
@@ -438,17 +446,28 @@ class StudentsController extends AppController {
 		$binary_data = base64_decode($encoded_data);
 
 		//first delete the file from the specified location if it exists
-		//$path = "img/studentpics/".$this->request->data['Student']['picturenumber'].".jpg";
-		//if(file_exists($path) == true){
-		    //unlink($path);
-		//}
+		$path = "img/studentpics/".(string)$id.".jpg";
+		if(file_exists($path) == true){
+		    unlink($path);
+		}
 		// save to server (beware of permissions)	
-		//$result = file_put_contents( 'img/studentpics/'.$this->request->data['Student']['picturenumber'].'.jpg', $binary_data );
+		$result = file_put_contents( 'img/studentpics/'.(string)$id.'.jpg', $binary_data );
 		$this->request->data['Student']['picture'] = "";
 		$this->request->data['Student']['studenthaspic'] = "YES";
 		$this->request->data['Student']['studentpicture'] = $binary_data;
 		
 	    }
+
+      if($this->request->data['Student']['clear_image'] === "1") {
+        //Delete the file from the specified location if it exists
+		    $path = "img/studentpics/".(string)$id.".jpg";
+		    if  (file_exists($path) == true)  {
+		      unlink($path);
+		    }
+        $this->request->data['Student']['picture'] = "";
+		    $this->request->data['Student']['studenthaspic'] = null;
+		    $this->request->data['Student']['studentpicture'] = null;
+      }
 
 	    $this->request->data['Student']['fullnames'] = $this->request->data['Student']['surname']." ".$this->request->data['Student']['othernames'];
 	    
@@ -595,7 +614,7 @@ class StudentsController extends AppController {
 	    throw new MethodNotAllowedException();
 	}
 	$students = $this->Student->findById($id);
-	$path = "img/studentpics/".$students['Student']['picturenumber'].".jpg";
+	$path = "img/studentpics/".(string)$id.".jpg";
 	if(file_exists($path) == true){
 	    unlink($path);
 	}

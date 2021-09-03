@@ -16,7 +16,7 @@
     echo $this->Form->create(false);
 ?>
 <fieldset class="sectiondefinition1">
-    <legend class="sectiondefinition">Create new reports for a class</legend>
+    <legend class="sectiondefinition">Create new report for Ordinary Level</legend>
 
     <table>
 	<tr class = "olevelresults">

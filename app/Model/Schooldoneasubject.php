@@ -33,8 +33,8 @@ class Schooldoneasubject extends AppModel {
 	      'message' => 'The short subject name already exists, please choose another subject name',
 	   ),
 	   'shortsubjectname-2' => array(
-	      'rule' => '/^[a-zA-Z_]{3,8}$/i',
-	      'message' => 'Only alphabetic words allowed, they must be between 3 to 8 letters long',
+	      'rule' => '/^[a-zA-Z_]{2,8}$/i',
+	      'message' => 'Only alphabetic words allowed, they must be from 2 to 8 letters long',
 	   ),
 	   'shortsubjectname-3' => array(
 	      'on' => 'create',
@@ -138,6 +138,9 @@ public function deleteColumninTable($shortsubjectname,$value2,$is_subsidiary){
     }
 }
 
+public function alterSubsidiaryColumn($previousshortsubjectname, $newshortsubjectname) {
+
+}
 
 public function alterColumninTable( $previousshortsubjectname,$newshortsubjectname,
 				    $subjectpaperstoremove,$subjectpaperstoadd,$subjectpaperstochange,$subject_was_sub_before

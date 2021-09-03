@@ -200,50 +200,50 @@
 <fieldset class="sectiondefinition1"><legend class="sectiondefinition">Advanced Level Point's grading</legend>
 <table>
 <tr>
-	<th>Lowest Value</th>
-	<th>Highest Value</th>
+	<!-- <th>Lowest Value</th>
+	<th>Highest Value</th> -->
 	<th>Award</th>
 	<th>Award weight</th>
 </tr>
 <tr class = "olevelresults2">
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.0.lowestvalue', array('label' => false)); ?></td>
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.0.highestvalue', array('label' => false)); ?></td>
+	<!-- <td><?php // echo $this->Form->input('Advancedlevelpointsaward.0.lowestvalue', array('label' => false)); ?></td>
+	<td><?php //echo $this->Form->input('Advancedlevelpointsaward.0.highestvalue', array('label' => false)); ?></td> -->
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.0.award', array('label' => false,'options' => $pointawards)); ?></td>
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.0.weight', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.1.lowestvalue', array('label' => false)); ?></td>
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.1.highestvalue', array('label' => false)); ?></td>
+	<!-- <td><?php // echo $this->Form->input('Advancedlevelpointsaward.1.lowestvalue', array('label' => false)); ?></td>
+	<td><?php //echo $this->Form->input('Advancedlevelpointsaward.1.highestvalue', array('label' => false)); ?></td> -->
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.1.award', array('label' => false,'options' => $pointawards)); ?></td>
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.1.weight', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.2.lowestvalue', array('label' => false)); ?></td>
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.2.highestvalue', array('label' => false)); ?></td>
+	<!-- <td><?php // echo $this->Form->input('Advancedlevelpointsaward.2.lowestvalue', array('label' => false)); ?></td>
+	<td><?php //echo $this->Form->input('Advancedlevelpointsaward.2.highestvalue', array('label' => false)); ?></td> -->
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.2.award', array('label' => false,'options' => $pointawards)); ?></td>
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.2.weight', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.3.lowestvalue', array('label' => false)); ?></td>
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.3.highestvalue', array('label' => false)); ?></td>
+	<!-- <td><?php //echo $this->Form->input('Advancedlevelpointsaward.3.lowestvalue', array('label' => false)); ?></td>
+	<td><?php //echo $this->Form->input('Advancedlevelpointsaward.3.highestvalue', array('label' => false)); ?></td> -->
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.3.award', array('label' => false,'options' => $pointawards)); ?></td>
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.3.weight', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.4.lowestvalue', array('label' => false)); ?></td>
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.4.highestvalue', array('label' => false)); ?></td>
+	<!-- <td><?php //echo $this->Form->input('Advancedlevelpointsaward.4.lowestvalue', array('label' => false)); ?></td>
+	<td><?php //echo $this->Form->input('Advancedlevelpointsaward.4.highestvalue', array('label' => false)); ?></td> -->
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.4.award', array('label' => false,'options' => $pointawards)); ?></td>
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.4.weight', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.5.lowestvalue', array('label' => false)); ?></td>
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.5.highestvalue', array('label' => false)); ?></td>
+	<!-- <td><?php //echo $this->Form->input('Advancedlevelpointsaward.5.lowestvalue', array('label' => false)); ?></td>
+	<td><?php //echo $this->Form->input('Advancedlevelpointsaward.5.highestvalue', array('label' => false)); ?></td> -->
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.5.award', array('label' => false,'options' => $pointawards)); ?></td>
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.5.weight', array('label' => false)); ?></td>
 </tr>
 <tr class = "olevelresults2">
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.6.lowestvalue', array('label' => false)); ?></td>
-	<td><?php echo $this->Form->input('Advancedlevelpointsaward.6.highestvalue', array('label' => false)); ?></td>
+	<!-- <td><?php //echo $this->Form->input('Advancedlevelpointsaward.6.lowestvalue', array('label' => false)); ?></td>
+	<td><?php //echo $this->Form->input('Advancedlevelpointsaward.6.highestvalue', array('label' => false)); ?></td> -->
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.6.award', array('label' => false,'options' => $pointawards)); ?></td>
 	<td><?php echo $this->Form->input('Advancedlevelpointsaward.6.weight', array('label' => false)); ?></td>
 </tr>

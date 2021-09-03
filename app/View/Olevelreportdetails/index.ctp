@@ -58,180 +58,151 @@
 		  <span id="drop-nav2">
 		  
 		  <ul>
-		  
-		      <li><a href="#">View </a>
-		      
-		        <ul>
-			    <li>
-				<?php echo $this->Form->postLink(
-					'Individudal ',
-					array('action' => 'viewReports', $report['Olevelreportdetail']['id'],0)
-					    );?>	  
-			    </li>
-			    <li>
-				<?php echo $this->Form->postLink(
-					'Marksheet ',
-					array('action' => 'viewReports', $report['Olevelreportdetail']['id'],1)
-					    );?>
-			    </li>
-			</ul>
-		      
-		      </li>
-		      <li><a href="#">Download </a>
-		      
-		        <ul>
-			    <li>
-				<?php echo $this->Form->postLink(
-					'Single Report',
-					array('action' => 'downloadReports', $report['Olevelreportdetail']['id'],4)
-					    );?>	  
-			    </li>
-		        
-			    <li>
-				<?php echo $this->Form->postLink(
-					'Report(s)',
-					array('action' => 'downloadReports', $report['Olevelreportdetail']['id'],3),
-					array('confirm' => 'This action may take a while downloading a report file, Are you sure you want to continue?')
-					    );?>	  
-			    </li>
-			    <li>
-				<?php echo $this->Form->postLink(
-					'Marksheets(Combined)',
-					array('action' => 'downloadReports', $report['Olevelreportdetail']['id'],1),
-					array('confirm' => 'This action may take a while downloading a marksheet file, Are you sure you want to continue?')
-
-					    );?>
-			    </li>
-			    <li>
-				<?php echo $this->Form->postLink(
-					'Result(s) summary ',
-					array('action' => 'downloadReports', $report['Olevelreportdetail']['id'],2),
-					array('confirm' => 'This action may take a while downloading a summary file, Are you sure you want to continue?')
-
-					    );?>
-			    </li>
-			</ul>
-		      
-		      </li>
-		      <li><a href="#">Update  </a>
-		      
-		        <ul>
-			    <li>
-			    <?php
-				echo $this->Form->postLink(
-					'Marks ',
-					array('action' => 'updateReports', $report['Olevelreportdetail']['id'],1),
-					array('confirm' => 'This action will update all the individudal records parmanently, Are you sure you want to continue?')
-					    ); 
+		    <!-- <li><a href="#">View </a>
+		      <ul>
+			      <li>
+				      <?php /*echo $this->Form->postLink(
+					      'Individudal ',
+					        array('action' => 'viewReports', $report['Olevelreportdetail']['id'],0)
+					      );*/
+              ?>	  
+			      </li>
+			      <li>
+				      <?php /*echo $this->Form->postLink(
+					      'Marksheet ',
+					      array('action' => 'viewReports', $report['Olevelreportdetail']['id'],1)
+					      );*/
+              ?>
+			      </li>
+			    </ul>
+		    </li> -->
+		    <li><a href="#">Download </a>
+		      <ul>
+			      <!-- <li>
+              <?php /*echo $this->Form->postLink(
+                'Single Report',
+                array('action' => 'downloadReports', $report['Olevelreportdetail']['id'],4)
+                    );*/?>	  
+			      </li> -->
+			      <li>
+              <?php echo $this->Form->postLink(
+                'Report(s)',
+                array('action' => 'downloadReports', $report['Olevelreportdetail']['id'],3),
+                array('confirm' => 'This action may take a while downloading a report file, Are you sure you want to continue?')
+                    );?>	  
+			      </li>
+			      <li>
+              <?php
+                echo $this->Form->postLink(
+                'Marksheets(Combined)',
+                array('action' => 'downloadReports', $report['Olevelreportdetail']['id'],1),
+                array('confirm' => 'This action may take a while downloading a marksheet file, Are you sure you want to continue?')
+                );
+              ?>
+			      </li>
+			      <li>
+              <?php 
+                echo $this->Form->postLink(
+                'Result(s) summary ',
+                array('action' => 'downloadReports', $report['Olevelreportdetail']['id'],2),
+                array('confirm' => 'This action may take a while downloading a summary file, Are you sure you want to continue?')
+                );
+              ?>
+			      </li>
+			    </ul>
+		    </li>
+		    <li><a href="#">Update  </a>
+		      <ul>
+			      <li>
+              <?php
+                echo $this->Form->postLink(
+                  'Marks ',
+                  array('action' => 'updateReports', $report['Olevelreportdetail']['id'],1),
+                  array('confirm' => 'This action will update all the individudal records parmanently, Are you sure you want to continue?')
+                      ); 
+              ?>
+			      </li>
+			      <!-- <li>
+              <?php
+                /*echo $this->Form->postLink(
+                  'Missing Students',
+                  array('action' => 'updateReports', $report['Olevelreportdetail']['id'], 2),
+                  array('confirm' => 'This action will update all the individudal records parmanently, Are you sure you want to continue?')
+                      );
+                */ 
+              ?>
+			      </li> -->
+			    </ul>
+		    </li>
+		    <li><a href="#">Comment on </a>
+		      <ul>
+			      <li>
+			        <?php
+                echo $this->Form->postLink(
+                  'Head Teacher Section ',
+                  array('action' => 'comment', $report['Olevelreportdetail']['id'],1),
+                  array('confirm' => 'This action will take a while downloading a comment file, Are you sure you want to continue?')
+                      );
 					    ?>
-			    </li>
-			    <li>
-				<?php
-				echo $this->Form->postLink(
-					'Missing Students',
-					array('action' => 'updateReports', $report['Olevelreportdetail']['id'], 2),
-					array('confirm' => 'This action will update all the individudal records parmanently, Are you sure you want to continue?')
-					    ); 
+			      </li>
+			      <li>
+              <?php
+              echo $this->Form->postLink(
+                'Class Teacher Section ',
+                array('action' => 'comment', $report['Olevelreportdetail']['id'],2),
+                array('confirm' => 'This action will take a while downloading a comment file, Are you sure you want to continue?')
+                    ); 
+                    ?>
+			      </li>
+			      <li>
+              <?php
+              echo $this->Form->postLink(
+                'Warden Section ',
+                array('action' => 'comment', $report['Olevelreportdetail']['id'],3),
+                array('confirm' => 'This action will take a while downloading a comment file, Are you sure you want to continue?')
+                    ); 
+                    ?>
+			      </li>
+			      <li>
+              <?php echo $this->Form->postLink(
+                'Matron Section ',
+                array('action' => 'comment', $report['Olevelreportdetail']['id'],4),
+                array('confirm' => 'This action will take a while downloading a comment file, Are you sure you want to continue?')
+                    );?>
+			      </li>
+			    </ul>
+		    </li>
+		    <li>
+          <?php
+          echo $this->Html->link(
+              'Edit',
+              array('action' => 'edit', $report['Olevelreportdetail']['id'], 1)
+              );
+          ?>
+		    </li>
+        <li><a href="#">Delete</a>
+          <ul>
+			      <li>
+			        <?php
+				        echo $this->Form->postLink(
+					        'All report Details ',
+					        array('action' => 'delete', $report['Olevelreportdetail']['id']),
+					        array('confirm' => 'This action will delete this report parmanently, Are you sure you want to continue?')
+					      );
 					    ?>
-			    </li>
-			</ul>
+			      </li>
+			    <!-- <li>
+              <?php
+            /*echo $this->Form->postLink(
+              'Single report ',
+              array('action' => 'delete', $report['Olevelreportdetail']['id'], 1 )
+              //array('confirm' => 'This action will delete this report parmanently, Are you sure you want to continue?')
+                  );*/
+                  ?>
+			    </li> -->
+			    </ul>
 		      
-		      </li>
-		      
-		       <li><a href="#">Comment on </a>
-		      
-		        <ul>
-			    <li>
-			    <?php
-				echo $this->Form->postLink(
-					'Head Teacher Section ',
-					array('action' => 'comment', $report['Olevelreportdetail']['id'],1),
-					array('confirm' => 'This action will take a while downloading a comment file, Are you sure you want to continue?')
-					    );
-					    ?>
-			    </li>
-			    <li>
-				<?php
-				echo $this->Form->postLink(
-					'Class Teacher Section ',
-					array('action' => 'comment', $report['Olevelreportdetail']['id'],2),
-					array('confirm' => 'This action will take a while downloading a comment file, Are you sure you want to continue?')
-					    ); 
-					    ?>
-			    </li>
-			    <li>
-				<?php
-				echo $this->Form->postLink(
-					'Warden Section ',
-					array('action' => 'comment', $report['Olevelreportdetail']['id'],3),
-					array('confirm' => 'This action will take a while downloading a comment file, Are you sure you want to continue?')
-					    ); 
-					    ?>
-			    </li>
-			    <li>
-				<?php echo $this->Form->postLink(
-					'Matron Section ',
-					array('action' => 'comment', $report['Olevelreportdetail']['id'],4),
-					array('confirm' => 'This action will take a while downloading a comment file, Are you sure you want to continue?')
-					    );?>
-			    </li>
-			</ul>
-		      
-		      </li>
-		      
-		      <li><!--  <a href="#">Edit</a> -->
-		      <?php
-				echo $this->Html->link(
-				    'Edit',
-				     array('action' => 'edit', $report['Olevelreportdetail']['id'], 1)
-				     );
-					    ?>
-					    <!--
-		        <ul>
-			    <li>
-			    <?php/*
-				echo $this->Html->link(
-				    'Subjects Considered',
-				     array('action' => 'edit', $report['Olevelreportdetail']['id'], 1)
-				     );
-					    */?>
-			    </li>
-			    <li>
-				<?php/*
-				echo $this->Html->link(
-				    'Exams Considered',
-				     array('action' => 'edit', $report['Olevelreportdetail']['id'], 2)
-				     ); 
-					    */?>
-			    </li>
-			</ul>-->
-		      
-		      </li>
-		      
-		      <li><a href="#">Delete</a>
-		      
-		        <ul>
-			    <li>
-			    <?php
-				echo $this->Form->postLink(
-					'All report Details ',
-					array('action' => 'delete', $report['Olevelreportdetail']['id']),
-					array('confirm' => 'This action will delete this report parmanently, Are you sure you want to continue?')
-					    );
-					    ?>
-			    </li>
-			    <li>
-			    <?php
-				echo $this->Form->postLink(
-					'Single report ',
-					array('action' => 'delete', $report['Olevelreportdetail']['id'], 1 )
-					//array('confirm' => 'This action will delete this report parmanently, Are you sure you want to continue?')
-					    );
-					    ?>
-			    </li>
-			</ul>
-		      
-		      </li>
+		    </li>
 		      
 		  </ul>
 		  

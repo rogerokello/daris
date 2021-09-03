@@ -17,19 +17,19 @@ class Olevelreportdetail extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'Alevelreport' => array(
-			'className' => 'Olevelreport',
-			'foreignKey' => 'olevelreportdetail_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
+		// 'Alevelreport' => array(
+		// 	'className' => 'Olevelreport',
+		// 	'foreignKey' => 'olevelreportdetail_id',
+		// 	'dependent' => true,
+		// 	'conditions' => '',
+		// 	'fields' => '',
+		// 	'order' => '',
+		// 	'limit' => '',
+		// 	'offset' => '',
+		// 	'exclusive' => '',
+		// 	'finderQuery' => '',
+		// 	'counterQuery' => ''
+		// )
 	);
 	
 	

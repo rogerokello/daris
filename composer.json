@@ -18,9 +18,15 @@
 		"source": "https://github.com/cakephp/cakephp"
 	},
 	"require": {
-		"php": ">=5.2.8",
-		"ext-mcrypt": "*"
+		"php": "=7.3.28"
 	},
+  "repositories":
+  [
+    {
+      "type": "composer",
+      "url": "https:\/\/www.phpclasses.org\/"
+    }
+  ],
 	"require-dev": {
 		"phpunit/phpunit": "3.7.*",
 		"cakephp/debug_kit" : "2.2.*"

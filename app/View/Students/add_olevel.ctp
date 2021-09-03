@@ -18,7 +18,7 @@
     ?><table><tr><td><?php
     
     //echo $this->Html->link('Upload your picture file', array('controller' => '','action' => ''));
-    echo $this->Form->input('Student.picturepath', array('between' => '<br />', 'type' => 'file', 'label' => 'Attach your picture', 'accept' =>'image/*'));
+    echo $this->Form->input('Student.picturepath', array('between' => '<br />', 'type' => 'file', 'label' => 'Attach your picture(A jpeg of not more than 200 Kilobytes)', 'accept' =>'image/*'));
     ?>
     </td>
     <td>

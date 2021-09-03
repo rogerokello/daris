@@ -805,6 +805,36 @@ class OlevelreportdetailsController extends AppController {
       $Gradeprofile = ClassRegistry::init('Gradeprofile');
       $this->loadModel('Schooldoneexam');
 
+      $this->loadModel('Reportsetting');
+
+      // Get all school details
+      $settings_report = $this->Reportsetting->findByUniqueSettingName("unique");
+      $school_name = null;
+      $school_address = null;
+      $school_telephone_number = null;
+      $headteacher_name = null;
+      $dorm_master_name = null;
+      $dorm_mistress_name = null;
+      $header_o_level_report = null; // o_level_report_header
+      $space_top_o_level = null; // o_level_top_space
+      $space_left_o_level = null; // o_level_left_space
+      $header_o_level_shown = null; // o_level_show_inbuilt_header
+      $school_motto = null; // school_motto
+
+      if ($settings_report) {
+        $school_name = $settings_report["Reportsetting"]["school_name"];
+        $school_address = $settings_report["Reportsetting"]["school_address"];
+        $school_telephone_number = $settings_report["Reportsetting"]["school_telephone_number"];
+        $headteacher_name = $settings_report["Reportsetting"]["headteacher_name"];
+        $dorm_master_name = $settings_report["Reportsetting"]["dorm_master_name"];
+        $dorm_mistress_name = $settings_report["Reportsetting"]["dorm_mistress_name"];
+        $header_o_level_report = $settings_report["Reportsetting"]["o_level_report_header"];
+        $space_top_o_level = $settings_report["Reportsetting"]["o_level_top_space"];
+        $space_left_o_level = $settings_report["Reportsetting"]["o_level_left_space"];
+        $header_o_level_shown = $settings_report["Reportsetting"]["o_level_show_inbuilt_header"];
+        $school_motto = $settings_report["Reportsetting"]["school_motto"];
+      }
+
       $report_exams = $this->Schooldoneexam->find(
         'list',
         array(
@@ -891,21 +921,6 @@ class OlevelreportdetailsController extends AppController {
       
         // Add new sheet
         $objWorkSheet = $objPhpExcel->createSheet($i); //Setting index when creating
-      
-        // School Badge
-        $objDrawing = new PHPExcel_Worksheet_Drawing();    //create object for Worksheet drawing
-        //$objDrawing->setName('Student Image');        //set name to image
-        $objDrawing->setDescription('School logo/badge'); //set description to image
-        //$signature = $file;    //Path to signature .jpg file
-        //$objDrawing->setPath(WWW_ROOT.'/img/studentpics/'.'person.png');
-        $objDrawing->setPath(WWW_ROOT.'/img/studentpics/'.'logo2.png');
-        //$objDrawing->setImageResource($file);
-        $objDrawing->setOffsetX(1);                       //setOffsetX works properly
-        $objDrawing->setOffsetY(2);                       //setOffsetY works properly
-        $objDrawing->setCoordinates('B1');        //set image to cell
-        $objDrawing->setWidth(100);                 //set width, height
-        //$objDrawing->setHeight(50);
-      
 
         $objPhpExcel->setActiveSheetIndex($i);
       
@@ -916,46 +931,67 @@ class OlevelreportdetailsController extends AppController {
         $objPhpExcel->getActiveSheet()->getColumnDimension('B')->setWidth(7.0);
         //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('C')->setAutoSize(false);
         $objPhpExcel->getActiveSheet()->getColumnDimension('C')->setWidth(17.00);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('D')->setAutoSize(false);
-        /*$objPhpExcel->getActiveSheet()->getColumnDimension('D')->setWidth(6.29);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('E')->setAutoSize(false);
-        $objPhpExcel->getActiveSheet()->getColumnDimension('E')->setWidth(5.14);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('F')->setAutoSize(false);
-        $objPhpExcel->getActiveSheet()->getColumnDimension('F')->setWidth(6.57);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('G')->setAutoSize(false);
-        $objPhpExcel->getActiveSheet()->getColumnDimension('G')->setWidth(4.29);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('I')->setAutoSize(false);
-        $objPhpExcel->getActiveSheet()->getColumnDimension('I')->setWidth(6.86);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('J')->setAutoSize(false);
-        $objPhpExcel->getActiveSheet()->getColumnDimension('J')->setWidth(5.86);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('K')->setAutoSize(false);
-        *///$objPhpExcel->getActiveSheet()->getColumnDimension('K')->setWidth(0);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('L')->setAutoSize(false);
-        /*$objPhpExcel->getActiveSheet()->getColumnDimension('L')->setWidth(5);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('M')->setAutoSize(false);
-        $objPhpExcel->getActiveSheet()->getColumnDimension('M')->setWidth(5.14);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('N')->setAutoSize(false);
-        $objPhpExcel->getActiveSheet()->getColumnDimension('N')->setWidth(12.86);
-        //$objPhpExcel->getActiveSheet()->getColumnDimensionByColumn('O')->setAutoSize(false);
-        $objPhpExcel->getActiveSheet()->getColumnDimension('O')->setWidth(9);
-        */
+
         $objPhpExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(29);
         $objPhpExcel->getActiveSheet()->getRowDimension(12)->setRowHeight(39.75);
-        $objPhpExcel->getActiveSheet()->mergeCells('C1:N1');
-        $objPhpExcel->getActiveSheet()->setCellValue('C1','ST. GRACIOUS SS - LIRA');
-        $objPhpExcel->getActiveSheet()->getStyle("C1")->getFont()->setSize(25);
-        $objPhpExcel->getActiveSheet()->getStyle("C1")->getFont()->setBold(true);
-        $objPhpExcel->getActiveSheet()->getStyle('C1')
-                    ->getAlignment()
-                    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPhpExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(15);
-        $objPhpExcel->getActiveSheet()->mergeCells('C2:N2');
-        $objPhpExcel->getActiveSheet()->setCellValue('C2','P.O Box 560 - LIRA(U)       TEL:+256784997232, +256775753373');
-        $objPhpExcel->getActiveSheet()->getStyle('C2')
-                    ->getAlignment()
-                    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        if ($header_o_level_shown) {
+          // School Badge
+          $objDrawing = new PHPExcel_Worksheet_Drawing();    //create object for Worksheet drawing
+          //$objDrawing->setName('Student Image');        //set name to image
+          $objDrawing->setDescription('School logo/badge'); //set description to image
+          //$signature = $file;    //Path to signature .jpg file
+          //$objDrawing->setPath(WWW_ROOT.'/img/studentpics/'.'person.png');
+          $objDrawing->setPath(WWW_ROOT.'/img/studentpics/'.'logo2.png');
+          //$objDrawing->setImageResource($file);
+          $objDrawing->setOffsetX(1);                       //setOffsetX works properly
+          $objDrawing->setOffsetY(2);                       //setOffsetY works properly
+          $objDrawing->setCoordinates('B1');        //set image to cell
+          $objDrawing->setWidth(100);                 //set width, height
+          $objDrawing->setWorksheet($objPhpExcel->getActiveSheet());
+
+          // School name
+          $objPhpExcel->getActiveSheet()->mergeCells('C1:N1');
+          $objPhpExcel->getActiveSheet()->setCellValue(
+            'C1',
+            (string)$school_name
+          );
+          $objPhpExcel->getActiveSheet()->getStyle("C1")->getFont()->setSize(25);
+          $objPhpExcel->getActiveSheet()->getStyle("C1")->getFont()->setBold(true);
+          $objPhpExcel->getActiveSheet()->getStyle('C1')
+                      ->getAlignment()
+                      ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+          $objPhpExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(15);
+          $objPhpExcel->getActiveSheet()->mergeCells('C2:N2');
+          // School Box address and telephone number
+          $school_address_and_phone = (string)$school_address."      TEL:".(string)$school_telephone_number;
+          $objPhpExcel->getActiveSheet()->setCellValue(
+            'C2',
+            $school_address_and_phone
+          );
+          $objPhpExcel->getActiveSheet()->getStyle('C2')
+                      ->getAlignment()
+                      ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        }
+
+        $path = WWW_ROOT."img/studentpics/".(string)$report['student_id'].".jpg";
+        // attach student picture if it exists
+	      if(file_exists($path) == true){
+	        $objDrawing = new PHPExcel_Worksheet_Drawing();    //create object for Worksheet drawing
+          //$objDrawing->setName('Student Image');        //set name to image
+          $objDrawing->setDescription('Student Image'); //set description to image
+          
+          $objDrawing->setPath($path);
+          $objDrawing->setOffsetX(1);                       //setOffsetX works properly
+          $objDrawing->setOffsetY(20.23);                       //setOffsetY works properly
+          $objDrawing->setCoordinates('O1');        //set image to cell
+          $objDrawing->setWidth(120);                 //set width, height
+          $objDrawing->setWorksheet($objPhpExcel->getActiveSheet());
+	      }
+
         $objPhpExcel->getActiveSheet()->mergeCells('C4:N4');
-        $objPhpExcel->getActiveSheet()->setCellValue('C4','ORDINARY LEVEL PROGRESSIVE REPORT');
+        // Set the report header
+        $objPhpExcel->getActiveSheet()->setCellValue('C4',(string)$header_o_level_report);
         $objPhpExcel->getActiveSheet()->getStyle("C4")->getFont()->setBold(true);
         $objPhpExcel->getActiveSheet()->getStyle('C4')
                     ->getAlignment()
@@ -974,12 +1010,13 @@ class OlevelreportdetailsController extends AppController {
         $objPhpExcel->getActiveSheet()->getRowDimension(4)->setRowHeight(19);
         $objPhpExcel->getActiveSheet()->getStyle("C4")->getFont()->setSize(16);
       
+        // Set the top space and bottom space if shown
         $objPhpExcel->getActiveSheet()
             ->getPageMargins()
-                ->setTop(0.75)
-                ->setRight(0.05)
-                ->setLeft(0.05)
-                ->setBottom(0.75);
+            ->setTop(is_null($space_top_o_level)?0.75:$space_top_o_level)
+            ->setRight(0.05)
+            ->setLeft(is_null($space_left_o_level)?0.05:$space_left_o_level)
+            ->setBottom(0.75);
       
         // The Exam name block
         $objPhpExcel->getActiveSheet()->mergeCells('C6:N6');
@@ -1266,12 +1303,16 @@ class OlevelreportdetailsController extends AppController {
         $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+1))->getFont()->setUnderline(true);
       
         //Award the grading schemes
-        $objPhpExcel->getActiveSheet()
-            ->setCellValue('C'.($insert_counter+2),"80 -100 D1             60-64 C4             45-49 P7");
-        $objPhpExcel->getActiveSheet()
-            ->setCellValue('C'.($insert_counter+3),"70 - 79  D2             55-59 C5             35-44 P8");
-        $objPhpExcel->getActiveSheet()
-            ->setCellValue('C'.($insert_counter+4),"65 - 69  C3             50-54 C6             00-34 P9");
+        $report_class = (int)$reports['Olevelreportdetail']['reportclass'];
+        $grading_scheme = $Gradeprofile->get_grading_scheme($report_class);
+        // $this->Session->setFlash(__(print_r($grading_scheme)));
+        for ($counter_grading_scheme=0; $counter_grading_scheme < count($grading_scheme); $counter_grading_scheme++) {
+            $objPhpExcel->getActiveSheet()
+                ->setCellValue(
+                  'B'.($insert_counter+2+$counter_grading_scheme),
+                  $grading_scheme[$counter_grading_scheme]
+                );
+        }
 
         //Apply boarders to the grading section
       
@@ -1291,13 +1332,16 @@ class OlevelreportdetailsController extends AppController {
         //Merge the cells containing the name
         $objPhpExcel->getActiveSheet()->mergeCells('B'.($insert_counter+7).':'.'C'.($insert_counter+7));
         //Name of the Head teacher
-        $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+7),"Mr. Ayo Edward");
+        $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+7), $headteacher_name);
         //Align the Name to the center
         $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+7))
               ->getAlignment()
               ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         //Set the comment font size to 12
-        $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+7))->getFont()->setSize(12);				
+        $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+7))->getFont()->setSize(12);
+        //Wrap the contents of the cell
+        $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+7))
+          ->getAlignment()->setWrapText(true);				
         //The Head teacher comment section
         $objPhpExcel->getActiveSheet()->setCellValue('D'.($insert_counter+6),"Head Teacher's comment");
         $objPhpExcel->getActiveSheet()->getStyle('D'.($insert_counter+6))->getFont()->setUnderline(true);
@@ -1336,6 +1380,9 @@ class OlevelreportdetailsController extends AppController {
         $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+9))->getFont()->setUnderline(true);
         //Merge the cells containing the name
         $objPhpExcel->getActiveSheet()->mergeCells('B'.($insert_counter+10).':'.'C'.($insert_counter+10));
+        //Wrap the contents of the cell
+        $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+10))
+          ->getAlignment()->setWrapText(true);
         //Name of the class teacher
         $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+10),$classteachertitle." ".$classteachername);
         //Align the Name to the center
@@ -1385,56 +1432,16 @@ class OlevelreportdetailsController extends AppController {
         $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+12))->getFont()->setUnderline(true);
         //Merge the cells containing the name
         $objPhpExcel->getActiveSheet()->mergeCells('B'.($insert_counter+13).':'.'C'.($insert_counter+13));
+
+        //Wrap the contents of the cell
+        $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+13))
+          ->getAlignment()->setWrapText(true);
+
         //Name of the House master / House mistress		
         if ($student_sex == "F") {
-          
-          switch($report['classthen']){
-          
-            case 1:
-              $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"Ms Awino Veronica");
-              break;
-            case 2:
-              $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"Ms Awino Veronica");
-              break;
-            case 3:
-              $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"Mrs Awor Dorothy");
-              break;
-            case 4:
-              $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"");
-              break;
-            case 5:
-              $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"Mrs Awor Dorothy");
-              break;
-            case 6:
-              $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"");
-              break;
-            default:
-              $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"Mrs Akao Stella");
-              break;
-          }
-
+          $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13), $dorm_mistress_name);
         } else  {
-      
-          switch($report['classthen']){
-          
-            case 1:
-                $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"Mr Orie Christopher");
-                break;
-            case 2:
-                $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"Mr Ogwal Moses Ogoola");
-                break;
-            case 3:
-                $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"Mr Ogwal Moses Ogoola");
-                break;
-            case 4:
-                $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"");
-                break;
-            default:
-                $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13),"Mr Okello Joseph");
-                break;
-          
-          }
-      
+          $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+13), $dorm_master_name);
         }
         //Align the Name to the center
         $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+13))
@@ -1491,7 +1498,7 @@ class OlevelreportdetailsController extends AppController {
         
         //Add the school logo to the end of the report and center align it
         $objPhpExcel->getActiveSheet()->mergeCells('B'.($insert_counter+15).':'.PHPExcel_Cell::stringFromColumnIndex(($number_of_exams_counter+7) - 1).($insert_counter+15));
-        $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+15),"WHERE THERE IS NO VISION, THE PEOPLE PERISH");
+        $objPhpExcel->getActiveSheet()->setCellValue('B'.($insert_counter+15),$school_motto);
         $objPhpExcel->getActiveSheet()->getStyle('B'.($insert_counter+15))
                 ->getAlignment()
                 ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -1514,8 +1521,6 @@ class OlevelreportdetailsController extends AppController {
         $objPhpExcel->getActiveSheet()->getPageSetup()->setFitToPage(true);
         $objPhpExcel->getActiveSheet()->getPageSetup()->setFitToWidth(1);
         $objPhpExcel->getActiveSheet()->getPageSetup()->setFitToHeight(1);
-        
-        $objDrawing->setWorksheet($objPhpExcel->getActiveSheet());
 
         $i++;
       }
@@ -1644,7 +1649,7 @@ class OlevelreportdetailsController extends AppController {
         );
         if ($file != null) {
           // Create file in the studentpics folder with a 0777 attribute
-          $file1 = new File(WWW_ROOT.'/img/studentpics/'.$report['student_id'].'.jpg', true, 0777);
+          $file1 = new File(WWW_ROOT.'img/studentpics/'.$report['student_id'].'.jpg', true, 0777);
           // Write a given number of bytes to the file.
           // The bytes will be got from the database
           $file1->write($file,'w',false);
@@ -1653,7 +1658,7 @@ class OlevelreportdetailsController extends AppController {
           $objDrawing->setName('Student Image');        //set name to image
           $objDrawing->setDescription('Customer Signature'); //set description to image
           //$signature = $file;    //Path to signature .jpg file
-          $objDrawing->setPath(WWW_ROOT.'/img/studentpics/'.$report['student_id'].'.jpg');
+          $objDrawing->setPath(WWW_ROOT.'img/studentpics/'.$report['student_id'].'.jpg');
           //$objDrawing->setImageResource($file);
           $objDrawing->setOffsetX(1);                       //setOffsetX works properly
           $objDrawing->setOffsetY(2);                       //setOffsetY works properly
@@ -3139,11 +3144,9 @@ class OlevelreportdetailsController extends AppController {
 
 		$i++;
 	}
-
-	    // $objPhpExcel->getActiveSheet()->getProtection()->setPassword('PHPExcel');
 	    
 	    if($mode == "1"){
-		$objPhpExcel->output("S".$reports['Olevelreportdetail']['reportclass']. " " .
+		    $objPhpExcel->output("S".$reports['Olevelreportdetail']['reportclass']. " " .
 						      $reports['Olevelreportdetail']['reportname']. " " .
 						      $reports['Olevelreportdetail']['reportterm']. " - " .
 						      $reports['Olevelreportdetail']['reportyear']. " - ".
@@ -3152,7 +3155,7 @@ class OlevelreportdetailsController extends AppController {
 	    
 	    
 	    if($mode == "2"){
-		$objPhpExcel->output("S".$reports['Olevelreportdetail']['reportclass']." ".$streamchosenbyclassteacher. " - " .
+		    $objPhpExcel->output("S".$reports['Olevelreportdetail']['reportclass']." ".$streamchosenbyclassteacher. " - " .
 						      $reports['Olevelreportdetail']['reportname']. " " .
 						      $reports['Olevelreportdetail']['reportterm']. " - " .
 						      $reports['Olevelreportdetail']['reportyear']. " - ".
@@ -3160,7 +3163,7 @@ class OlevelreportdetailsController extends AppController {
 	    }
 	    
 	    if($mode == "3"){
-		$objPhpExcel->output("S".$reports['Olevelreportdetail']['reportclass']. " " .
+		    $objPhpExcel->output("S".$reports['Olevelreportdetail']['reportclass']. " " .
 						      $reports['Olevelreportdetail']['reportname']. " " .
 						      $reports['Olevelreportdetail']['reportterm']. " - " .
 						      $reports['Olevelreportdetail']['reportyear']. " - ".
@@ -3168,7 +3171,7 @@ class OlevelreportdetailsController extends AppController {
 	    }
 	    
 	    if($mode == "4"){
-		$objPhpExcel->output("S".$reports['Olevelreportdetail']['reportclass']. " " .
+		    $objPhpExcel->output("S".$reports['Olevelreportdetail']['reportclass']. " " .
 						      $reports['Olevelreportdetail']['reportname']. " " .
 						      $reports['Olevelreportdetail']['reportterm']. " - " .
 						      $reports['Olevelreportdetail']['reportyear']. " - ".
@@ -3194,70 +3197,54 @@ class OlevelreportdetailsController extends AppController {
 	$this->set('commentfile',$commentfile);
     
     }
-/**
-* delete method
-*
-* @throws NotFoundException
-* @param string $id
-* @return void
-*/
-    public function delete($id = null) {
-		$this->layout = 'default2';
-		$this->Olevelreportdetail->id = $id;
-		//$shortsubjectnametobedeleted = $shortsubjectname;
-		if (!$this->Olevelreportdetail->exists()) {
-			throw new NotFoundException(__('Invalid Report'));
-		}
-		
-		$this->loadModel("Olevelreport");
-		$numberofcomments = $this->Olevelreport->find('count', array(
-		    //'fields' => array(''),
-		    'conditions' => array('olevelreportdetail_id' => $id,
-			"OR" => array(
-			    "headteacherscomment !=" => null,
-			    "classteacherscomment !=" => null,
-			    "dormmasterscomment !=" => null,
-			    "dormmistresscomment !=" => null,
-			    "headteacherscomment !=" => "",
-			    "classteacherscomment !=" => "",
-			    "dormmasterscomment !=" => "",
-			    "dormmistresscomment !=" => "",
-			)
-		    ),
-		
-		));
-		
-		if($numberofcomments>0){
-		
-		    $this->Session->setFlash(__('This report cannot be deleted because it contains some comments'));
-		
-		}else{
-		
-		    if ($this->Olevelreportdetail->delete()) {
-		
-			$this->Session->setFlash(__('All the details for the selected report have been deleted.'));
-				
-		    } else {
-		
-			$this->Session->setFlash(__('The report details could not be deleted. Please, try again.'));
-			
-		    }
-		
-		}
-		
-		/*$this->request->allowMethod('post', 'delete');
 
-		if ($this->Olevelreportdetail->delete()) {
+    /**
+    * delete method
+    *
+    * @throws NotFoundException
+    * @param string $id
+    * @return void
+    */
+    public function delete($id = null) {
+      $this->layout = 'default2';
+      $this->Olevelreportdetail->id = $id;
+      //$shortsubjectnametobedeleted = $shortsubjectname;
+      if (!$this->Olevelreportdetail->exists()) {
+        throw new NotFoundException(__('Invalid Report'));
+      }
 		
-			$this->Session->setFlash(__('All the details for the selected report have been deleted.'));
-				
-		} else {
+      $this->loadModel("Olevelreport");
+
+      $numberofcomments = $this->Olevelreport->find(
+        'count', array(
+		    //'fields' => array(''),
+          'conditions' => array(
+            'olevelreportdetail_id' => $id,
+            "OR" => array(
+                "headteacherscomment !=" => null,
+                "classteacherscomment !=" => null,
+                "dormmasterscomment !=" => null,
+                "dormmistresscomment !=" => null,
+                "headteacherscomment !=" => "",
+                "classteacherscomment !=" => "",
+                "dormmasterscomment !=" => "",
+                "dormmistresscomment !=" => "",
+            )
+          ),
+		    )
+      );
 		
-			$this->Session->setFlash(__('Subject details could not be deleted. Please, try again.'));
-			
-		}
-		*/
-		return $this->redirect(array('action' => 'index'));
+	    if  ($numberofcomments>0) {
+		    $this->Session->setFlash(__('This report cannot be deleted because it contains some comments'));
+		  } else {
+		    if ($this->Olevelreportdetail->delete()) {
+			    $this->Session->setFlash(__('All the details for the selected report have been deleted.'));
+		    } else {
+			    $this->Session->setFlash(__('The report details could not be deleted. Please, try again.'));
+		    }
+		  }
+		
+		  return $this->redirect(array('action' => 'index'));
     }
     
     public function updateReports($report_id,$update_flag = null){
@@ -3286,311 +3273,154 @@ class OlevelreportdetailsController extends AppController {
     
     }
     
-        public function upLoadData(){
+    public function upLoadData(){
         
-        set_time_limit(0);
-	$this->layout = 'default2';
-	Controller::disableCache();
-	if ($this->request->is('Post')){
-	    
-	    $condition1 = ($this->request->data['uploadedfile']['error'] == 0);
-	    $condition2 = ($this->request->data['uploadedfile']['type'] == 
-			   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-			  );
-	    /*
-	    $condition3 = (($this->request->data['uploadedfile']['size'] > 0) && 
-			   ($this->request->data['uploadedfile']['size'] <= 6291456)
-			  );
-	    */	  
-	    $condition4 = ($this->request->data['uploadData'] == "olevelstudentreports");
-	    
-	    if($condition1 != true){
-		$this->Session->setFlash(__("There was an error during the upload, Please try again"));
-	    }
-	    
-	    if($condition2 != true){
-		$this->Session->setFlash(__("Please select an Excel 2007 file"));
-	    }
-	    
- 
-	    if($this->request->data['uploadedfile']['size'] == 0){
-		$this->Session->setFlash(__("Please choose an Excel 2007 file to upload"));
-	    }
-	    /*
-	    if($condition3 != true && ($this->request->data['uploadedfile']['size'] != 0)){
-		$this->Session->setFlash(__("Please choose an Excel 2007 which is less than 7MB"));
-	    }
-	    */
-	    if( $condition1 && $condition2 /*&& $condition3*/ && $condition4){
-	    
-		$file = $this->request->data['uploadedfile']['tmp_name'];
-	    
-		//load the worksheet from a file
-		//Read spreadsheeet workbook
-		try {
-		      //$inputFileType = $this->PhpExcel->identify($file);
-		      //$objReader = $this->PhpExcel->createReader($inputFileType);
-		      $objPhpExcel = $this->PhpExcel->loadWorksheet($file);
-		} catch(Exception $e) {
-		      die($e->getMessage());
-		      $this->Session->setFlash(__("An error occurred during file loading"));
-		}
-		
-		$avaluethathasbeenhacked = null;
-		$thehack;
-		
-		Security::setHash('blowfish');
-		$this->loadModel("Olevelreport");
-		//Check if all the cells have been hashed according to how you wanted initially
-		foreach ($objPhpExcel->getWorksheetIterator() as $worksheetNbr => $worksheet) {
-		    //echo 'Worksheet number - ', $worksheetNbr, PHP_EOL;
+      set_time_limit(0);
+  
+      $this->layout = 'default2';
+      Controller::disableCache();
 
-		    //$division = $worksheet->getCell('C3');
-		    $cellsthatwerehashed = $worksheet->getCell('B11')->getValue().
-					   $worksheet->getCell('C11')->getValue().
-					   $worksheet->getCell('C10')->getValue().
-					   $worksheet->getCell('E10')->getValue();
-		    
-		    $hashedmatch = (Security::hash($cellsthatwerehashed,'blowfish',$worksheet->getCell('D11')->getValue()) === $worksheet->getCell('D11')->getValue());
-		    if($hashedmatch != true){
-		    
-			$avaluethathasbeenhacked = 2;
-			//$thehack = Security::hash($cellsthatwerehashed,'blowfish',$worksheet->getCell('D11')->getValue());
-			break;
-		    
-		    }
+      if ($this->request->is('Post')) {
+        $condition1 = ($this->request->data['uploadedfile']['error'] == 0);
+        $condition2 = ($this->request->data['uploadedfile']['type'] == 
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+        $condition4 = ($this->request->data['uploadData'] == "olevelstudentreports");
+  
+        if($condition1 != true){
+          $this->Session->setFlash(__("There was an error during the upload, Please try again"));
+        }
+  
+        if  ($condition2 != true){
+          $this->Session->setFlash(__("Please select an Excel 2007 file"));
+        }
+  
+        if  ($this->request->data['uploadedfile']['size'] == 0) {
+          $this->Session->setFlash(__("Please choose an Excel 2007 file to upload"));
+        }
 
-		}
+	      if  ($condition1 && $condition2 && $condition4) {
+	    
+		      $file = $this->request->data['uploadedfile']['tmp_name'];
+	    
+		      //load the worksheet from a file
+		      //Read spreadsheeet workbook
+		      try {
+		        $objPhpExcel = $this->PhpExcel->loadWorksheet($file);
+		      } catch(Exception $e) {
+		        die($e->getMessage());
+		        $this->Session->setFlash(__("An error occurred during file loading"));
+		      }
 		
-		if($avaluethathasbeenhacked == 2){
+		      $avaluethathasbeenhacked = null;
 		
-		    $this->Session->setFlash(__("Invalid file supplied. Please upload correctfile"/*.$thehack."------".$worksheet->getCell('D11')->getValue()*/));
-		
-		}else{
-		
-		    //$this->Session->setFlash(__("You are in the loop"));
-		    // Start the processing of the file and putting the comments into the individual 
-		    // reports
-		    foreach ($objPhpExcel->getWorksheetIterator() as $worksheetNbr => $worksheet) {
-			//echo 'Worksheet number - ', $worksheetNbr, PHP_EOL;
+		      Security::setHash('blowfish');
 
-			//$division = $worksheet->getCell('C3');
-			$who_is_commenting = $worksheet->getCell('B11')->getValue();
-			$were_2_extract_cmmnt_from = $worksheet->getCell('C11')->getValue();
-			$the_rptid_2_pt_de_cmmnt_on = $worksheet->getCell('C10')->getValue();
-			$the_sex_of_student = $worksheet->getCell('E10')->getValue();
-			$thecomment = $worksheet->getCell($were_2_extract_cmmnt_from)->getValue();
-			
-			if($who_is_commenting == "H"){
-			
-			    $data = array(
-				    'Olevelreport' => array(
-					'id' => $the_rptid_2_pt_de_cmmnt_on,
-					'headteacherscomment' => $thecomment				    
-				    )
-			    );
-			    
-			    $this->Olevelreport->save($data);
-			
-			}
-			
-			if($who_is_commenting == "C"){
-			
-			    $data = array(
-				    'Olevelreport' => array(
-					'id' => $the_rptid_2_pt_de_cmmnt_on,
-					'classteacherscomment' => $thecomment				    
-				    )
-			    );
-			    
-			    $this->Olevelreport->save($data);
-			
-			}
-			
-			if($who_is_commenting == "W"){
-			
-			    $data = array(
-				    'Olevelreport' => array(
-					'id' => $the_rptid_2_pt_de_cmmnt_on,
-					'dormmasterscomment' => $thecomment				    
-				    )
-			    );
-			    
-			    $this->Olevelreport->save($data);
-			
-			}
-			
-			if($who_is_commenting == "M"){
-			
-			    $data = array(
-				    'Olevelreport' => array(
-					'id' => $the_rptid_2_pt_de_cmmnt_on,
-					'dormmistresscomment' => $thecomment				    
-				    )
-			    );
-			    
-			    $this->Olevelreport->save($data);
-			
-			}
+		      $this->loadModel("Olevelreport");
+		      //Check if all the cells have been hashed according to how you wanted initially
+		      foreach ($objPhpExcel->getWorksheetIterator() as $worksheetNbr => $worksheet) {
+		        //echo 'Worksheet number - ', $worksheetNbr, PHP_EOL;
 
-		    }
+		        //$division = $worksheet->getCell('C3');
+            $cellsthatwerehashed = $worksheet->getCell('B11')->getValue().
+                $worksheet->getCell('C11')->getValue().
+                $worksheet->getCell('C10')->getValue().
+                $worksheet->getCell('E10')->getValue();
 		    
-		    $this->Session->setFlash(__("Commenting Successfull"));
+            $hashedmatch = (
+              Security::hash(
+                $cellsthatwerehashed,
+                'blowfish',
+                $worksheet->getCell('D11')->getValue()
+              ) === $worksheet->getCell('D11')->getValue());
+
+            if  ($hashedmatch != true)  {
+			        $avaluethathasbeenhacked = 2;
+			        break;
+		        }
+		      }
 		
-		}
-		/*
-		$objPHPExcel = $this->PhpExcel->loadWorksheet($file);
-		$objPHPExcel->setActiveSheetIndex(0);
-		
-		$header1 = $objPHPExcel->getActiveSheet()->getCell('A1')->getValue();
-		
-		$header = $header1."+-1";
-		
-		$salt = "12345-+5tgijmdlwi84je9d,w+-984m$";
-		
-		Security::setHash('blowfish');
-		
-		// Check for the header match
-		$condition5 = (Security::hash($header, 'blowfish', $objPHPExcel->getActiveSheet()->getCell('CC3')->getValue())  === $objPHPExcel->getActiveSheet()->getCell('CC3')->getValue());
-		
-		$i = 3;
-		
-		$reghash = "";
-		
-		while($objPHPExcel->getActiveSheet()->getCell('B'.$i)->getValue() != null){
-		
-		    $reghash = $reghash.$objPHPExcel->getActiveSheet()->getCell('B'.$i)->getValue();
+          if  ($avaluethathasbeenhacked == 2) {
+              $this->Session->setFlash(__("Invalid file supplied. Please upload correctfile"));
+          } else {
+            // Start the processing of the file and putting the comments into the individual 
+            // reports
+            foreach ($objPhpExcel->getWorksheetIterator() as $worksheetNbr => $worksheet) {
+              //echo 'Worksheet number - ', $worksheetNbr, PHP_EOL;
+			        //$division = $worksheet->getCell('C3');
+              $who_is_commenting = $worksheet->getCell('B11')->getValue();
+              $were_2_extract_cmmnt_from = $worksheet->getCell('C11')->getValue();
+              $the_rptid_2_pt_de_cmmnt_on = $worksheet->getCell('C10')->getValue();
+              $the_sex_of_student = $worksheet->getCell('E10')->getValue();
+              $thecomment = $worksheet->getCell($were_2_extract_cmmnt_from)->getValue();
+              
+			        if($who_is_commenting == "H"){
+			
+                $data = array(
+                  'Olevelreport' => array(
+                    'id' => $the_rptid_2_pt_de_cmmnt_on,
+                    'headteacherscomment' => $thecomment				    
+                  )
+                );
+			    
+			          $this->Olevelreport->save($data);
+			
+			        }
+			
+			        if  ($who_is_commenting == "C") {
+			
+                $data = array(
+                  'Olevelreport' => array(
+                    'id' => $the_rptid_2_pt_de_cmmnt_on,
+                    'classteacherscomment' => $thecomment				    
+                  )
+                );
+			    
+			          $this->Olevelreport->save($data);
+			
+			        }
+			
+			        if  ($who_is_commenting == "W") {
+                $data = array(
+                  'Olevelreport' => array(
+                    'id' => $the_rptid_2_pt_de_cmmnt_on,
+                    'dormmasterscomment' => $thecomment				    
+                  )
+                );
+			    
+			          $this->Olevelreport->save($data);	
+			        }
+			
+			        if  ($who_is_commenting == "M") {
+			
+                $data = array(
+                  'Olevelreport' => array(
+                    'id' => $the_rptid_2_pt_de_cmmnt_on,
+                    'dormmistresscomment' => $thecomment				    
+                  )
+                );
+			    
+			          $this->Olevelreport->save($data);
+			        }
+
+		        }
 		    
-		    $i = $i + 1;
-		
-		}
-		
-		
-		
-		$reghash = $reghash."+-=";
-		
-		Security::setHash('blowfish');
-		
-		// Check for Registration match
-		$condition6 = ((Security::hash($reghash, 'blowfish', $objPHPExcel->getActiveSheet()->getCell('CC4')->getValue()))  === ($objPHPExcel->getActiveSheet()->getCell('CC4')->getValue()));
-		
-		
-		if (($condition5 == true) && ($condition6 == true)) {
-		
-		    if ((strlen($header1) <= 100) && (strlen($header1) >= 1)){
-			//split the title to extract values
-			$splitTitle = explode(" - ",(string)$header1);
-			
-			// put split values of split array in different variables
-			$classname   = $splitTitle[0];
-			$subjectname = $splitTitle[1];
-			$examname    = $splitTitle[2];
-			$examyear    = $splitTitle[3];
-			
-			if(strlen($classname) != 2){
-			    $this->Session->setFlash(__("Error in input file. Please upload a correct file"));
-			}
-			
-			// Get the registration number, look for its id in the database
-			// and replace the subject with the mark in the marksheet
-			
-			$registationnumber = "";
-			$this->loadModel("Student");
-			$this->loadModel("Schooldoneexam");
-			$this->loadModel("Schooldonesubject");
-			
-			$trueexamname = $this->Schooldoneexam->field('alias',
-			    array('fullexamname =' => $examname)
-			);
-			
-			if ($trueexamname == false) {
-			    $this->Session->setFlash(__("Error in input file. Please upload a correct file"));
-			}
-			    
-			$truesubjectname = $this->Schooldonesubject->field('shortsubjectname',
-			    array('fullsubjectname =' => $subjectname)
-			);
-			
-			if ($truesubjectname == false) {
-			    $this->Session->setFlash(__("Error in input file. Please upload a correct file"));
-			}
-			
-			if ($examyear != date('Y')) {
-			    $this->Session->setFlash(__("Error in input file. Please upload a correct file"));
-			}
-			
-			$i = 3;
-			$number_of_entries_made = 0;
-			while($objPHPExcel->getActiveSheet()->getCell('B'.$i)->getValue() != null){
-		
-			    $reghash = $objPHPExcel->getActiveSheet()->getCell('B'.$i)->getValue();
-			    
-			    $mark = $objPHPExcel->getActiveSheet()->getCell('E'.$i)->getValue();
-			    
-			    //look for the id with the particular
-			    //of that registration number
-			    $studentid = $this->Student->field('id',
-				array('registrationnumber =' => $reghash)
-			    );
-		    
-			    // find the id in the o-level results table
-			    $olevelmarksheetresultId = $this->Olevelmarksheetresult->field('id',
-				array('student_id =' => $studentid,
-					    'year =' => $examyear,
-					   'class =' => substr($classname, -1, 1),
-					 'exam_name' => $trueexamname
-				)
-			    );
-			    
-			    $data = array(
-				'Olevelmarksheetresult' => array(
-				    'id' => $olevelmarksheetresultId,
-				    $truesubjectname => $mark				    
-				)
-			    );
-			    
-			    $this->Olevelmarksheetresult->save($data);
-			    
-			    $i = $i + 1;
-			    
-			    $number_of_entries_made = $number_of_entries_made + 1;
-		
-			}
-			
-			if ($number_of_entries_made == 1) {
-			    $this->Session->setFlash(__("Successfully updated ".$number_of_entries_made." record"));
-			}
-			
-			if ($number_of_entries_made > 1) {
-			    $this->Session->setFlash(__("Successfully updated ".$number_of_entries_made." records"));
-			}
-			
-			if ($number_of_entries_made == 0) {
-			    $this->Session->setFlash(__("Failed to update any records"));
-			}
-		    }
-		    
-		    
-		} else {
-		    
-		    $this->Session->setFlash(__("Error in input file. Please upload a correct file"));
-		    
-		}
-		*/
-		
+		        $this->Session->setFlash(__("Commenting Successfull"));
+
+		      }
+	      }
 	    }
-	}
 	
-	$this->render('up_load_data'/*,'uploadlayout'*/);
+	    $this->render('up_load_data');
     }
 
     public function createcolumn($columnname){
     
-	$this->layout = 'default2';
-	// load the model with the data
-	$new = ClassRegistry::init('Olevelmarksheetresult');
+      $this->layout = 'default2';
+      // load the model with the data
+      $new = ClassRegistry::init('Olevelmarksheetresult');
 
-	// perform a query using the model you loaded
-	$livequery = $new->query("DESCRIBE olevelmarksheetresults;");
+      // perform a query using the model you loaded
+      $livequery = $new->query("DESCRIBE olevelmarksheetresults;");
     }
 }

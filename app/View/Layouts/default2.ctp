@@ -232,6 +232,9 @@ $(document).ready(function (e) {
 		    <li>
           <a href="/daris/Olevelreportdetails/">O-level Academic Results</a>
         </li>
+        <li>
+          <a href="/daris/Alevelreportdetails/">A-level Academic Results</a>
+        </li>
           <!--
           <li>
               <a href="#">Student Reports</a>
@@ -251,12 +254,17 @@ $(document).ready(function (e) {
 	  <li><a href="#">Settings</a>
 	    <ul>
 		    <li>
+          <a href="/daris/reportsettings/edit/unique">Reports</a>
+        </li>
+        <li>
           <a href="/daris/schoolstreams/">Streams</a>
         </li>
 		    <li>
           <a href="/daris/schooldonesubjects/">O-level Subjects</a>
-	    <ul>
-		  <li><a href="/daris/Olevelcompulsorysubjects/">Compulsory Subjects</a></li>
+	      <ul>
+		    <li>
+          <a href="/daris/Olevelcompulsorysubjects/">Compulsory Subjects</a>
+        </li>
 	      </ul>
 	  </li>
 	  <li><a href="/daris/schooldoneasubjects/">A-level Subjects</a></li>

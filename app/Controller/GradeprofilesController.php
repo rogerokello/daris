@@ -128,17 +128,16 @@ class GradeprofilesController extends AppController {
 	public function add() {
 	$this->layout = 'default2';    
 	    if ($this->request->is('post')) {
-		/*
-		$this->Gradeprofile->create();
-		//unset($this->Gradeprofile->Grading->validate['Gradeprofile_id']);
+
+		    $this->Gradeprofile->create();
+		    //unset($this->Gradeprofile->Grading->validate['Gradeprofile_id']);
 	    
-		if ($this->Gradeprofile->saveAssociated($this->request->data)) {
-		    $this->Session->setFlash(__('Profile records were sucessfully added to the database'));
+		    if ($this->Gradeprofile->saveAssociated($this->request->data)) {
+		      $this->Session->setFlash(__('Profile records were sucessfully added to the database'));
 		    return $this->redirect(array('action' => 'index'));
-		}else{
-		    $this->Session->setFlash(__('Unable to add the profile records to the database'));
-		}
-		*/
+		    } else  {
+		      $this->Session->setFlash(__('Unable to add the profile records to the database'));
+		    }
 	    }
 	    
 	    /*

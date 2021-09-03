@@ -48,6 +48,32 @@ class Student extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
+    ),
+    'Alevelmarksheetresult' => array(
+			'className' => 'Alevelmarksheetresult',
+			'foreignKey' => 'student_id',
+			'dependent' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Alevelreport' => array(
+			'className' => 'Alevelreport',
+			'foreignKey' => 'student_id',
+			'dependent' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
 		)
 	);
     

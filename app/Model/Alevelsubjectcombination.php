@@ -6,7 +6,11 @@ class Alevelsubjectcombination extends AppModel {
     public $belongsTo = array(
 	'Student' => array(
 	    'className' => 'Student',
-	    'foreignKey' => 'student_id'
+	    'foreignKey' => 'student_id',
+      'dependent' => true,
+      'conditions' => '',
+			'fields' => '',
+			'order' => ''
 	 )
     );
 }
