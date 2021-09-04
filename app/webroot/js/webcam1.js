@@ -131,7 +131,7 @@ var Webcam = {
 			}, 
 			function(stream) {
 				// got access, attach stream to video
-				video.src = window.URL.createObjectURL( stream ) || stream;
+				video.srcObject = stream;
 				Webcam.stream = stream;
 				Webcam.loaded = true;
 				Webcam.live = true;
