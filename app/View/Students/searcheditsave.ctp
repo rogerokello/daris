@@ -162,7 +162,12 @@
     $studentpicuture = $webcampic;
     if($studentpicuture != false){
 	//echo $this->Html->image('studentpics/'.$studentpicuture.'.jpg', array('alt' => 'Student\'s Picture', 'id' => 'shayhowe'));
-	echo '<img src="/daris/students/displayImage/'.$studentpicid.'" alt="Student\'s Picture" id="shayhowe"/>';
+  $student_pic_url = $this->Html->url(array(
+    "controller" => "students",
+    "action" => "displayImage",
+    $studentpicid
+  ));
+	echo '<img src="'.$student_pic_url.'" alt="Student\'s Picture" id="shayhowe"/>';
     }else{
 	echo $this->Html->image('studentpics/person.png', array('alt' => 'Student\'s Picture', 'id' => 'shayhowe'));
     }

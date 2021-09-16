@@ -32,27 +32,42 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
         public $components = array(
-		'DebugKit.Toolbar',
-		'Session',
-		'Auth' => array(
-		    'loginRedirect' => array(
-			'controller' => 'students',
-			'action' => 'index'
-		    ),	
-		    'logoutRedirect' => array(
-			'controller' => 'users',
-			'action' => 'login'
-		    ),
-		    'authError' => 'You must be logged in to view this page.',
-		    'loginError' => 'Invalid Username or Password entered, please try again.',
-		    'authenticate' => array(
-			'Form' => array(
-			    'passwordHasher' => 'Blowfish'
-			)
-		    )
-		)
-	    );
-	    
+		      'DebugKit.Toolbar',
+		      'Session',
+		      'Auth' => array(
+		        'loginRedirect' => array(
+			        'controller' => 'students',
+			        'action' => 'index'
+		        ),	
+		        'logoutRedirect' => array(
+			        'controller' => 'users',
+			        'action' => 'login'
+		        ),
+		        'authError' => 'You must be logged in to view this page.',
+		        'loginError' => 'Invalid Username or Password entered, please try again.',
+		        'authenticate' => array(
+			        'Form' => array(
+			          'passwordHasher' => 'Blowfish'
+			        )
+		        )
+		      )
+	      );
+	
+  // Get name of the School
+  function get_school_name(){
+    $this->loadModel('Reportsetting');
+    $settings_report = $this->Reportsetting->findByUniqueSettingName("unique");
+    if ($settings_report){
+      return $settings_report["Reportsetting"]["school_name"];
+    } else {
+      return "Unknown School";
+    }
+  }
+
+  function beforeRender(){
+    $this->set('SCHOOL_NAME', $this->get_school_name());
+  }
+
 	// only allow the login controllers only
 	public function beforeFilter() {
 	    $this->Auth->allow('login');

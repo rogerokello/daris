@@ -467,16 +467,16 @@ class OlevelmarksheetresultsController extends AppController {
 			  
 			  $registrationnumberhash = "";
 			  
-			  foreach ($studentsbyclass as $d) {
+			  foreach ($studentsbyclass as $key => $value) {
 			      $rowtobemodified++;
 			      $this->PhpExcel->addTableRow(array(
 				  $numberofstudent++,
-				  $d['Student']['registrationnumber'],		
-				  $d['Student']['surname']." ".$d['Student']['othernames'],
-				  $d['Student']['currentstream']
+				  $value['Student']['registrationnumber'],		
+				  $value['Student']['surname']." ".$value['Student']['othernames'],
+				  $value['Student']['currentstream']
 			      ));
 			      
-			      $registrationnumberhash = $registrationnumberhash.$d['Student']['registrationnumber'];
+			      $registrationnumberhash = $registrationnumberhash.$value['Student']['registrationnumber'];
 			  }
 
 			  $registrationnumberhash = (string)$registrationnumberhash."+-=";

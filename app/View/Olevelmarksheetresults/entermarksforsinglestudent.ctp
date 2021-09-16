@@ -18,8 +18,12 @@
 		$studentpicid = $student[0]['Student']['id'];
 
 		if($picuturepresent == "YES"){
-   
-		    echo '<img src="/daris/students/displayImage/'.$studentpicid.'" alt="Student\'s Picture" id="shayhowe"/>';
+      $student_pic_url = $this->Html->url(array(
+        "controller" => "students",
+        "action" => "displayImage",
+        $studentpicid
+      ));
+		  echo '<img src="'.$student_pic_url.'" alt="Student\'s Picture" id="shayhowe"/>';
 	
 		}else{
 		

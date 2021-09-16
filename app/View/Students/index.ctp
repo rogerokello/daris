@@ -203,10 +203,18 @@
 	<?php     
 		$picuturepresent = $student['Student']['studenthaspic'];
 		 if($picuturepresent == "YES"){
-		    $picvariable = "background: url(/daris/students/displayImage/".$student['Student']['id'].");background-size: 80%;background-repeat: no-repeat;	background-position: center top;";
+        $student_pic_url = $this->Html->url(array(
+          "controller" => "students",
+          "action" => "displayImage"
+        ));
+		    $picvariable = "background: url(".$student_pic_url."/".$student['Student']['id'].");background-size: 80%;background-repeat: no-repeat;	background-position: center top;";
 		    //echo $this->Html->image('studentpics/'.$student['Student']['picturenumber'].'.jpg', array('alt' => 'Student\'s Picture', 'id' => 'shayhowe', 'class' =>'resizestudentpic'));
 		 }else{
-		    $picvariable = "background: url(/daris/img/studentpics/person.png);background-size: 70%;background-repeat: no-repeat;	background-position: center top;";		    
+        $student_pic_url = $this->Html->url(array(
+          "controller" => "img",
+          "action" => "studentpics"
+        ));
+		    $picvariable = "background: url(".$student_pic_url."/person.png);background-size: 70%;background-repeat: no-repeat;	background-position: center top;";		    
 		    //echo $this->Html->image('studentpics/person.png', array('alt' => 'Student\'s Picture', 'id' => 'shayhowe' , 'class' =>'resizestudentpic'));
 		 } 
 	?>
