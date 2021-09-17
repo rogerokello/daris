@@ -31,3 +31,7 @@ Thumbs.db
 
 #Old library 
 lib_old/
+
+# Student pics and staff pics
+/app/webroot/img/studentpics/*
+/app/webroot/img/staffpics/*
