@@ -380,13 +380,24 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
               </ul>
           </li>
           -->
-              <!-- <li><a href="#">Comment</a></li> -->
               <li>
-                <?php echo $this->Html->link(
-                      'Upload Comment file',
-                      array('controller' => 'Olevelreportdetails', 'action' => "upLoadData")
-                    ); 
-                ?>
+                <a href="#">Comment file</a>
+                <ul>
+                  <li>
+                    <?php echo $this->Html->link(
+                          'O-level',
+                          array('controller' => 'Olevelreportdetails', 'action' => "upLoadData")
+                        ); 
+                    ?>
+                  </li>
+                  <li>
+                    <?php echo $this->Html->link(
+                          'A-level',
+                          array('controller' => 'Alevelreportdetails', 'action' => "upLoadData")
+                        ); 
+                    ?>
+                  </li>
+                </ul>
               </li>
             </ul>
           </li>

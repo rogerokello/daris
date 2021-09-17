@@ -2,12 +2,11 @@
     echo $this->Form->create(false,array('type' => 'file'));
 ?>
 <fieldset class="sectiondefinition1">
-    <legend class="sectiondefinition">Upload a comment file</legend>
+    <legend class="sectiondefinition">Upload Ordinary level comment file</legend>
     
     <?php
 	$uploadOptions = array(
-	    "olevelstudentreports" => "Ordinary level comments",
-	    "alevelstudentreports" => "Advanced level comments",
+	    "olevelstudentreports" => "Ordinary level comments"
 	);
     ?>
     

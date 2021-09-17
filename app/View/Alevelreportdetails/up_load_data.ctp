@@ -1,13 +1,13 @@
 <?php
+    print_r($data_array);
     echo $this->Form->create(false,array('type' => 'file'));
 ?>
 <fieldset class="sectiondefinition1">
-    <legend class="sectiondefinition">Upload a comment file</legend>
+    <legend class="sectiondefinition">Upload Advanced Level comment file</legend>
     
     <?php
 	$uploadOptions = array(
-	    "olevelstudentreports" => "Ordinary level comments",
-	    "alevelstudentreports" => "Advanced level comments",
+	    "alevelstudentreports" => "Advanced level comments"
 	);
     ?>
     
