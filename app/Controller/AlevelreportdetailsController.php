@@ -3629,7 +3629,7 @@ class AlevelreportdetailsController extends AppController {
 		$this->loadModel("Alevelreport");
 		$numberofcomments = $this->Alevelreport->find('count', array(
 		    //'fields' => array(''),
-		    'conditions' => array('olevelreportdetail_id' => $id,
+		    'conditions' => array('alevelreportdetail_id' => $id,
 			"OR" => array(
 			    "headteacherscomment !=" => null,
 			    "classteacherscomment !=" => null,
