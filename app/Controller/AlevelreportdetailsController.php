@@ -1104,7 +1104,7 @@ class AlevelreportdetailsController extends AppController {
               $objPhpExcel->getActiveSheet()->getColumnDimension('C')->setWidth(6.29);
 
               $objPhpExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(37.5);
-              $objPhpExcel->getActiveSheet()->getRowDimension(11)->setRowHeight(35.25);
+              $objPhpExcel->getActiveSheet()->getRowDimension(12)->setRowHeight(35.25);
 
               if (true) {
                 if ($header_a_level_shown) {
@@ -1191,20 +1191,7 @@ class AlevelreportdetailsController extends AppController {
                 
                 $objPhpExcel->getActiveSheet()->getStyle("C6")
                         ->getAlignment()
-                        ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                
-                // Set a cell value and wrap the text
-                // $objPhpExcel->getActiveSheet()->setCellValue('D12',$report_exams_considered[0]." 100%");
-                // $objPhpExcel->getActiveSheet()->getStyle('D12')
-                //         ->getAlignment()->setWrapText(true); 
-                
-                $styleArray1 = array(
-                  'borders' => array(
-                    'allborders' => array(
-                      'style' => PHPExcel_Style_Border::BORDER_THIN,
-                    ),
-                  ),
-                );	
+                        ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);	
                 
                 // The student details section; ie StdN, Name: , Class:, Sex:
                 // Merge the Name
@@ -1234,12 +1221,20 @@ class AlevelreportdetailsController extends AppController {
 
                 // Report ID
                 // Merge the Report ID label cells 
-                $objPhpExcel->getActiveSheet()->mergeCells('G9:O9');
-                $objPhpExcel->getActiveSheet()->setCellValue('G9','REPORT ID:  '.($report['id']));
+                $objPhpExcel->getActiveSheet()->mergeCells('G9:H9');
+                $objPhpExcel->getActiveSheet()->setCellValue('G9','REPORT ID:');
+                $objPhpExcel->getActiveSheet()->mergeCells('I9:O9');
+                $objPhpExcel->getActiveSheet()->setCellValue('I9',($report['id']));
                 $objPhpExcel->getActiveSheet()->getStyle("G9")->getFont()->setSize(12);
                 $objPhpExcel->getActiveSheet()->getStyle("G9")->getFont()->setBold(true);
-                // Align report id details to the right
+                $objPhpExcel->getActiveSheet()->getStyle("I9")->getFont()->setSize(12);
+                $objPhpExcel->getActiveSheet()->getStyle("I9")->getFont()->setBold(true);
+                // Align report id label to the right
                 $objPhpExcel->getActiveSheet()->getStyle("G9")
+                        ->getAlignment()
+                        ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+                // Align report id value to the left
+                $objPhpExcel->getActiveSheet()->getStyle("I9")
                         ->getAlignment()
                         ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 
@@ -1350,16 +1345,13 @@ class AlevelreportdetailsController extends AppController {
               
               }
               
-              // portion of code below may not be so vital
-              // $objPhpExcel->getActiveSheet()->getStyle('A'.(3+$number_of_exams_counter).':'.'A'.(7+$number_of_exams_counter))
-              //         ->getAlignment()->setWrapText(true);
-              //portion of code above may not be so vital
-              $objPhpExcel->getActiveSheet()->fromArray($table, NULL, 'A11');
+              // Add column headers
+              $objPhpExcel->getActiveSheet()->fromArray($table, NULL, 'A12');
 		
 		
               // counter tells one where to start adding the inividual subjects for the student together
               // with the marks and average
-              $insert_counter = 12;
+              $insert_counter = 13;
 		
               // if the number of subjects initially considered is more than 1, go ahead and 
               // create the subjects and their marks
@@ -1555,12 +1547,12 @@ class AlevelreportdetailsController extends AppController {
               }
 		
               // Put boarders around the report data
-              $objPhpExcel->getActiveSheet()->getStyle('B11:'.PHPExcel_Cell::stringFromColumnIndex(($number_of_exams_counter+7) - 1).$insert_counter)
+              $objPhpExcel->getActiveSheet()->getStyle('B12:'.PHPExcel_Cell::stringFromColumnIndex(($number_of_exams_counter+7) - 1).$insert_counter)
                   ->applyFromArray($styleArray);
                   
               //Make the heading where the code, subject and exam names are bold
               $objPhpExcel->getActiveSheet()
-                  ->getStyle('B11:'.PHPExcel_Cell::stringFromColumnIndex(($number_of_exams_counter+8) - 1)."11")
+                  ->getStyle('B12:'.PHPExcel_Cell::stringFromColumnIndex(($number_of_exams_counter+8) - 1)."12")
                   ->getFont()->setBold(true);
 
               // Merge Cells containing the Grade Column and make width of Award column 30 pts
@@ -1614,10 +1606,10 @@ class AlevelreportdetailsController extends AppController {
               //Wrap the text for the subjects codes, names and paper and center values in cells
               // $objPhpExcel->getActiveSheet()->getStyle('B12'.':'.'C'.($insert_counter-1))
               //         ->getAlignment()->setWrapText(true);
-              $objPhpExcel->getActiveSheet()->getStyle('B12'.':'.'C'.($insert_counter-1))
+              $objPhpExcel->getActiveSheet()->getStyle('B13'.':'.'C'.($insert_counter-1))
                       ->getAlignment()
                       ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-              $objPhpExcel->getActiveSheet()->getStyle('B12'.':'.'C'.($insert_counter-1))
+              $objPhpExcel->getActiveSheet()->getStyle('B13'.':'.'C'.($insert_counter-1))
                       ->getAlignment()
                       ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
