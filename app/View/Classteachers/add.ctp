@@ -12,6 +12,8 @@
 		   "2" => "Senior Two",
 		   "3" => "Senior Three",
 		   "4" => "Senior Four",
+       "5" => "Senior Five",
+       "6" => "Senior Six",
     );
     
     $titles = array(
