@@ -1,5 +1,4 @@
 <?php
-    print_r($data_array);
     echo $this->Form->create(false,array('type' => 'file'));
 ?>
 <fieldset class="sectiondefinition1">
@@ -26,11 +25,12 @@
 	<tr class = "olevelresults">
 	    <td>
 		<?php
-		    echo $this->Form->input('uploadedfile',
+		    echo $this->Form->input('uploadedfiles.',
 						  array( 
 						      'type' => 'file',
 						      'label' => 'Choose file',
-						      'accept' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+						      'accept' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                  'multiple'
 						  )
 					    );
 		?>

@@ -3862,136 +3862,175 @@ class AlevelreportdetailsController extends AppController {
     set_time_limit(0);
 	  $this->layout = 'default2';
 	  Controller::disableCache();
+
+    $errors = [];
+
 	  if ($this->request->is('Post')){
-	    $condition1 = ($this->request->data['uploadedfile']['error'] == 0);
-	    $condition2 = ($this->request->data['uploadedfile']['type'] == 
-			   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-			  );
-	  
-	    $condition4 = ($this->request->data['uploadData'] == "alevelstudentreports");
-	    
-	    if($condition1 != true){
-		    $this->Session->setFlash(__("There was an error during the upload, Please try again"));
-	    }
-	    
-	    if($condition2 != true){
-		    $this->Session->setFlash(__("Please select an Excel 2007 file"));
-	    }
-	    
- 
-	    if($this->request->data['uploadedfile']['size'] == 0){
-		    $this->Session->setFlash(__("Please choose an Excel 2007 file to upload"));
-	    }
-	    
-	    if( $condition1 && $condition2 && $condition4){
-	    
-		    $file = $this->request->data['uploadedfile']['tmp_name'];
-	    
-		    //load the worksheet from a file
-		    //Read spreadsheeet workbook
-		    try {
-		      $objPhpExcel = $this->PhpExcel->loadWorksheet($file);
-		    } catch(Exception $e) {
-		      die($e->getMessage());
-		      $this->Session->setFlash(__("An error occurred during file loading"));
-		    }
-		
-		    $avaluethathasbeenhacked = null;
-		    $thehack;
-		
-		    Security::setHash('blowfish');
-		    $this->loadModel("Alevelreport");
-
-		    //Check if all the cells have been hashed according to how you wanted initially
-		    foreach ($objPhpExcel->getWorksheetIterator() as $worksheetNbr => $worksheet) {
-
-          $cellsthatwerehashed = $worksheet->getCell('B11')->getValue().
-              $worksheet->getCell('C11')->getValue().
-              $worksheet->getCell('I9')->getValue();
-		    
-		      $hashedmatch = (Security::hash($cellsthatwerehashed,'blowfish',$worksheet->getCell('D11')->getValue()) === $worksheet->getCell('D11')->getValue());
-
-		      if($hashedmatch != true) {
-			      $avaluethathasbeenhacked = 2;
-			      break;
-		      }
-
-		    }
-		
-        if($avaluethathasbeenhacked == 2){
+      if ($this->request->data['uploadData'] != "alevelstudentreports"){
         
-            $this->Session->setFlash(__("Invalid file supplied. Please upload correctfile"));
-        
-        }else{
+      }
 
-          // Start the processing of the file and putting the comments into the individual 
+      // Validate sent files
+      if (is_array($this->request->data['uploadedfiles'])){
+        foreach($this->request->data['uploadedfiles'] as $key => $value) {
+          if ($value['error'] != 0) {
+            if (array_key_exists($value["name"], $errors)){
+              $errors[$value["name"]]["upload_error"] = "Something went wrong during upload";
+            }else{
+              $errors[$value["name"]] = array("upload_error" => "Something went wrong during upload");
+            }
+          }
+          if (strcmp($value['type'], "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") != 0) {
+            if (array_key_exists($value["name"], $errors)){
+              $errors[$value["name"]]["type_error"] = "Wrong file type, must be an xlxs file";
+            }else{
+              $errors[$value["name"]] = array("type_error" => "Wrong file type, must be an xlxs file");
+            }
+          }
+
+          $file = $value['tmp_name'];
+	    
+          //load the worksheet from a file
+          //Read spreadsheeet workbook
+          try {
+            $objPhpExcel = $this->PhpExcel->loadWorksheet($file);
+          } catch(Exception $e) {
+            die($e->getMessage());
+            if (array_key_exists($value["name"], $errors)){
+              $errors[$value["name"]]["loading_error"] = "Unable to load file";
+            }else{
+              $errors[$value["name"]] = array("loading_error" => "Unable to load file");
+            }
+          }
+		
+          $avaluethathasbeenhacked = null;
+          $thehack;
+      
+          Security::setHash('blowfish');
+
+          //Check if all the cells have been hashed according to how you wanted initially
+          foreach ($objPhpExcel->getWorksheetIterator() as $worksheetNbr => $worksheet) {
+
+            $cellsthatwerehashed = $worksheet->getCell('B11')->getValue().
+                $worksheet->getCell('C11')->getValue().
+                $worksheet->getCell('I9')->getValue();
+          
+            $hashedmatch = (Security::hash($cellsthatwerehashed,'blowfish',$worksheet->getCell('D11')->getValue()) === $worksheet->getCell('D11')->getValue());
+
+            if($hashedmatch != true) {
+              $avaluethathasbeenhacked = 2;
+              break;
+            }
+
+          }
+		
+          if($avaluethathasbeenhacked == 2){
+          
+            if (array_key_exists($value["name"], $errors)){
+              $errors[$value["name"]]["sheet_error"] = "Sheet has been tampered with, Invalid cell values on sheet";
+            }else{
+              $errors[$value["name"]] = array("sheet_error" => "Sheet has been tampered with, Invalid cell values on sheet");
+            }
+          
+          }
+
+          if($value['size'] == 0){
+            if (array_key_exists($value["name"], $errors)){
+              $errors[$value["name"]]["size_error"] = "File cannot be empty";
+            }else{
+              $errors[$value["name"]] = array("size_error" => "File cannot be empty");
+            }
+          }
+        }
+      }
+
+      if(count($errors) == 0){
+        foreach($this->request->data['uploadedfiles'] as $key => $value) {
+
+          $file = $value['tmp_name'];
+      
+          //load the worksheet from a file
+          //Read spreadsheeet workbook
+          try {
+            $objPhpExcel = $this->PhpExcel->loadWorksheet($file);
+          } catch(Exception $e) {
+            die($e->getMessage());
+            $this->Session->setFlash(__("An error occurred during file loading"));
+          }
+
+          $final_data = [];
           // reports
           foreach ($objPhpExcel->getWorksheetIterator() as $worksheetNbr => $worksheet) {
-	
+
             $who_is_commenting = $worksheet->getCell('B11')->getValue();
             $were_2_extract_cmmnt_from = $worksheet->getCell('C11')->getValue();
             $the_rptid_2_pt_de_cmmnt_on = $worksheet->getCell('I9')->getValue();
             $the_sex_of_student = $worksheet->getCell('E10')->getValue();
             $thecomment = $worksheet->getCell($were_2_extract_cmmnt_from)->getValue();
-			
+      
             if($who_is_commenting == "H"){
             
-                $data = array(
+              array_push($final_data, array(
                   'Alevelreport' => array(
                 'id' => $the_rptid_2_pt_de_cmmnt_on,
                 'headteacherscomment' => $thecomment				    
                   )
-                );
-                
-                $this->Alevelreport->save($data);
-            
+                )
+              );
+
             }
-			
+      
             if($who_is_commenting == "C"){
             
-                $data = array(
+              array_push($final_data, array(
                   'Alevelreport' => array(
                 'id' => $the_rptid_2_pt_de_cmmnt_on,
                 'classteacherscomment' => $thecomment				    
                   )
-                );
-                
-                $this->Alevelreport->save($data);
+                )
+              );
             
             }
-			
+      
             if($who_is_commenting == "W"){
             
-                $data = array(
+              array_push($final_data, array(
                   'Alevelreport' => array(
                 'id' => $the_rptid_2_pt_de_cmmnt_on,
                 'dormmasterscomment' => $thecomment				    
                   )
-                );
-                
-                $this->Alevelreport->save($data);
+                )
+              );
             
             }
-			
+      
             if($who_is_commenting == "M"){
             
-                $data = array(
+              array_push($final_data, array(
                   'Alevelreport' => array(
                 'id' => $the_rptid_2_pt_de_cmmnt_on,
                 'dormmistresscomment' => $thecomment				    
                   )
-                );
-                
-                $this->Alevelreport->save($data);
-            
+                )
+              );
+
             }
 
-		      }
-		    
-		      $this->Session->setFlash(__("Commenting Successfull"));
-		
-		    }
-	    }
+          }
+          $this->Alevelreport->saveMany($final_data);
+        }
+        $this->Session->setFlash(__("Commenting Successfull"));
+      }else{
+        $this->Session->setFlash(__("Errors occured while validating files. Please reupload the correct files.<br/>"));
+        foreach($errors as $key => $value) {
+          $error_string = "Errors occured while processing file: `".$key."`<br/>Errors: <br/>";
+          $error_counter=1;
+          foreach($value as $key2 => $value2){
+            $error_string=$error_string.($error_counter++).". ". $value2."<br/>";
+          }
+          $this->Session->setFlash(__($error_string));
+        }
+      }
 	  }
 	  $this->render('up_load_data');
   }
