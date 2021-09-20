@@ -1900,217 +1900,219 @@ class AlevelreportdetailsController extends AppController {
 	
 	      }
 	
-	// Mode for creating marksheet with all the results	
-	if($mode == 1){
-	
-	    $this->loadModel('Schooldonesubject');
-	    $this->loadModel('Student');
-	    $subjectsdoneinolevel = $this->Schooldonesubject->find('all',
-		array(
-		  'fields' => array('Schooldonesubject.fullsubjectname','Schooldonesubject.shortsubjectname'),
-		  'order' => array('Schooldonesubject.shortsubjectname' => 'asc')
-		)
-	    
-	    );
-	    //$reports['Alevelreportdetail'][''];
-	    $objPhpExcel  = $this->PhpExcel->createWorksheet()
-					      ->setDefaultFont('Calibri', 11);
-	    
-	    $table = array(
-			      array('label' => __("S".$reports['Alevelreportdetail']['reportclass']. " " .
-						      $reports['Alevelreportdetail']['reportname']. " " .
-						      $reports['Alevelreportdetail']['reportterm']. " - " .
-						      $reports['Alevelreportdetail']['reportyear']. " - ".
-						      "Examination Marksheet"
-			      ))
-			  );
-			  
-	    $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
-	
-	    // merge particular cells
-	    $objPhpExcel->getActiveSheet()->mergeCells('A1:E1');
-	
-	    // change the cell alignment
-	    $objPhpExcel->getActiveSheet()->getStyle('A1:E1')
-					      ->getAlignment()
-					      ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-	
-	    // change the text wrapping to false
-	    $objPhpExcel->getActiveSheet()->getStyle('A1:E1')
-						->getAlignment()
-						->setWrapText(true);
-	
-	    // increase row height for the first row 
-	    $objPhpExcel->getActiveSheet()->getRowDimension(1)
-						->setRowHeight(30);
-						
-						
-	    // define table cells
-	    $table = array(
-			      array('label' => __('No.'), 'filter' => false),
-			      array('label' => __('Picture.')/*, 'filter' => false*/),
-			      array('label' => __('Registration Number'), 'filter' => false,),
-			      array('label' => __('Student Name'), 'filter' => false),
-			      array('label' => __('Stream'))
-	    );
-	    
-	    foreach($subjectsdoneinolevel as $olevel_subject){
-	    
-		array_push($table,array('label' => __($olevel_subject['Schooldonesubject']['shortsubjectname'])));
-		array_push($table,array('label' => __('G')));
-		
-	    }
-	    
-	    if(($reports['Alevelreportdetail']['reportclass'] == 1) || 
-	       ($reports['Alevelreportdetail']['reportclass'] == 2)
-	    ){
-		array_push($table, array('label' => __('Total')));
-		array_push($table, array('label' => __('Strm Posn')));
-		array_push($table, array('label' => __('Class Posn')));
-		
-	    } else {
-	    
-		array_push($table, array('label' => __('Agg')));
-		array_push($table, array('label' => __('Div')));
-	    
-	    }
-	    // add heading with different font and bold text
-	    $this->PhpExcel
-			->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
-	
-	    // The number of students to be used as a counter
-	    $numberofstudent = 1;
-	    
-	    
-	    
-	    $this->loadModel('Student');
-	    $file1 = $this->Student->field('studentpicture',
-		    array('id =' => 651)
-		);
+        // Mode for creating marksheet with all the results	
+        if($mode == 1){      
+            $this->loadModel('Schooldoneasubject');
+            $this->loadModel('Student');
+            $subjectsdoneinolevel = $this->Schooldoneasubject->find(
+              'all',
+              array(
+                'fields' => array('Schooldoneasubject.fullsubjectname','Schooldoneasubject.shortsubjectname', 'Schooldoneasubject.subjectcode', 'Schooldoneasubject.papersdone', 'Schooldoneasubject.issubsidiary'),
+                'order' => array('Schooldoneasubject.shortsubjectname' => 'asc')
+              )
+            );
 
-	    	    
-	    //row counter
-	    $row_counter = 3;
-	    
-	    $row_picture_counter = 3;
-	    foreach($reports['Alevelreport'] as $report){
-		
-		// increase row height for the row currently in
-		$objPhpExcel->getActiveSheet()->getRowDimension($row_picture_counter++)
-							      ->setRowHeight(32);
-		$studentregistrationnumber  = $this->Student->field('registrationnumber',
-		
-		    array('id' => $report['student_id'])
-		
-		);
-		
-		$file = $this->Student->field('studentpicture',
-		    array('id =' => $report['student_id'])
-		);
-		if($file != null){
-		
-		    // Create file in the studentpics folder with a 0777 attribute
-		    $file1 = new File(WWW_ROOT.'img/studentpics/'.$report['student_id'].'.jpg', true, 0777);
-		    
-		    // Write a given number of bytes to the file.
-		    // The bytes will be got from the database
-		    $file1->write($file,'w',false);
-		    $file1->close();
-		    $objDrawing = new PHPExcel_Worksheet_Drawing();    //create object for Worksheet drawing
-		    $objDrawing->setName('Student Image');        //set name to image
-		    $objDrawing->setDescription('Customer Signature'); //set description to image
-		    //$signature = $file;    //Path to signature .jpg file
-		    $objDrawing->setPath(WWW_ROOT.'img/studentpics/'.$report['student_id'].'.jpg');
-		    //$objDrawing->setImageResource($file);
-		    $objDrawing->setOffsetX(1);                       //setOffsetX works properly
-		    $objDrawing->setOffsetY(2);                       //setOffsetY works properly
-		    $objDrawing->setCoordinates('B'.($row_counter));        //set image to cell
-		    //$objDrawing->setWidth(33);                 //set width, height
-		    $objDrawing->setHeight(37);
-		    $objDrawing->setWorksheet($objPhpExcel->getActiveSheet());
-		    
-		    
-		}
-		
-		
-		
-		$row_counter++;
-		
-		$studentfullnames  = $this->Student->field('fullnames',
-		
-		    array('id' => $report['student_id'])
-		
-		);
-		
-		$row_to_add = array($numberofstudent++,
-				  "",
-				  $studentregistrationnumber,		
-				  $studentfullnames,
-				  $report['streamthen']
-		);
-		
-		foreach($subjectsdoneinolevel as $olevel_subject){
-	    
-		    array_push($row_to_add,$report[$olevel_subject['Schooldonesubject']['shortsubjectname']]);
-		    
-		    $grade = $report[$olevel_subject['Schooldonesubject']['shortsubjectname']."_grade"];
-		    //$grade = $grade - 1;
-		    if($grade == 10){
-			
-			array_push($row_to_add,"X");
-			//array_push($row_to_add,$report[$olevel_subject['Schooldonesubject']['shortsubjectname']."_grade"]);
-			
-		    }else{
-		    
-			//array_push($row_to_add,"X");
-			array_push($row_to_add,$report[$olevel_subject['Schooldonesubject']['shortsubjectname']."_grade"]);
-		    
-		    }
-		    
-		}
-		
-		if(($reports['Alevelreportdetail']['reportclass'] == 1) || 
-		   ($reports['Alevelreportdetail']['reportclass'] == 2)
-		){
-		
-		    array_push($row_to_add, $report['totalmark']); // total
-		    array_push($row_to_add, $report['streamposition']);  // stream position
-		    array_push($row_to_add, $report['classposition']); // class position
-		
-		} else {
-	    
-		    array_push($row_to_add, $report['besteightaggregates']); // aggregates
-		    array_push($row_to_add, $report['division']); // division
-	    
-		}
-		
-		$this->PhpExcel->addTableRow($row_to_add);
-		//$report[''];
+            //$reports['Alevelreportdetail'][''];
+            $objPhpExcel  = $this->PhpExcel->createWorksheet()
+                      ->setDefaultFont('Calibri', 11);
+            
+            $table = array(
+              array('label' => __("S".$reports['Alevelreportdetail']['reportclass']. " " .
+                    $reports['Alevelreportdetail']['reportname']. " " .
+                    $reports['Alevelreportdetail']['reportterm']. " - " .
+                    $reports['Alevelreportdetail']['reportyear']. " - ".
+                    "Examination Marksheet"
+              ))
+            );
+              
+            $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
+        
+            // merge particular cells
+            $objPhpExcel->getActiveSheet()->mergeCells('A1:E1');
+        
+            // change the cell alignment
+            $objPhpExcel->getActiveSheet()->getStyle('A1:E1')
+                      ->getAlignment()
+                      ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        
+            // change the text wrapping to false
+            $objPhpExcel->getActiveSheet()->getStyle('A1:E1')
+                  ->getAlignment()
+                  ->setWrapText(true);
+        
+            // increase row height for the first row 
+            $objPhpExcel->getActiveSheet()->getRowDimension(1)
+                  ->setRowHeight(30);
 
-		
-	    
-	    }
-	    
-	    // SET BORDERS ON A PARTCULAR CELL RANGE IN THE ACTIVE SHEET
-	    $styleArray = array(
-			    'borders' => array(
-				'allborders' => array(
-				    'style' => PHPExcel_Style_Border::BORDER_THIN,
-				    //'color' => array('argb' => 'FFFF0000'),
-				 ),
-			    ),
-	    );	
-	    
-	    //$objPhpExcel->getActiveSheet()->getCellByColumnAndRow(4,4)->getStyle()->applyFromArray($styleArray);
-	    $this->PhpExcel->addTableFooter();
-	    $objPhpExcel->output("S".$reports['Alevelreportdetail']['reportclass']." - ".
-				     $reports['Alevelreportdetail']['reportname']. " " .
-				     $reports['Alevelreportdetail']['reportterm']. " - " .
-				     $reports['Alevelreportdetail']['reportyear']. " - ".
-				     "Examination Marksheet".
-				     '.xlsx','Excel2007');
-	
-	}
+            // define table cells
+            $table = array(
+                  array('label' => __('No.'), 'filter' => false),
+                  array('label' => __('Picture.')),
+                  array('label' => __('Registration Number'), 'filter' => false,),
+                  array('label' => __('Student Name'), 'filter' => false),
+                  array('label' => __('Stream'))
+            );
+
+            // Subject list to use
+            $subject_list = [];
+
+            // Generate Subject headers
+            foreach($subjectsdoneinolevel as $olevel_subject){
+              if ($olevel_subject['Schooldoneasubject']['issubsidiary'] == 0) {
+                $subject_papers = [];
+                $subject_papers = explode("$",substr($olevel_subject['Schooldoneasubject']['papersdone'], 1));
+                if (count($subject_papers) > 0){
+                  foreach($subject_papers as $paper){
+                    array_push(
+                      $table,
+                      array(
+                        'label' => __(
+                          $olevel_subject['Schooldoneasubject']['shortsubjectname']."_".(string)$paper
+                        )
+                      )
+                    );
+                    array_push($table,array('label' => __('G')));
+                    array_push(
+                      $subject_list,
+                      $olevel_subject['Schooldoneasubject']['shortsubjectname'].(string)$paper."_finalaveragemark",
+                      $olevel_subject['Schooldoneasubject']['shortsubjectname'].(string)$paper."_finalaveragemarkgrade",
+                    );
+                  }
+                }
+                array_push($table,array('label' => __($olevel_subject['Schooldoneasubject']['shortsubjectname']."_G")));
+                array_push(
+                  $subject_list,
+                  $olevel_subject['Schooldoneasubject']['shortsubjectname']."_finalgrade"
+                );
+              }
+
+              if ($olevel_subject['Schooldoneasubject']['issubsidiary'] == 1) {
+                array_push(
+                  $table,
+                  array(
+                    'label' => __(
+                      $olevel_subject['Schooldoneasubject']['shortsubjectname']
+                    )
+                  )
+                );
+                array_push($table,array('label' => __($olevel_subject['Schooldoneasubject']['shortsubjectname']."_G")));
+                array_push(
+                  $subject_list,
+                  $olevel_subject['Schooldoneasubject']['shortsubjectname']."_finalaveragemark",
+                  $olevel_subject['Schooldoneasubject']['shortsubjectname']."_finalaveragemarkgrade",
+                );
+              }
+            }
+
+            // Total points label
+            array_push($table,array('label' => __("Total Points")));
+
+            // add heading with different font and bold text
+            $this->PhpExcel
+             ->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
+
+            // The number of students to be used as a counter
+            $numberofstudent = 1;
+            
+            $this->loadModel('Student');
+            $file1 = $this->Student->field(
+              'studentpicture',
+              array('id =' => 651)
+            );
+            $column_name_total_points = PHPExcel_Cell::stringFromColumnIndex((count($table) - 1));      
+            //row counter
+            $row_counter = 3;
+
+            $row_picture_counter = 3;
+            foreach($reports['Alevelreport'] as $report){
+          
+              // increase row height for the row currently in
+              $objPhpExcel->getActiveSheet()->getRowDimension($row_picture_counter++)
+                              ->setRowHeight(32);
+
+              $studentregistrationnumber = $this->Student->field(
+                'registrationnumber',
+                array('id' => $report['student_id'])
+              );
+          
+              $file = $this->Student->field('studentpicture',
+                  array('id =' => $report['student_id'])
+              );
+
+              if($file != null){
+              
+                  // Create file in the studentpics folder with a 0777 attribute
+                  $file1 = new File(WWW_ROOT.'img/studentpics/'.$report['student_id'].'.jpg', true, 0777);
+                  
+                  // Write a given number of bytes to the file.
+                  // The bytes will be got from the database
+                  $file1->write($file,'w',false);
+                  $file1->close();
+                  $objDrawing = new PHPExcel_Worksheet_Drawing();    //create object for Worksheet drawing
+                  $objDrawing->setName('Student Image');        //set name to image
+                  $objDrawing->setDescription('Customer Signature'); //set description to image
+                  //$signature = $file;    //Path to signature .jpg file
+                  $objDrawing->setPath(WWW_ROOT.'img/studentpics/'.$report['student_id'].'.jpg');
+                  //$objDrawing->setImageResource($file);
+                  $objDrawing->setOffsetX(1);                       //setOffsetX works properly
+                  $objDrawing->setOffsetY(2);                       //setOffsetY works properly
+                  $objDrawing->setCoordinates('B'.($row_counter));        //set image to cell
+                  //$objDrawing->setWidth(33);                 //set width, height
+                  $objDrawing->setHeight(37);
+                  $objDrawing->setWorksheet($objPhpExcel->getActiveSheet());
+                  
+                  
+              }
+
+              $studentfullnames  = $this->Student->field(
+                'fullnames',
+                array('id' => $report['student_id'])
+              );
+          
+              $row_to_add = array(
+                $numberofstudent++,
+                "",
+                $studentregistrationnumber,		
+                $studentfullnames,
+                $report['streamthen']
+              );
+          
+              foreach($subject_list as $item){
+                array_push($row_to_add,$report[$item]);
+              }
+
+              // Total points
+              array_push($row_to_add, $report['totalpoints']);
+              
+              $this->PhpExcel->addTableRow($row_to_add);
+              // Set the formating of the total points to include 0 before it
+              $objPhpExcel
+                ->getActiveSheet()
+                ->getStyle($column_name_total_points.$row_counter)
+                ->getNumberFormat()->setFormatCode("00");
+
+              $row_counter++;
+            }
+            
+            // SET BORDERS ON A PARTCULAR CELL RANGE IN THE ACTIVE SHEET
+            $styleArray = array(
+              'borders' => array(
+                'allborders' => array(
+                  'style' => PHPExcel_Style_Border::BORDER_THIN,
+                ),
+              ),
+            );
+
+
+            $this->PhpExcel->addTableFooter();
+            $objPhpExcel->output("S".$reports['Alevelreportdetail']['reportclass']." - ".
+                  $reports['Alevelreportdetail']['reportname']. " " .
+                  $reports['Alevelreportdetail']['reportterm']. " - " .
+                  $reports['Alevelreportdetail']['reportyear']. " - ".
+                  "Examination Marksheet".
+                  '.xlsx','Excel2007');
+        
+        }
 	
 	// Mode for creating the summary of results
 	if($mode == 2){
