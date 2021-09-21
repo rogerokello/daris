@@ -2117,13 +2117,19 @@ class AlevelreportdetailsController extends AppController {
         // Mode for creating the summary of results
         if($mode == 2){
         
-          $this->loadModel('Schooldonesubject');
+          $this->loadModel('Schooldoneasubject');
           $this->loadModel('Student');
-          $subjectsdoneinolevel = $this->Schooldonesubject->find(
+          $subjectsdoneinolevel = $this->Schooldoneasubject->find(
             'all',
             array(
-              'fields' => array('Schooldonesubject.fullsubjectname','Schooldonesubject.shortsubjectname'),
-              'order' => array('Schooldonesubject.shortsubjectname' => 'asc')
+              'fields' => array(
+                'Schooldoneasubject.fullsubjectname',
+                'Schooldoneasubject.shortsubjectname',
+                'Schooldoneasubject.subjectcode',
+                'Schooldoneasubject.papersdone',
+                'Schooldoneasubject.issubsidiary',
+              ),
+              'order' => array('Schooldoneasubject.shortsubjectname' => 'asc')
             )
           );
 
