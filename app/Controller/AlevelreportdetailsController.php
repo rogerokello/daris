@@ -2009,7 +2009,7 @@ class AlevelreportdetailsController extends AppController {
 
             // add heading with different font and bold text
             $this->PhpExcel
-             ->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
+            ->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
 
             // The number of students to be used as a counter
             $numberofstudent = 1;
@@ -2114,475 +2114,447 @@ class AlevelreportdetailsController extends AppController {
         
         }
 	
-	// Mode for creating the summary of results
-	if($mode == 2){
-	
-	    $this->loadModel('Schooldonesubject');
-	    $this->loadModel('Student');
-	    $subjectsdoneinolevel = $this->Schooldonesubject->find('all',
-		array(
-		  'fields' => array('Schooldonesubject.fullsubjectname','Schooldonesubject.shortsubjectname'),
-		  'order' => array('Schooldonesubject.shortsubjectname' => 'asc')
-		)
-	    
-	    );
-	    //$reports['Alevelreportdetail'][''];
-	    $objPhpExcel  = $this->PhpExcel->createWorksheet()
-					      ->setDefaultFont('Calibri', 11);
-	    
-	    $table = array(
-			      array('label' => __("S".$reports['Alevelreportdetail']['reportclass']. " " .
-						      $reports['Alevelreportdetail']['reportname']. " " .
-						      $reports['Alevelreportdetail']['reportterm']. " - " .
-						      $reports['Alevelreportdetail']['reportyear']. " - ".
-						      "Results Summary (By numbers)"
-			      ))
-			  );
-			  
-	    $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
-	
-	    // merge particular cells
-	    $objPhpExcel->getActiveSheet()->mergeCells('A1:L1');
-	
-	    // change the cell alignment
-	    $objPhpExcel->getActiveSheet()->getStyle('A1:L1')
-					      ->getAlignment()
-					      ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-	
-	    // change the text wrapping to false
-	    $objPhpExcel->getActiveSheet()->getStyle('A1:L1')
-						->getAlignment()
-						->setWrapText(true);
-	
-	    // increase row height for the first row 
-	    $objPhpExcel->getActiveSheet()->getRowDimension(1)
-						->setRowHeight(30);
-						
-						
-	    // define table cells
-	    $table = array(
-			      array('label' => __('Subject Name'), 'filter' => false),
-			      array('label' => __('D1'), 'filter' => false,),
-			      array('label' => __('D2'), 'filter' => false),
-			      array('label' => __('C3')),
-			      array('label' => __('C4')),
-			      array('label' => __('C5')),
-			      array('label' => __('C6')),
-			      array('label' => __('P7')),
-			      array('label' => __('P8')),
-			      array('label' => __('F9')),
-			      array('label' => __('X')),
-			      array('label' => __('Total')),
-	    );
-	    
-	    
-	    
-	    // add heading with different font and bold text
-	    $this->PhpExcel
-			->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
-	
-	    // The number of students to be used as a counter
-	    $numberofstudent = 1;
-	    
-	    $number_of_subjects = 2;
-	    
-	    foreach($subjectsdoneinolevel as $olevel_subject){
-		$number_of_subjects++;
-		$d1s = null;
-		$d1s = array();
-		
-		$d2s = null;
-		$d2s = array();
-		
-		$c3s = null;
-		$c3s = array();
-		
-		$c4s = null;
-		$c4s = array();
-		
-		$c5s = null;
-		$c5s = array();
-		
-		$c6s = null;
-		$c6s = array();
-		
-		$p7s = null;
-		$p7s = array();
-		
-		$p8s = null;
-		$p8s = array();
-		
-		$f9s = null;
-		$f9s = array();
-		
-		$notdone = null;
-		$notdone = array();
-	    
-		foreach($reports['Alevelreport'] as $report){
-		    
-		    $grade = intval(($report[$olevel_subject['Schooldonesubject']['shortsubjectname']."_grade"]));
-		    
-		    switch ($grade){
-		    
-			case 1:
-			  array_push($d1s,1);
-			  break;
-			case 2:
-			  array_push($d2s,2);
-			  break;
-			case 3:
-			  array_push($c3s,3);
-			  break;
-			case 4:
-			  array_push($c4s,4);
-			  break;
-			case 5:
-			  array_push($c5s,5);
-			  break;
-			case 6:
-			  array_push($c6s,6);
-			  break;
-			case 7:
-			  array_push($p7s,7);
-			  break;
-			case 8:
-			  array_push($p8s,8);
-			  break;
-			case 9:
-			  array_push($f9s,9);
-			  break;
-			case 10:
-			  array_push($notdone,10);
-			  break;
-		    }
-		
-		}
-		
-		$row_to_add = null;
-		$row_to_add = array($olevel_subject['Schooldonesubject']['fullsubjectname'],
-			  count($d1s),
-			  count($d2s),
-			  count($c3s),
-			  count($c4s),
-			  count($c5s),
-			  count($c6s),
-			  count($p7s),
-			  count($p8s),
-			  count($f9s),
-			  count($notdone),
-			  (count($d1s)+count($d2s)+count($c3s)+count($c4s)+
-			  count($c5s)+count($c6s)+count($p7s)+count($p8s)+
-			  count($f9s)+count($notdone))
-		);
-		
-		$this->PhpExcel->addTableRow($row_to_add);
-		//$this->PhpExcel->addTableRow();
-	}
-	$table = null;
-	$table = array(
-			      array('label' => __("S".$reports['Alevelreportdetail']['reportclass']. " " .
-						      $reports['Alevelreportdetail']['reportname']. " " .
-						      $reports['Alevelreportdetail']['reportterm']. " - " .
-						      $reports['Alevelreportdetail']['reportyear']. " - ".
-						      "Results Summary (By Percentages)"
-			      ))
-			  );
-			  
-	    $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
-	
-	    // merge particular cells
-	    $objPhpExcel->getActiveSheet()->mergeCells('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1));
-	
-	    // change the cell alignment
-	    $objPhpExcel->getActiveSheet()->getStyle('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1))
-					      ->getAlignment()
-					      ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-	
-	    // change the text wrapping to false
-	    $objPhpExcel->getActiveSheet()->getStyle('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1))
-						->getAlignment()
-						->setWrapText(true);
-	
-	    // increase row height for the first row 
-	    $objPhpExcel->getActiveSheet()->getRowDimension(1)
-						->setRowHeight(30);
-						
-						
-	    // define table cells
-	    $table = array(
-			      array('label' => __('Subject Name'), 'filter' => false),
-			      array('label' => __('D1'), 'filter' => false,),
-			      array('label' => __('D2'), 'filter' => false),
-			      array('label' => __('C3')),
-			      array('label' => __('C4')),
-			      array('label' => __('C5')),
-			      array('label' => __('C6')),
-			      array('label' => __('P7')),
-			      array('label' => __('P8')),
-			      array('label' => __('F9')),
-			      array('label' => __('X')),
-	    );
-	    
-	    
-	    
-	    // add heading with different font and bold text
-	    $this->PhpExcel
-			->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
-	
-	    // The number of students to be used as a counter
-	    $numberofstudent = 1;
-	    $number_of_subjects = $number_of_subjects + 2;
-	    foreach($subjectsdoneinolevel as $olevel_subject){
-		$number_of_subjects++;
-		$d1s = null;
-		$d1s = array();
-		
-		$d2s = null;
-		$d2s = array();
-		
-		$c3s = null;
-		$c3s = array();
-		
-		$c4s = null;
-		$c4s = array();
-		
-		$c5s = null;
-		$c5s = array();
-		
-		$c6s = null;
-		$c6s = array();
-		
-		$p7s = null;
-		$p7s = array();
-		
-		$p8s = null;
-		$p8s = array();
-		
-		$f9s = null;
-		$f9s = array();
-		
-		$notdone = null;
-		$notdone = array();
-	    
-		foreach($reports['Alevelreport'] as $report){
-		    
-		    $grade = intval(($report[$olevel_subject['Schooldonesubject']['shortsubjectname']."_grade"]));
-		    
-		    switch ($grade){
-		    
-			case 1:
-			  array_push($d1s,1);
-			  break;
-			case 2:
-			  array_push($d2s,2);
-			  break;
-			case 3:
-			  array_push($c3s,3);
-			  break;
-			case 4:
-			  array_push($c4s,4);
-			  break;
-			case 5:
-			  array_push($c5s,5);
-			  break;
-			case 6:
-			  array_push($c6s,6);
-			  break;
-			case 7:
-			  array_push($p7s,7);
-			  break;
-			case 8:
-			  array_push($p8s,8);
-			  break;
-			case 9:
-			  array_push($f9s,9);
-			  break;
-			case 10:
-			  array_push($notdone,10);
-			  break;
-		    }
-		
-		}
-		
-		$row_to_add = null;
-		$total_number_of_students = (count($d1s)+count($d2s)+count($c3s)+count($c4s)+
-			  count($c5s)+count($c6s)+count($p7s)+count($p8s)+
-			  count($f9s)+count($notdone));
-		
-		$percentages_to_be_created = array();
-		
-		array_push($percentages_to_be_created,$d1s,$d2s,$c3s,$c4s,$c5s,$c6s,$p7s,$p8s,$f9s,$notdone);
-		
-		$row_to_add = array($olevel_subject['Schooldonesubject']['fullsubjectname']);
-		
-		foreach($percentages_to_be_created as $percentage){
-		
-		    if(count($percentage) != 0){
-		    
-			$apercentage = (count($percentage)/$total_number_of_students)*100;
-			array_push($row_to_add,sprintf("%01.1f",$apercentage));
-			
-		    }else{
-		    
-			array_push($row_to_add,0);
-		    
-		    }
-		
-		}
-		
-		/*$row_to_add = array($olevel_subject['Schooldonesubject']['fullsubjectname'],
-			  ((count($d1s)/$total_number_of_students)*100),
-			  count($d2s),
-			  count($c3s),
-			  count($c4s),
-			  count($c5s),
-			  count($c6s),
-			  count($p7s),
-			  count($p8s),
-			  count($f9s),
-			  count($notdone),
-			  (count($d1s)+count($d2s)+count($c3s)+count($c4s)+
-			  count($c5s)+count($c6s)+count($p7s)+count($p8s)+
-			  count($f9s)+count($notdone))
-		);
-		*/
-		$this->PhpExcel->addTableRow($row_to_add);
-	}	
+        // Mode for creating the summary of results
+        if($mode == 2){
+        
+          $this->loadModel('Schooldonesubject');
+          $this->loadModel('Student');
+          $subjectsdoneinolevel = $this->Schooldonesubject->find(
+            'all',
+            array(
+              'fields' => array('Schooldonesubject.fullsubjectname','Schooldonesubject.shortsubjectname'),
+              'order' => array('Schooldonesubject.shortsubjectname' => 'asc')
+            )
+          );
 
-	$table = null;
-	$table = array(
-			      array('label' => __("S".$reports['Alevelreportdetail']['reportclass']. " " .
-						      $reports['Alevelreportdetail']['reportname']. " " .
-						      $reports['Alevelreportdetail']['reportterm']. " - " .
-						      $reports['Alevelreportdetail']['reportyear']. " - ".
-						      "Results Summary (By Division)"
-			      ))
-			  );
-			  
-	    $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
+          $objPhpExcel  = $this->PhpExcel->createWorksheet()
+                    ->setDefaultFont('Calibri', 11);
+          
+          $table = array(
+            array('label' => __("S".$reports['Alevelreportdetail']['reportclass']. " " .
+                  $reports['Alevelreportdetail']['reportname']. " " .
+                  $reports['Alevelreportdetail']['reportterm']. " - " .
+                  $reports['Alevelreportdetail']['reportyear']. " - ".
+                  "Results Summary (By numbers)"
+            ))
+          );
+              
+          $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
+      
+          // merge particular cells
+          $objPhpExcel->getActiveSheet()->mergeCells('A1:L1');
+        
+          // change the cell alignment
+          $objPhpExcel->getActiveSheet()->getStyle('A1:L1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        
+          // change the text wrapping to false
+          $objPhpExcel->getActiveSheet()->getStyle('A1:L1')
+            ->getAlignment()
+            ->setWrapText(true);
+        
+          // increase row height for the first row 
+          $objPhpExcel->getActiveSheet()->getRowDimension(1)
+            ->setRowHeight(30);
+                  
+          // define table cells
+          $table = array(
+                array('label' => __('Subject Name'), 'filter' => false),
+                array('label' => __('D1'), 'filter' => false,),
+                array('label' => __('D2'), 'filter' => false),
+                array('label' => __('C3')),
+                array('label' => __('C4')),
+                array('label' => __('C5')),
+                array('label' => __('C6')),
+                array('label' => __('P7')),
+                array('label' => __('P8')),
+                array('label' => __('F9')),
+                array('label' => __('X')),
+                array('label' => __('Total')),
+          );
+            
+          // add heading with different font and bold text
+          $this->PhpExcel
+            ->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
+        
+          // The number of students to be used as a counter
+          $numberofstudent = 1;
+          
+          $number_of_subjects = 2;
+            
+          foreach($subjectsdoneinolevel as $olevel_subject){
+            $number_of_subjects++;
+            $d1s = null;
+            $d1s = array();
+            
+            $d2s = null;
+            $d2s = array();
+            
+            $c3s = null;
+            $c3s = array();
+            
+            $c4s = null;
+            $c4s = array();
+            
+            $c5s = null;
+            $c5s = array();
+            
+            $c6s = null;
+            $c6s = array();
+            
+            $p7s = null;
+            $p7s = array();
+            
+            $p8s = null;
+            $p8s = array();
+            
+            $f9s = null;
+            $f9s = array();
+            
+            $notdone = null;
+            $notdone = array();
+            
+            foreach($reports['Alevelreport'] as $report){
+                
+              $grade = intval(($report[$olevel_subject['Schooldonesubject']['shortsubjectname']."_grade"]));
+                
+              switch ($grade){
+                case 1:
+                  array_push($d1s,1);
+                  break;
+                case 2:
+                  array_push($d2s,2);
+                  break;
+                case 3:
+                  array_push($c3s,3);
+                  break;
+                case 4:
+                  array_push($c4s,4);
+                  break;
+                case 5:
+                  array_push($c5s,5);
+                  break;
+                case 6:
+                  array_push($c6s,6);
+                  break;
+                case 7:
+                  array_push($p7s,7);
+                  break;
+                case 8:
+                  array_push($p8s,8);
+                  break;
+                case 9:
+                  array_push($f9s,9);
+                  break;
+                case 10:
+                  array_push($notdone,10);
+                  break;
+              }
+            
+            }
+          
+            $row_to_add = null;
+            $row_to_add = array($olevel_subject['Schooldonesubject']['fullsubjectname'],
+                count($d1s),
+                count($d2s),
+                count($c3s),
+                count($c4s),
+                count($c5s),
+                count($c6s),
+                count($p7s),
+                count($p8s),
+                count($f9s),
+                count($notdone),
+                (count($d1s)+count($d2s)+count($c3s)+count($c4s)+
+                count($c5s)+count($c6s)+count($p7s)+count($p8s)+
+                count($f9s)+count($notdone))
+            );
+            
+            $this->PhpExcel->addTableRow($row_to_add);
+          }
+
+          $table = null;
+          $table = array(
+            array('label' => __("S".$reports['Alevelreportdetail']['reportclass']. " " .
+              $reports['Alevelreportdetail']['reportname']. " " .
+              $reports['Alevelreportdetail']['reportterm']. " - " .
+              $reports['Alevelreportdetail']['reportyear']. " - ".
+              "Results Summary (By Percentages)"
+              )
+            )
+          );
+          
+          $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
+      
+          // merge particular cells
+          $objPhpExcel->getActiveSheet()->mergeCells('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1));
+      
+          // change the cell alignment
+          $objPhpExcel->getActiveSheet()->getStyle('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1))
+                    ->getAlignment()
+                    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+      
+          // change the text wrapping to false
+          $objPhpExcel->getActiveSheet()->getStyle('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1))
+                ->getAlignment()
+                ->setWrapText(true);
 	
-	    // merge particular cells
-	    $objPhpExcel->getActiveSheet()->mergeCells('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1));
-	
-	    // change the cell alignment
-	    $objPhpExcel->getActiveSheet()->getStyle('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1))
-					      ->getAlignment()
-					      ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-	
-	    // change the text wrapping to false
-	    $objPhpExcel->getActiveSheet()->getStyle('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1))
-						->getAlignment()
-						->setWrapText(true);
-	
-	    // increase row height for the first row 
-	    $objPhpExcel->getActiveSheet()->getRowDimension(1)
-						->setRowHeight(30);
+          // increase row height for the first row 
+          $objPhpExcel->getActiveSheet()->getRowDimension(1)
+                ->setRowHeight(30);
 						
 						
-	    // define table cells
-	    $table = array(
-			      array('label' => __('Division'), 'filter' => false),
-			      array('label' => __('I'), 'filter' => false,),
-			      array('label' => __('II'), 'filter' => false),
-			      array('label' => __('III')),
-			      array('label' => __('IV')),
-			      array('label' => __('VII')),
-			      array('label' => __('U')),
-			      array('label' => __('X')),
-			      array('label' => __('Total')),
-	    );
-	    
-	    $div1 = 0;
-	    $div2 = 0;
-	    $div3 = 0;
-	    $div4 = 0;
-	    $div7 = 0;
-	    $divU = 0;
-	    $divX = 0;
-	    $total_number_of_students_for_division = 0;
-	    
-	    foreach($reports['Alevelreport'] as $report){
-	    
-		$grade = $report["division"];
-	    
-		switch($grade){
+          // define table cells
+          $table = array(
+                array('label' => __('Subject Name'), 'filter' => false),
+                array('label' => __('D1'), 'filter' => false,),
+                array('label' => __('D2'), 'filter' => false),
+                array('label' => __('C3')),
+                array('label' => __('C4')),
+                array('label' => __('C5')),
+                array('label' => __('C6')),
+                array('label' => __('P7')),
+                array('label' => __('P8')),
+                array('label' => __('F9')),
+                array('label' => __('X')),
+          );
+
+          // add heading with different font and bold text
+          $this->PhpExcel
+            ->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
+	
+          // The number of students to be used as a counter
+          $numberofstudent = 1;
+          $number_of_subjects = $number_of_subjects + 2;
+
+          foreach($subjectsdoneinolevel as $olevel_subject){
+            $number_of_subjects++;
+            $d1s = null;
+            $d1s = array();
 		
-		    case "I":
-		      $div1 = $div1 + 1;
-		      $total_number_of_students_for_division++;
-		      break;
-		    case "II":
-		      $div2 = $div2 + 1;
-		      $total_number_of_students_for_division++;
-		      break;
-		    case "III":
-		      $div3 = $div3 + 1;
-		      $total_number_of_students_for_division++;
-		      break;
-		    case "IV":
-		      $div4 = $div4 + 1;
-		      $total_number_of_students_for_division++;
-		      break;
-		    case "VII":
-		      $div7 = $div7 + 1;
-		      $total_number_of_students_for_division++;
-		      break;
-		    case "U":
-		      $divU = $divU + 1;
-		      $total_number_of_students_for_division++;
-		      break;
-		    case "X":
-		      $divX = $divX + 1;
-		      $total_number_of_students_for_division++;
-		      break;		
-		}
+            $d2s = null;
+            $d2s = array();
+		
+            $c3s = null;
+            $c3s = array();
+		
+            $c4s = null;
+            $c4s = array();
+		
+            $c5s = null;
+            $c5s = array();
+		
+            $c6s = null;
+            $c6s = array();
+		
+            $p7s = null;
+            $p7s = array();
+		
+            $p8s = null;
+            $p8s = array();
+		
+            $f9s = null;
+            $f9s = array();
+		
+            $notdone = null;
+            $notdone = array();
 	    
-	    }
+            foreach($reports['Alevelreport'] as $report){
+                
+                $grade = intval(($report[$olevel_subject['Schooldonesubject']['shortsubjectname']."_grade"]));
+                
+                switch ($grade){
+                
+              case 1:
+                array_push($d1s,1);
+                break;
+              case 2:
+                array_push($d2s,2);
+                break;
+              case 3:
+                array_push($c3s,3);
+                break;
+              case 4:
+                array_push($c4s,4);
+                break;
+              case 5:
+                array_push($c5s,5);
+                break;
+              case 6:
+                array_push($c6s,6);
+                break;
+              case 7:
+                array_push($p7s,7);
+                break;
+              case 8:
+                array_push($p8s,8);
+                break;
+              case 9:
+                array_push($f9s,9);
+                break;
+              case 10:
+                array_push($notdone,10);
+                break;
+                }
+            
+            }
+		
+            $row_to_add = null;
+            $total_number_of_students = (count($d1s)+count($d2s)+count($c3s)+count($c4s)+
+                count($c5s)+count($c6s)+count($p7s)+count($p8s)+
+                count($f9s)+count($notdone));
+		
+            $percentages_to_be_created = array();
+            
+            array_push($percentages_to_be_created,$d1s,$d2s,$c3s,$c4s,$c5s,$c6s,$p7s,$p8s,$f9s,$notdone);
+            
+            $row_to_add = array($olevel_subject['Schooldonesubject']['fullsubjectname']);
+		
+            foreach($percentages_to_be_created as $percentage){
+            
+                if(count($percentage) != 0){
+                  $apercentage = (count($percentage)/$total_number_of_students)*100;
+                  array_push($row_to_add,sprintf("%01.1f",$apercentage));
+                }else{
+                  array_push($row_to_add,0);
+                }
+            
+            }
+
+		        $this->PhpExcel->addTableRow($row_to_add);
+	        }	
+
+          $table = null;
+          $table = array(
+            array(
+              'label' => __("S".$reports['Alevelreportdetail']['reportclass']. " " .
+                  $reports['Alevelreportdetail']['reportname']. " " .
+                  $reports['Alevelreportdetail']['reportterm']. " - " .
+                  $reports['Alevelreportdetail']['reportyear']. " - ".
+                  "Results Summary (By Division)"
+              )
+            )
+          );
+			  
+          $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
+      
+          // merge particular cells
+          $objPhpExcel->getActiveSheet()->mergeCells('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1));
+      
+          // change the cell alignment
+          $objPhpExcel->getActiveSheet()->getStyle('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1))
+                    ->getAlignment()
+                    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+      
+          // change the text wrapping to false
+          $objPhpExcel->getActiveSheet()->getStyle('A'.($number_of_subjects + 1).':L'.($number_of_subjects + 1))
+                ->getAlignment()
+                ->setWrapText(true);
+      
+          // increase row height for the first row 
+          $objPhpExcel->getActiveSheet()->getRowDimension(1)
+                ->setRowHeight(30);
+						
+          // define table cells
+          $table = array(
+                array('label' => __('Division'), 'filter' => false),
+                array('label' => __('I'), 'filter' => false,),
+                array('label' => __('II'), 'filter' => false),
+                array('label' => __('III')),
+                array('label' => __('IV')),
+                array('label' => __('VII')),
+                array('label' => __('U')),
+                array('label' => __('X')),
+                array('label' => __('Total')),
+          );
 	    
-	    // add heading with different font and bold text
-	    $this->PhpExcel
-			->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
+          $div1 = 0;
+          $div2 = 0;
+          $div3 = 0;
+          $div4 = 0;
+          $div7 = 0;
+          $divU = 0;
+          $divX = 0;
+          $total_number_of_students_for_division = 0;
+	    
+	        foreach($reports['Alevelreport'] as $report){
+	    
+		        $grade = $report["division"];
+	    
+            switch($grade){
+            
+              case "I":
+                $div1 = $div1 + 1;
+                $total_number_of_students_for_division++;
+                break;
+              case "II":
+                $div2 = $div2 + 1;
+                $total_number_of_students_for_division++;
+                break;
+              case "III":
+                $div3 = $div3 + 1;
+                $total_number_of_students_for_division++;
+                break;
+              case "IV":
+                $div4 = $div4 + 1;
+                $total_number_of_students_for_division++;
+                break;
+              case "VII":
+                $div7 = $div7 + 1;
+                $total_number_of_students_for_division++;
+                break;
+              case "U":
+                $divU = $divU + 1;
+                $total_number_of_students_for_division++;
+                break;
+              case "X":
+                $divX = $divX + 1;
+                $total_number_of_students_for_division++;
+                break;		
+            }
+	    
+	        }
+	    
+          // add heading with different font and bold text
+          $this->PhpExcel
+            ->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
 	
-	    // The number of students to be used as a counter
-	    $numberofstudent = 1;
+          // The number of students to be used as a counter
+          $numberofstudent = 1;
 	
-	    $row_to_add = null;
-	    $row_to_add = array();
-	    array_push($row_to_add,"Number of Students",
-		       $div1,
-		       $div2,
-		       $div3,
-		       $div4,
-		       $div7,
-		       $divU,
-		       $divX,
-		       $total_number_of_students_for_division
-	    );
-	    
-	    $this->PhpExcel->addTableRow($row_to_add);
+          $row_to_add = null;
+          $row_to_add = array();
+          array_push($row_to_add,"Number of Students",
+              $div1,
+              $div2,
+              $div3,
+              $div4,
+              $div7,
+              $divU,
+              $divX,
+              $total_number_of_students_for_division
+          );
+          
+          $this->PhpExcel->addTableRow($row_to_add);
 	
 	
-	$styleArray = array(
-			    'borders' => array(
-				'allborders' => array(
-				    'style' => PHPExcel_Style_Border::BORDER_THIN,
-				    //'color' => array('argb' => 'FFFF0000'),
-				 ),
-			    ),
-	    );	
-	    
-	    //$objPhpExcel->getActiveSheet()->getCellByColumnAndRow(4,4)->getStyle()->applyFromArray($styleArray);
-	    $this->PhpExcel->addTableFooter();
-	    $objPhpExcel->output("S".$reports['Alevelreportdetail']['reportclass']." - ".
-				     $reports['Alevelreportdetail']['reportname']. " " .
-				     $reports['Alevelreportdetail']['reportterm']. " - " .
-				     $reports['Alevelreportdetail']['reportyear']. " - ".
-				     "Result summaries".
-				     '.xlsx','Excel2007');
-	    
-	    
-	
-	}
+          $styleArray = array(
+            'borders' => array(
+              'allborders' => array(
+                'style' => PHPExcel_Style_Border::BORDER_THIN,
+              ),
+            ),
+          );	
+
+          $this->PhpExcel->addTableFooter();
+          $objPhpExcel->output("S".$reports['Alevelreportdetail']['reportclass']." - ".
+                $reports['Alevelreportdetail']['reportname']. " " .
+                $reports['Alevelreportdetail']['reportterm']. " - " .
+                $reports['Alevelreportdetail']['reportyear']. " - ".
+                "Result summaries".
+                '.xlsx','Excel2007');
+	      }
     
     }
 
