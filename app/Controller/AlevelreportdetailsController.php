@@ -2177,7 +2177,6 @@ class AlevelreportdetailsController extends AppController {
                 array('label' => __('P7')),
                 array('label' => __('P8')),
                 array('label' => __('F9')),
-                array('label' => __('X')),
                 array('label' => __('Total')),
           );
             
@@ -2189,9 +2188,11 @@ class AlevelreportdetailsController extends AppController {
           $numberofstudent = 1;
           
           $number_of_subjects = 2;
+
+          $row_counter_2 = 3;
             
           foreach($subjectsdoneinolevel as $olevel_subject){
-            $number_of_subjects++;
+            // $number_of_subjects++;
             if ($olevel_subject['Schooldoneasubject']['issubsidiary'] == 0) {
               $subject_papers = [];
               $subject_papers = explode("$",substr($olevel_subject['Schooldoneasubject']['papersdone'], 1));
@@ -2223,9 +2224,6 @@ class AlevelreportdetailsController extends AppController {
                 
                 $f9s = null;
                 $f9s = array();
-                
-                $notdone = null;
-                $notdone = array();
               
                 foreach($reports['Alevelreport'] as $report){
                     
@@ -2259,16 +2257,16 @@ class AlevelreportdetailsController extends AppController {
                     case 9:
                       array_push($f9s,9);
                       break;
-                    case 10:
-                      array_push($notdone,10);
-                      break;
                   }
                 
                 }
             
                 $row_to_add = null;
                 $row_to_add = array(
-                    $olevel_subject['Schooldoneasubject']['fullsubjectname'],
+                    $olevel_subject['Schooldoneasubject']['fullsubjectname']
+                    .":"
+                    .$olevel_subject['Schooldoneasubject']['subjectcode']
+                    ,
                     $paper,
                     count($d1s),
                     count($d2s),
@@ -2279,14 +2277,18 @@ class AlevelreportdetailsController extends AppController {
                     count($p7s),
                     count($p8s),
                     count($f9s),
-                    count($notdone),
                     (count($d1s)+count($d2s)+count($c3s)+count($c4s)+
                     count($c5s)+count($c6s)+count($p7s)+count($p8s)+
-                    count($f9s)+count($notdone))
+                    count($f9s))
                 );
                 
                 $this->PhpExcel->addTableRow($row_to_add);
+                $row_counter_2++;
               }
+
+              $objPhpExcel->getActiveSheet()->mergeCells(
+                'A'.($row_counter_2 - (count($subject_papers))).':A'.($row_counter_2-1)
+              );
             }
             if ($olevel_subject['Schooldoneasubject']['issubsidiary'] == 1) {
               $d1s = null;
@@ -2315,9 +2317,6 @@ class AlevelreportdetailsController extends AppController {
               
               $f9s = null;
               $f9s = array();
-              
-              $notdone = null;
-              $notdone = array();
             
               foreach($reports['Alevelreport'] as $report){
                   
@@ -2351,32 +2350,32 @@ class AlevelreportdetailsController extends AppController {
                   case 9:
                     array_push($f9s,9);
                     break;
-                  case 10:
-                    array_push($notdone,10);
-                    break;
                 }
               
               }
           
               $row_to_add = null;
               $row_to_add = array(
-                  $olevel_subject['Schooldoneasubject']['fullsubjectname'],
+                $olevel_subject['Schooldoneasubject']['fullsubjectname']
+                .":"
+                .$olevel_subject['Schooldoneasubject']['subjectcode']
+                ,
                   "",
-                  count($d1s),
-                  count($d2s),
-                  count($c3s),
-                  count($c4s),
-                  count($c5s),
-                  count($c6s),
-                  count($p7s),
-                  count($p8s),
-                  count($f9s),
-                  count($notdone),
-                  (count($d1s)+count($d2s)+count($c3s)+count($c4s)+
-                  count($c5s)+count($c6s)+count($p7s)+count($p8s)+
-                  count($f9s)+count($notdone))
+                count($d1s),
+                count($d2s),
+                count($c3s),
+                count($c4s),
+                count($c5s),
+                count($c6s),
+                count($p7s),
+                count($p8s),
+                count($f9s),
+                (count($d1s)+count($d2s)+count($c3s)+count($c4s)+
+                count($c5s)+count($c6s)+count($p7s)+count($p8s)+
+                count($f9s))
               );
               $this->PhpExcel->addTableRow($row_to_add);
+              $row_counter_2++;
             }
           }
 
