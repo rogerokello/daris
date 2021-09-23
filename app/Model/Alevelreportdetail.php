@@ -57,25 +57,20 @@ class Alevelreportdetail extends AppModel {
       return $line_count;
     }
 	
-    public function updateReport($reportdetail_id = null, $updateflag = null){
-    
-	// $Olevelreports = ClassRegistry::init('Olevelreport');
-	if(($reportdetail_id != null) && ($updateflag == 1)){
+    public function updateReport($reportdetail_id = null, $updateflag = null, $class = null){
+      $Alevelreport = ClassRegistry::init('Alevelreport');
+      if(($reportdetail_id != null) && ($updateflag == 1)){
+        $Alevelreport->report_add_examsconsidered($reportdetail_id, null);
+        $Alevelreport->report_grade_subjects($reportdetail_id,null); // Grade individual subjects ie D1 yadi yada
+        $Alevelreport->report_get_final_subject_grades($reportdetail_id,null); // Grade all papers done ie A B C or D 
+        $Alevelreport->report_get_points($reportdetail_id, $class, null); // Get the total points for each student
+      }
 	
-	      // $Olevelreports->report_add_examsconsidered($reportdetail_id,null);// Expensive operation
-	      // $Olevelreports->report_gradesubjects($reportdetail_id,null);// Expensive operation
-	      // $Olevelreports->report_getaggregates($reportdetail_id);
-	      // $Olevelreports->report_get_total_mark($reportdetail_id,null);
-	      // $Olevelreports->report_getdivision($reportdetail_id);
-	      // $Olevelreports->report_get_position($reportdetail_id, null); // Expensive operation
-	
-	}
-	
-	if(($reportdetail_id != null) && ($updateflag == 2)){
-	
-	
-	
-	}
+      if(($reportdetail_id != null) && ($updateflag == 2)){
+      
+      
+      
+      }
     
     }
     

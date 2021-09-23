@@ -3916,15 +3916,17 @@ class AlevelreportdetailsController extends AppController {
 		set_time_limit(0);
 		$this->layout = 'default2';
 		$this->Alevelreportdetail->id = $report_id;
-		//$shortsubjectnametobedeleted = $shortsubjectname;
+
 		if (!$this->Alevelreportdetail->exists()) {
 			throw new NotFoundException(__('Invalid Report'));
 		}
 		
 		if($update_flag == "1"){
-		
-		    $this->Alevelreportdetail->updateReport($report_id,1);
-		    
+      $this->Alevelreportdetail->updateReport(
+        $report_id,
+        1,
+        $this->Alevelreportdetail->field('reportclass')
+      );  
 		}
 		
 		if($update_flag == "2"){
